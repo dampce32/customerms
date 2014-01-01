@@ -41,4 +41,14 @@ public class RoleRightDAOImpl implements RoleRightDAO {
 	public Integer countChildrenSameParent(RoleRight model) {
 		return (Integer) sqlSession.selectOne("RoleRightMapper.countChildrenSameParent",model);
 	}
+
+	public void insertByRoleId(Integer roleId) {
+		sqlSession.insert("RoleRightMapper.insertByRoleId",roleId);
+	}
+
+	public void insertByRightId(Integer rightId) {
+		sqlSession.insert("RoleRightMapper.insertByRightId",rightId);
+	}
+	
+	
 }

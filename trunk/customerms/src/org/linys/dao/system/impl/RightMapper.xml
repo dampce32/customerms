@@ -130,6 +130,7 @@
 	
  	<!-- 删除权限 -->
   	<delete id="delete" parameterType="int">
+  		delete from T_RoleRight where rightId = #{rightId};
 		delete from T_Right where rightId = #{rightId}
 	</delete>
 	

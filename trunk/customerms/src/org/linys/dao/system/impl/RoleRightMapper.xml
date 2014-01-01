@@ -44,17 +44,21 @@
 	    set status = #{status}
 	    where roleId = #{roleId,jdbcType=INTEGER} and rightId = #{rightId,jdbcType=INTEGER}
 	</update>
+	<insert id="insertByRoleId" parameterType="int" >
+	    insert into t_roleright (rightId, roleId,status)
+	    select rightId,#{roleId,jdbcType=INTEGER},0
+	    from t_right
+	</insert>
+	<insert id="insertByRightId" parameterType="int" >
+	    insert into t_roleright (rightId, roleId,status)
+	    select #{rightId,jdbcType=INTEGER},roleId,0
+	    from T_Role
+	</insert>
 	
   <delete id="deleteByPrimaryKey" parameterType="Integer" >
     delete from t_roleright
     where roleRightId = #{roleRightId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="RoleRight" >
-    insert into t_roleright (roleRightId, rightId, roleId
-      )
-    values (#{roleRightId,jdbcType=INTEGER}, #{rightId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}
-      )
-  </insert>
   <insert id="insertSelective" parameterType="RoleRight" >
     insert into t_roleright
     <trim prefix="(" suffix=")" suffixOverrides="," >
