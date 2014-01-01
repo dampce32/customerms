@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <!-- 引入配置文件 -->  
+  <properties resource="jdbc.properties"/>  
+  <!-- 指定数据连接驱动jar地址 -->  
+  <classPathEntry location="${classPath}" /> 
+  <context id="context1" >
+  	<commentGenerator> 
+	    <!-- 是否去除自动生成的注释 true：是 ： false:否 --> 
+	    <property name="suppressAllComments" value="true" /> 
+	    <!--数据库连接的信息：驱动类、连接地址、用户名、密码 --> 
+  	</commentGenerator> 
+    <jdbcConnection driverClass="${driver}" connectionURL="${url}" userId="${userName}" password="${password}"/>
+    <javaModelGenerator targetPackage="org.linys.model.system" targetProject="${project}"> 
+      <!-- enableSubPackages:是否让schema作为包的后缀 -->      
+      <property name="enableSubPackages" value="true" /> 
+  	</javaModelGenerator>   
+    <sqlMapGenerator targetPackage="org.linys.dao" targetProject="${project}"/>  
+    <javaClientGenerator targetPackage="org.linys.dao" targetProject="${project}" type="XMLMAPPER"/>  
+    
+    <!-- 用户表 
+    <table schema="customerms" tableName="T_USER" domainObjectName="User"
+   		enableInsert="true" enableDeleteByPrimaryKey="false"
+   		enableUpdateByPrimaryKey="false" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
+  		enableCountByExample="false" enableUpdateByExample="false"
+       	enableDeleteByExample="false" enableSelectByExample="false"
+       	selectByExampleQueryId="false">  
+        <columnOverride column="userid" property="userId" javaType="int"></columnOverride>
+        <columnOverride column="usercode" property="userCode" javaType="String"></columnOverride>
+        <columnOverride column="username" property="userName" javaType="String"></columnOverride>
+    </table>  
+    -->
+     <!-- 权限  -->
+    <table schema="customerms" tableName="T_Right" domainObjectName="Right"
+   		enableInsert="true" enableDeleteByPrimaryKey="false"
+   		enableUpdateByPrimaryKey="false" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
+  		enableCountByExample="false" enableUpdateByExample="false"
+       	enableDeleteByExample="false" enableSelectByExample="false"
+       	selectByExampleQueryId="false">  
+       	<columnOverride column="rightid" property="rightId" javaType="Integer"></columnOverride>
+       	<columnOverride column="parentrightid" property="parentRightId" javaType="Integer"></columnOverride>
+       	<columnOverride column="rightcode" property="rightCode" javaType="String"></columnOverride>
+       	<columnOverride column="rightname" property="rightName" javaType="String"></columnOverride>
+       	<columnOverride column="righturl" property="rightUrl" javaType="String"></columnOverride>
+       	<columnOverride column="isleaf" property="isLeaf" javaType="Integer"></columnOverride>
+       	<columnOverride column="rightkind" property="rightKind" javaType="Integer"></columnOverride>
+    </table>  
+   
+  </context>
+</generatorConfiguration>

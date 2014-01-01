@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="RightMapper" >
+	<!-- 取得树的跟节点 -->
+	<select id="getRootTreeNode"  resultType="Right">
+		select rightId,rightPKCode,rightCode,rightName,rightUrl,isLeaf
+		from t_right
+		where parentRightId is null
+	</select>
+	<!-- 取得树的节点下的子节点 -->
+	<select id="getChildrenTreeNode"  resultType="Right" parameterType="Right">
+		select rightId,rightPKCode,rightCode,rightName,rightUrl,isLeaf
+		from t_right
+		where parentRightId=#{rightId}
+		order by array
+	</select>
+	<!-- 查询树的节点下的子节点 -->
+	<select id="queryChildren"  resultType="Right" parameterType="Right">
+		select *
+		from t_right
+		where parentRightId=#{rightId}
+		order by array
+	</select>
+	<!-- 统计树的节点下的子节点 -->
+	<select id="countChildren" parameterType="Right" resultType="Long">
+		select count(1)
+		from t_right
+		where parentRightId=#{rightId}
+	</select>
+	<!-- 根据属性查询属性 -->
+	<select id="loadByRightCode" parameterType="String" resultType="Right">
+		select *
+		from t_right
+		where rightCode=#{rightCode}
+	</select>
+	<!-- 根据属性查询属性 -->
+	<select id="getMaxRightPKCode" parameterType="int" resultType="String">
+		select max(rightPKCode)
+		from t_right
+		where parentRightId=#{parentRightId}
+	</select>
+	<!-- 根据属性查询属性 -->
+	<select id="getMaxArray" parameterType="int" resultType="Integer">
+		select max(array)
+		from t_right
+		where parentRightId=#{parentRightId}
+	</select>
+	<!-- 根据属性查询属性 -->
+	<select id="loadByRightId" parameterType="int" resultType="Right">
+		select *
+		from t_right
+		where rightId=#{rightId}
+	</select>
+	<!-- 统计树的节点下的子节点 -->
+	<select id="countChildrenByParentRightId" parameterType="int" resultType="Long">
+		select count(1)
+		from t_right
+		where parentRightId=#{rightId}
+	</select>
+	<select id="queryChildrenListByParentRightPKCode" parameterType="String" resultType="Right">
+		select *
+		from t_right
+		where rightPKCode like #{rightPKCode}+"%"
+	</select>
+	
+	<!-- 保存权限 -->
+	<insert id="insert" parameterType="Right" useGeneratedKeys="true" keyProperty="rightId">
+	  insert into t_right (parentRightId, rightPKCode, 
+	    rightCode, rightName, rightUrl, 
+	    array, isLeaf, rightKind, 
+	    iconCls, status)
+	  values (#{parentRightId,jdbcType=INTEGER}, #{rightPKCode,jdbcType=VARCHAR}, 
+	    #{rightCode,jdbcType=VARCHAR}, #{rightName,jdbcType=VARCHAR}, #{rightUrl,jdbcType=VARCHAR}, 
+	    #{array,jdbcType=INTEGER}, #{isLeaf,jdbcType=INTEGER}, #{rightKind,jdbcType=INTEGER}, 
+	    #{iconCls,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
+	</insert>
+	<!-- 更新权限 -->
+  	<update id="update" parameterType="Right">
+		update T_Right 
+		set rightCode = #{rightCode},rightName = #{rightName},
+		rightUrl=#{rightUrl},rightKind = #{rightKind},iconCls = #{iconCls},status=#{status}
+		where rightId = #{rightId}
+	</update>
+	<update id="updateDragChange" parameterType="Right">
+		update T_Right 
+		set parentRightId = #{parentRightId},rightPKCode=#{rightPKCode},array=#{array}
+		where rightId = #{rightId}
+	</update>
+	<!-- 更新权限 -->
+  	<update id="updateIsLeaf" parameterType="Right">
+		update T_Right 
+		set isLeaf = #{isLeaf}
+		where rightId = #{rightId}
+	</update>
+	<!-- 更新权限 -->
+  	<update id="updateStatus" parameterType="Right">
+		update T_Right 
+		set status = #{status}
+		where rightId = #{rightId}
+	</update>
+	<update id="dropUpdateArray" parameterType="java.util.Map">
+		update T_Right 
+		<choose>  
+            <when test="point =='top' ">  
+                set array = array+1
+            </when > 
+            <when test="point =='bottom' ">  
+                set array = array-1
+            </when >  
+        </choose>
+		where parentRightId=#{parentRightId}
+		<choose>  
+            <when test="point =='top' ">  
+                and array&gt;=#{targetArray}
+            </when> 
+            <when test="point =='bottom' ">  
+                and array&lt;=#{targetArray}
+            </when>
+        </choose>
+        
+	</update>
+	
+ 	<!-- 删除权限 -->
+  	<delete id="delete" parameterType="int">
+		delete from T_Right where rightId = #{rightId}
+	</delete>
+	
+	
+</mapper>
