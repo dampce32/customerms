@@ -4,6 +4,7 @@ body td,input{
 #index-north{
 	height:32px;
 	overflow:hidden;
+	border: 
 }
 #index-north-bd-right{
 	padding:3px;
@@ -143,4 +144,7 @@ body td,input{
 }
 .tdQueryBtn{
 	padding-right: 10px;
+}
+.inputBorderNone{
+	border: 0px;
 }

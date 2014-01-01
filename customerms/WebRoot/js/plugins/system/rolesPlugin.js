@@ -29,7 +29,7 @@
 			toolbar:'#tb_'+id,
 			columns:[[
 			      {field:'ck',checkbox:true},
-		          {field:'state',title:'状态',width:50,sortable:true,align:"center",
+		          {field:'status',title:'状态',width:50,sortable:true,align:"center",
 						formatter: function(value,row,index){
 							if (value==0){
 								return '<img src="style/v1/icons/warn.png"/>';
@@ -38,19 +38,7 @@
 							}
 					 }},
 				{field:'roleCode',title:'角色编号',width:100,align:"center"},
-				{field:'roleName',title:'角色名称',width:100,align:"center"},
-				{field:'roleType',title:'角色类型',width:100,align:"center",
-					formatter:function(value,row,index){
-						if (value==0){
-							return '学校';
-						} else if (value==1){
-							return '部门';
-						} else if (value==2){
-							return '游客';
-						}
-					}
-				},
-				{field:'note',title:'备注',width:100,align:"center"}
+				{field:'roleName',title:'角色名称',width:100,align:"center"}
 			]],
 			onClickRow:function(rowIndex, rowData){
 				selectRow = rowData;
@@ -80,7 +68,7 @@
 	  //状态
 	  $('#state_'+id).menu({  
 		    onClick:function(item){
-		  		onMulUpdateState(item.name);
+		  		onMulUpdateStatus(item.name);
 		    }
 		    	
 	  });
@@ -121,11 +109,13 @@
 			handler:function(){
 				$(editDialog).dialog('close');
 			}
-		}]
+		}],
+		onClose:function(){
+			$(editForm).form('clear');
+		}
 	});    
 	//添加
 	var onAdd = function(){
-		$(editForm).form('clear');
 		$('#state',editForm).combobox('setValue',1);
 		$(editDialog).dialog('open');
 	};
@@ -139,11 +129,6 @@
 		var roleName = $.trim($('#roleName',editForm).val());
 		if(''==roleName){
 			$.messager.alert('提示','请填写角色名','warning');
-			return false;
-		}
-		var roleType = $('#roleType',editForm).combobox('getValue');
-		if(''==roleType){
-			$.messager.alert('提示','请填写角色类型','warning');
 			return false;
 		}
 		return true;
@@ -160,9 +145,9 @@
 				if(result.isSuccess){
 					var fn = function(){
 						search();
+						$(editDialog).dialog('close');
 					};
 					$.messager.alert('提示','保存成功','info',fn);
-					$(editDialog).dialog('close');
 				}else{
 					$.messager.alert('提示',result.message,"error");
 				}
@@ -180,11 +165,6 @@
 				$.messager.alert('警告','超级管理员不能修改','warning');
 				return false;
 			}
-			if(selectRow.roleName=='教师'){
-				$.messager.alert('警告','教师角色不能修改',"warning");
-				return false;
-			}
-			$(editForm).form('clear');
 			$(editForm).form('load',selectRow);
 			$(editDialog).dialog('open');
 		}
@@ -194,7 +174,6 @@
 		var roleCodeSearch = $('#roleCodeSearch',queryContent).val();
 		var roleNameSearch = $('#roleNameSearch',queryContent).val();
 		var content = {roleName:roleNameSearch,roleCode:roleCodeSearch};
-		
 		$(viewList).datagrid({
 			queryParams:content
 		});
@@ -233,10 +212,10 @@
 		});
 	};
 	//修改多个审核状态
-	var onMulUpdateState = function(state){
+	var onMulUpdateStatus = function(status){
 		var rows =  $(viewList).datagrid('getChecked');
 		var msg = '';
-		if(state==1){
+		if(status==1){
 			msg = '启用';
 		}else{
 			msg = '禁用';
@@ -247,14 +226,14 @@
 		}
 		var idArray = new Array();
 		for ( var i = 0; i < rows.length; i++) {
-			if(rows[i].roleName!="超级管理员"&&rows[i].roleName!="教师"){
+			if(rows[i].roleName!="超级管理员"){
 				idArray.push(rows[i].roleId);
 			}
 		}
 		$.messager.confirm("提示","确定要"+msg+"记录?",function(t){ 
 			if(t){
-				var url = 'system/mulUpdateStateRole.do';
-				var content ={ids:idArray.join(CSIT.join),state:state};
+				var url = 'system/mulUpdateStatusRole.do';
+				var content ={ids:idArray.join(CSIT.join),status:status};
 				asyncCallService(url,content,function(result){
 					if(result.isSuccess){
 						var fn = function(){
@@ -595,31 +574,6 @@
 	//----------检查权限--------------
 	var rights = null;
 	var checkBtnRight = function(){
-		if(rights==null){
-			rights = $($this).attr('rights');
-			rights = eval('('+rights+')');
-		}
-		var checkArray = new Array();
-		
-		var addBtn = $('#add_'+id,$this);
-		var updateBtn = $('#update_'+id,$this);
-		var deleteBtn = $('#delete_'+id,$this);
-		var tbStateBtn = $('#tbState_'+id,$this);
-		var roleRightBtn = $('#roleRight_'+id,$this);
-		var sysRemindBtn = $('#sysRemind_'+id,$this);
-		var moveUpBtn = $('#moveUp_'+id,$this);
-		var moveDownBtn = $('#moveDown_'+id,$this);
-		
-		checkArray.push(addBtn);
-		checkArray.push(updateBtn);
-		checkArray.push(deleteBtn);
-		checkArray.push(tbStateBtn);
-		checkArray.push(roleRightBtn);
-		checkArray.push(sysRemindBtn);
-		checkArray.push(moveUpBtn);
-		checkArray.push(moveDownBtn);
-		
-		checkRight(checkArray,rights);
 	};
 	checkBtnRight();
   };

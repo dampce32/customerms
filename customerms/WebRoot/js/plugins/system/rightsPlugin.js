@@ -71,9 +71,9 @@
 			    {field:'status',title:'状态',width:50,sortable:true,align:"center",
 					formatter: function(value,row,index){
 						if (value==0){
-							return '<img src="js/easyui/icons/warn.png"/>';
+							return '<img src="style/v1/icons/warn.png"/>';
 						} else if (value==1){
-							return '<img src="js/easyui/icons/info.png"/>';
+							return '<img src="style/v1/icons/info.png"/>';
 						}
 				 }},
 			    {field:'rightCode',title:'权限编号',width:200,sortable:true,align:"center"},

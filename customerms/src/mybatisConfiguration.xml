@@ -14,6 +14,7 @@
 	
 	<typeAliases>
 		<typeAlias alias="Right" type="org.linys.model.system.Right" />
+		<typeAlias alias="Role" type="org.linys.model.system.Role" />
 	</typeAliases>
 
 </configuration>
