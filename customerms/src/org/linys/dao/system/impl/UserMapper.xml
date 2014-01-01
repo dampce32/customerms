@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="UserMapper" >
+	<!-- 根据编号查询 -->
+	<select id="loadByUserCode" parameterType="String" resultType="User">
+		select *
+		from T_User
+		where userCode=#{userCode}
+	</select>
+	<!-- 根据userId查询 -->
+	<select id="loadByUserId" parameterType="Integer" resultType="User">
+		select *
+		from T_User
+		where userId=#{userId}
+	</select>
+	<!-- 分页查询查询 -->
+	<select id="query" parameterType="User" resultType="User">
+		select *
+		from T_User
+		where 1 = 1  
+		<if test="userCode != null and userCode !=''">
+			and userCode like '%${userCode}%'
+		</if>
+		<if test="userName != null and userName !=''">
+			and userName like '%${userName}%'
+		</if>
+	</select>
+	<!-- 统计 -->
+	<select id="count" parameterType="User" resultType="Long">
+		select count(1)
+		from T_User
+		where 1 = 1  
+		<if test="userCode != null and userCode !=''">
+			and userCode like '%${userCode}%'
+		</if>
+		<if test="userName != null and userName !=''">
+			and userName like '%${userName}%'
+		</if>
+	</select>
+	<!-- 插入 -->
+	<insert id="insert" parameterType="User" useGeneratedKeys="true" keyProperty="userId">
+	   insert into t_user (userCode, userName, 
+	     passwords,status)
+	   values ( #{userCode,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+	     #{passwords,jdbcType=VARCHAR},status=#{status,jdbcType=INTEGER})
+	</insert>
+	<!-- 更新 -->  
+	<update id="update" parameterType="User" >
+	  update t_user
+	  set userCode = #{userCode,jdbcType=VARCHAR},
+	    userName = #{userName,jdbcType=VARCHAR},status=#{status,jdbcType=INTEGER}
+	  where userId = #{userId,jdbcType=INTEGER}
+	</update>
+	<!-- 更新状态 -->  
+	<update id="updateStatus" parameterType="User" >
+	  	update t_user 
+		set status = #{status}
+		where userId = #{userId}
+	</update>
+	<!-- 删除 -->
+	<delete id="delete" parameterType="Integer" >
+	  delete from t_user
+	  where userId = #{userId,jdbcType=INTEGER}
+	</delete>
+</mapper>

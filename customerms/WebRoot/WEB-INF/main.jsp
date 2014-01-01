@@ -48,8 +48,9 @@ String base = request.getScheme()+"://"+request.getServerName()+":"+request.getS
 </div>
 <div region="west" split="true" title="--------导航菜单--------" icon="icon-none" id="index-left">
   <ul id="rightTree">
-  	<a href="javascript:void(0)" name="system/rights.html">权限管理</a>
-  	<a href="javascript:void(0)" name="system/roles.html">角色管理</a>
+	  	<a href="javascript:void(0)" name="system/rights.html">权限管理</a>
+  		<a href="javascript:void(0)" name="system/roles.html">角色管理</a>
+  		<a href="javascript:void(0)" name="system/users.html">用户管理</a>
   </ul>
 </div>
 
