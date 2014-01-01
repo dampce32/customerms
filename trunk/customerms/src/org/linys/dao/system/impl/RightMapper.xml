@@ -62,6 +62,14 @@
 		from t_right
 		where rightPKCode like #{rightPKCode}+"%"
 	</select>
+	<!-- 取得父权限 -->
+	<select id="getParentRight" parameterType="int" resultType="Right">
+		select b.*
+		from(select parentRightId
+			from t_right
+			where rightId=#{rightId})a
+		left join t_right b on a.parentRightId = b.rightId
+	</select>
 	
 	<!-- 保存权限 -->
 	<insert id="insert" parameterType="Right" useGeneratedKeys="true" keyProperty="rightId">

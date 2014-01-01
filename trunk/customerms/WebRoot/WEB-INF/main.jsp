@@ -22,6 +22,7 @@ String base = request.getScheme()+"://"+request.getServerName()+":"+request.getS
 	<script type="text/javascript" src="js/common/serializeForm.js"></script>
 	<script type="text/javascript" src="js/common/commons-ajaxclient.js"></script>
 	<script type="text/javascript" src="js/common/csit.core.js"></script>
+	<script type="text/javascript" src="js/common/mask.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 	<script type="text/javascript">
 		var sessionId = '${pageContext.session.id}' ;	
