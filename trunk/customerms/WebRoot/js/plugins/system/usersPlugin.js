@@ -1,7 +1,7 @@
 // 创建一个闭包  
 (function($) {  
   // 插件的定义  
-  $.fn.teacherInit = function() {
+  $.fn.usersInit = function() {
 	  var $this = $(this);
 	  var id =   $(this).attr('id');
 	  var rightId = $(this).attr('rightId');
@@ -12,15 +12,9 @@
 	  
 	  var selectRow = null;
 	  var selectIndex = null;
-	  $('#schoolDeptSearch',queryContent).combobox({
-		  width:270,
-		  data:CMS.getSchoolDeptList(),
-		  valueField:'schoolDeptId',
-		  textField:'schoolDeptName'
-	  });
 	//加载列表
 	$(viewList).datagrid({
-		url:"system/queryUserTeacher.do",
+		url:"system/queryUser.do",
 		fit:true,
 		singleSelect:true,
 		selectOnCheck:false,
@@ -33,70 +27,39 @@
 		pagination:true,
 		remoteSort:false,
 		toolbar:[
-		    {id:'upload_'+id,text:'导入',iconCls:'icon-upload',handler:function(){onUpload();}},'-',
-			{id:'add_'+id,text:'添加',iconCls:'icon-add',handler:function(){onAdd();}},'-',
-			{id:'update_'+id,text:'修改',iconCls:'icon-edit',handler:function(){onUpdate();}},'-',
-			{id:'delete_'+id,text:'删除',iconCls:'icon-remove',handler:function(){onMulDelete();}},'-',
-			{id:'teacherRole_'+id,text:'教师角色',iconCls:'icon-role',handler:function(){onTeacherRole();}},'-',
-			{id:'teacherRight_'+id,text:'查看权限',iconCls:'icon-role-right',handler:function(){onTeacherRight();}},'-',
+			{id:'add_'+id,text:'添加',iconCls:'icon-add',handler:function(){onAdd();}},
+			{id:'update_'+id,text:'修改',iconCls:'icon-edit',handler:function(){onUpdate();}},
+			{id:'delete_'+id,text:'删除',iconCls:'icon-remove',handler:function(){onMulDelete();}},
+			{id:'userRole_'+id,text:'用户角色',iconCls:'icon-role',handler:function(){onUserRole();}},
+			{id:'userRight_'+id,text:'查看权限',iconCls:'icon-role-right',handler:function(){onUserRight();}},
 			{id:'resetPwd_'+id,text:'重置密码',iconCls:'icon-resetPwd',handler:function(){onMulResetPwd();}}
 			
 		],
 		columns:[[
 			{field:'ck',checkbox:true},
-		    {field:'teacherCode',title:'教师代码',width:100,align:"center"},
-			{field:'teacherName',title:'教师名称',width:100,align:"center"}, 
-			{field:'schoolDeptName',title:'部门',width:140,align:"center"}, 
-			{field:'teaType',title:'用户类型',width:100,align:"center",formatter: function(value,row,index){
-				if (value==0){
-					return "人事教师";
-				} else if(value==1){
-					return "外来人员/学生";
-				}else if(value==2){
-					return "部门管理员";
-				}
-			}} 
+			{field:'status',title:'状态',width:50,sortable:true,align:"center",
+				formatter: function(value,row,index){
+					if (value==0){
+						return '<img src="style/v1/icons/warn.png"/>';
+					} else if (value==1){
+						return '<img src="style/v1/icons/info.png"/>';
+					}
+			 }},
+		    {field:'userCode',title:'用户编号',width:100,align:"center"},
+			{field:'userName',title:'用户名称',width:100,align:"center"}
 		]],
 		onDblClickRow:function(rowIndex, rowData){
-			if(rowData.teacherCode!='admin'&&rowData.teaType!=1){
-				onUpdate();
-			}
+			onUpdate();
 		},
 		onClickRow:function(rowIndex, rowData){
 			selectRow = rowData;
 			selectIndex = rowIndex;
-			if(rowData.teaType==1){
-				$('#update_'+id).linkbutton('disable');
-			}else{
-				$('#update_'+id).linkbutton('enable');
-			}
-		},
-		onSelect:function(rowIndex, rowData){
-			if(rowData.teacherCode=='admin'){
-				$('#update_'+id).linkbutton('disable');
-				$('#teacherRole_'+id).linkbutton('disable');
-				$('#resetPwd_'+id).linkbutton('disable');
-			}else{
-				$('#update_'+id).linkbutton('enable');
-				$('#teacherRole_'+id).linkbutton('enable');
-				$('#resetPwd_'+id).linkbutton('enable');
-			}
-		},
-		onCheck:function(rowIndex, rowData){
-			if(rowData.teacherCode=='admin'){
-				$('#delete_'+id,$this).linkbutton('disable');
-			}
-		},
-		onUncheck:function(rowIndex, rowData){
-			if(rowData.teacherCode=='admin'){
-				$('#delete_'+id).linkbutton('enable');
-			}
 		}
 	});
 
 	//编辑框
 	  $(editDialog).dialog({  
-	    title: '编辑教师信息',  
+	    title: '编辑用户信息',  
 	    width:400,
 	    height:340,
 	    closed: true,  
@@ -109,26 +72,22 @@
 			handler:function(){
 				onSave();
 			}
-		},'-',{
+		},{
 			text:'退出',
 			iconCls:'icon-cancel',
 			handler:function(){
 				$(editDialog).dialog('close');
 			}
-		}]
+		}],
+		onClose:function(){
+			$(editForm).form('clear');
+		}
 	  });
 	 var init = function(){
-		 $('#schoolDept',editForm).combobox({
-			  data:CMS.getSchoolDeptList(),
-			  valueField:'schoolDeptId',
-			  textField:'schoolDeptName'
-		  });
 	 };
 	//添加信息
 	var onAdd = function(){
-		$(editForm).form('clear');
-		init();
-		$('#state',editForm).combobox('setValue','true');
+		$('#status',editForm).combobox('setValue',1);
 		$(editDialog).dialog('open');
 	};
 	//修改
@@ -137,10 +96,7 @@
 			$.messager.alert("提示","请选择数据行","warning");
 			return;
 		}
-		init();
-		$(editForm).form('clear');
 		$(editForm).form('load',selectRow);
-		$('#schoolDept',editForm).combobox('setValue',selectRow.schoolDeptId);
 		$(editDialog).dialog('open');
 	 };
 	//删除
@@ -158,10 +114,10 @@
 			}
 			var idArray = new Array();
 			for(var i=0;i<rows.length;i++){
-				idArray.push(rows[i].teacherId);
+				idArray.push(rows[i].userId);
 			}
 			var ids = idArray.join(CSIT.join);
-			var url = "system/mulDeleteTeacher.do";
+			var url = "system/mulDeleteUser.do";
 			var content = {ids:ids};
 			$.post(url,content,
 				function(result){
@@ -174,10 +130,10 @@
 		});
 	};
 	//修改多个审核状态
-	var onMulUpdateState = function(state){
+	var onMulUpdateStatus = function(status){
 		var rows =  $(viewList).datagrid('getChecked');
 		var msg = '';
-		if(state){
+		if(status){
 			msg = '启用';
 		}else{
 			msg = '禁用';
@@ -188,12 +144,12 @@
 		}
 		var idArray = new Array();
 		for ( var i = 0; i < rows.length; i++) {
-			idArray.push(rows[i].teacherId);
+			idArray.push(rows[i].userId);
 		}
 		$.messager.confirm("提示","确定要"+msg+"记录?",function(t){ 
 			if(t){
-				var url = 'system/mulUpdateStateTeacher.do';
-				var content ={ids:idArray.join(CSIT.join),state:state};
+				var url = 'system/mulUpdateStatusUser.do';
+				var content ={ids:idArray.join(CSIT.join),status:status};
 				asyncCallService(url,content,function(result){
 					if(result.isSuccess){
 						var fn = function(){
@@ -209,34 +165,22 @@
 	};
 	//提交前验证
 	var setValue = function(){
-		
-		var teacherCode = $.trim($('#teacherCode',editForm).val());
-		if(''==teacherCode){
-			$.messager.alert('提示','请填写教师代码','warning');
+		var userCode = $.trim($('#userCode',editForm).val());
+		if(''==userCode){
+			$.messager.alert('提示','请填写用户编号','warning');
 			return false;
 		}
-		var teacherName = $.trim($('#teacherName',editForm).val());
-		if(''==teacherName){
-			$.messager.alert('提示','请填写教师名称','warning');
+		var userName = $.trim($('#userName',editForm).val());
+		if(''==userName){
+			$.messager.alert('提示','请填写用户名称','warning');
 			return false;
 		}
-		var schoolDept = $.trim($('#schoolDept',editForm).combobox('getValue'));
-		if(''==schoolDept){
-			$.messager.alert('提示','请选择部门','warning');
-			return false;
-		}
-		var teaType = $.trim($('#teaType',editForm).combobox('getValue'));
-		if(''==teaType){
-			$.messager.alert('提示','请选择用户类型','warning');
-			return false;
-		}
-		$('#teaStatus',editForm).val(CMS.getTeaWorkingStatusId());
 		return true;
 	};
 	//保存
 	var onSave = function(){
 		$(editForm).form('submit',{
-			url: 'system/saveAdminTeacher.do',
+			url: 'system/saveUser.do',
 			onSubmit: function(){
 				return setValue();
 			},
@@ -257,10 +201,9 @@
 	};
 	//查询
 	var search = function(){
-		var teacherName = $('#teacherNameSearch',queryContent).val();
-		var teacherCode = $('#teacherCodeSearch',queryContent).val();
-		var schoolDept =  $('#schoolDeptSearch',queryContent).combobox('getValue');
-		var content = {teacherCode:teacherCode,teacherName:teacherName,'schoolDept.schoolDeptId':schoolDept};
+		var userName = $('#userNameSearch',queryContent).val();
+		var userCode = $('#userCodeSearch',queryContent).val();
+		var content = {userCode:userCode,userName:userName};
 		$(viewList).datagrid({
 			queryParams:content
 		});
@@ -269,16 +212,16 @@
 	$('#search',$this).click(function(){
 		search();
 	});
-	//--------------教师角色---------------
-	var teacherRoleList = $('#teacherRoleList_'+id,$this);
-	var teacherRoleDialog = $('#teacherRoleDialog_'+id,$this);
+	//--------------用户角色---------------
+	var userRoleList = $('#userRoleList_'+id,$this);
+	var userRoleDialog = $('#userRoleDialog_'+id,$this);
 	var oldIdArray = new Array();
 	var idArray = new Array();
 	var deleteIdList = new Array();
 	var addIdList = new Array();
 	//编辑框
-	$(teacherRoleDialog).dialog({  
-	    title: '编辑教师角色信息',  
+	$(userRoleDialog).dialog({  
+	    title: '编辑用户角色信息',  
 	    width:400,
 	    height:500,
 	    closed: true,  
@@ -289,26 +232,26 @@
 			text:'保存',
 			iconCls:'icon-save',
 			handler:function(){
-				onSaveTeacherRole();
+				onSaveUserRole();
 			}
-		},'-',{
+		},{
 			text:'退出',
 			iconCls:'icon-cancel',
 			handler:function(){
-				$(teacherRoleDialog).dialog('close');
+				$(userRoleDialog).dialog('close');
 			}
 		}]
 	});
-	//教师角色
-	var onTeacherRole = function(){
+	//用户角色
+	var onUserRole = function(){
 		if(selectRow==null){
 			$.messager.alert("提示","请选择数据行","warning");
 			return;
 		}
 		 //加载列表
-		$(teacherRoleList).datagrid({
-			url:'system/queryRoleTeacherRole.do?teacher.teacherId='+
-				selectRow.teacherId+'&role.roleType=0',
+		$(userRoleList).datagrid({
+			url:'system/queryRoleUserRole.do?user.userId='+
+				selectRow.userId+'&role.roleType=0',
 			fit:true,
 			method:"POST",
 			nowrap:true,
@@ -321,24 +264,24 @@
 			    {field:'roleName',title:'角色名',width:100,align:"center"}
 			]],
 			onLoadSuccess:function(data){
-				var rows = $(teacherRoleList).datagrid('getRows');
+				var rows = $(userRoleList).datagrid('getRows');
 				oldIdArray = new Array();
 				for(var i=0;i<rows.length;i++){
 					if(rows[i].checked){
 						oldIdArray.push(rows[i].roleId);
-						$(teacherRoleList).datagrid('selectRow',i);
+						$(userRoleList).datagrid('selectRow',i);
 					}
 				}
 			}
 		  });
-		$(teacherRoleDialog).dialog('open');
+		$(userRoleDialog).dialog('open');
 	};
-	//保存教师角色前验证
-	var setValueTeacherRole = function(){
+	//保存用户角色前验证
+	var setValueUserRole = function(){
 		deleteIdList = new Array();
 		addIdList = new Array();
 		idArray = new Array();
-		var rows = $(teacherRoleList).datagrid('getSelections');
+		var rows = $(userRoleList).datagrid('getSelections');
 		for(var i =0;i<rows.length;i++){
 			idArray.push(rows[i].roleId);
 		}
@@ -378,11 +321,11 @@
 		return true;
 	};
 	//保存
-	var onSaveTeacherRole = function(){
-		if(setValueTeacherRole()){
-			var teacherId = selectRow.teacherId;
-			var content = {'teacher.teacherId':teacherId,ids: idArray.join(CSIT.join),oldIds:oldIdArray.join(CSIT.join)};
-			var url = "system/updateRoleTeacherRole.do";
+	var onSaveUserRole = function(){
+		if(setValueUserRole()){
+			var userId = selectRow.userId;
+			var content = {'user.userId':userId,ids: idArray.join(CSIT.join),oldIds:oldIdArray.join(CSIT.join)};
+			var url = "system/updateRoleUserRole.do";
 			$.post(url,content,
 				function(result){
 					if(result.isSuccess){
@@ -395,12 +338,12 @@
 		}
 	};
 	
-	//----------------------教师权限---------------------
-	var teacherRightDialog = $('#teacherRightDialog_'+id,$this);
-	var teacherRightTree = $('#teacherRightTree_'+id,$this);
+	//----------------------用户权限---------------------
+	var userRightDialog = $('#userRightDialog_'+id,$this);
+	var userRightTree = $('#userRightTree_'+id,$this);
 	//编辑框
-	$(teacherRightDialog).dialog({  
-	    title: '教师权限',  
+	$(userRightDialog).dialog({  
+	    title: '用户权限',  
 	    width:400,
 	    height:500,
 	    closed: true,  
@@ -411,23 +354,23 @@
 			text:'取消',
 			iconCls:'icon-cancel',
 			handler:function(){
-				$(teacherRightDialog).dialog('close');
+				$(userRightDialog).dialog('close');
 			}
 		}]
 	});
-	//教师权限
-	var onTeacherRight = function(){
+	//用户权限
+	var onUserRight = function(){
 		if(selectRow==null){
 			$.messager.alert("提示","请选择数据行","warning");
 			return;
 		}
-		$(teacherRightTree).tree({
-			url: 'system/queryRootRightTeacher.do?teacherId='+selectRow.teacherId,
+		$(userRightTree).tree({
+			url: 'system/queryRootRightUser.do?userId='+selectRow.userId,
 			onBeforeExpand:function(node,param){
-				$(teacherRightTree).tree('options').url = 'system/getChildrenUrlRightTeacher.do?teacherId='+selectRow.teacherId+'&rightId='+node.id;  
+				$(userRightTree).tree('options').url = 'system/getChildrenUrlRightUser.do?userId='+selectRow.userId+'&rightId='+node.id;  
 	        }
 		});
-		$(teacherRightDialog).dialog('open');
+		$(userRightDialog).dialog('open');
 	};
 	//重置密码
 	var onMulResetPwd = function(){
@@ -440,10 +383,10 @@
 			if(!t) return;
 			var idArray = new Array();
 			for(var i=0;i<rows.length;i++){
-				idArray.push(rows[i].teacherId);
+				idArray.push(rows[i].userId);
 			}
 			var ids = idArray.join(CSIT.join);
-			var url = "system/mulResetPwdTeacher.do";
+			var url = "system/mulResetPwdUser.do";
 			var content = {ids:ids};
 			$.post(url,content,
 				function(result){
@@ -455,43 +398,9 @@
 				}, "json");
 		});
 	};
-	//上传导入
-	var onUpload = function(){
-		$('#uploadDialogMain').dialog({title: '导入教师'});
-		var url = 'common/downloadTemplateCommon.do?filePath=personnel/teacher.xls&fileName='+encodeURIComponent(encodeURIComponent('在职教师上传模板.xls'));
-		var urlUpload = 'personnel/uploadAllTeacher.do';
-		$('#searchBtnIdMain').val(id);
-		var searchBtnIdMain = $('#searchBtnIdMain').val();
-		$('#urlTemplateMain').val(url);
-		$('#urlUploadMain').val(urlUpload);
-		$('#uploadDialogMain').dialog('open');
-	};
 	//----------检查权限--------------
 	var rights = null;
 	var checkBtnRight = function(){
-		if(rights==null){
-			rights = $($this).attr('rights');
-			rights = eval('('+rights+')')
-		}
-		var checkArray = new Array();
-		
-		var addBtn = $('#add_'+id,$this);
-		var updateBtn = $('#update_'+id,$this);
-		var deleteBtn = $('#delete_'+id,$this);
-		var tbStateBtn = $('#tbState_'+id,$this);
-		var teacherRoleBtn = $('#teacherRole_'+id,$this);
-		var teacherRightBtn = $('#teacherRight_'+id,$this);
-		var resetPwdBtn = $('#resetPwd_'+id,$this);
-		var uploadBtn = $('#upload_'+id,$this);
-		checkArray.push(addBtn);
-		checkArray.push(updateBtn);
-		checkArray.push(deleteBtn);
-		checkArray.push(tbStateBtn);
-		checkArray.push(teacherRoleBtn);
-		checkArray.push(teacherRightBtn);
-		checkArray.push(resetPwdBtn);
-		checkArray.push(uploadBtn);
-		checkRight(checkArray,rights);
 	};
 	checkBtnRight();
 };

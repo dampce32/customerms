@@ -16,4 +16,8 @@ public interface GlobalConstants {
 	public static int DEFAULT_CALLIST_ARCHIVE = 10;
 	public static String SPLIT=",";
 	public static String SPLIT_SEPARATOR ="^";
+	/**
+	 * 默认密码
+	 */
+	public static String DEFAULT_PWD = "123456";
 }
