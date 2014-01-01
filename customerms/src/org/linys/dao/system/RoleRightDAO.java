@@ -52,5 +52,19 @@ public interface RoleRightDAO {
 	 * @return
 	 */
 	Integer countChildrenSameParent(RoleRight model);
+	/**
+	 * @description: 根据角色roleId的角色权限
+	 * @created: 2014-1-1 下午11:58:48
+	 * @author 以宋
+	 * @param roleId
+	 */
+	void insertByRoleId(Integer roleId);
+	/**
+	 * @description: 
+	 * @created: 2014-1-2 上午12:12:05
+	 * @author 以宋
+	 * @param rightId
+	 */
+	void insertByRightId(Integer rightId);
 
 }

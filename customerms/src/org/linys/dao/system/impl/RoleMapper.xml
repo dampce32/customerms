@@ -75,6 +75,7 @@
 	</update>
 	<!-- 删除 -->
   	<delete id="delete" parameterType="int">
+  		delete from T_RoleRight where roleId= #{roleId};
 		delete from T_Role where roleId = #{roleId}
 	</delete>
 </mapper>

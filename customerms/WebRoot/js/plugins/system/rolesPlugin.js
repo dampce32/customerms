@@ -76,10 +76,6 @@
 	  $('#roleRight_'+id,$this).click(function(){
 		  onRoleRight();
 	  });
-	  //系统提醒
-	  $('#sysRemind_'+id,$this).click(function(){
-		  onSysRemind();
-	  });
 	  //上移
 	  $('#moveUp_'+id,$this).click(function(){
 		  onMove(-1);
@@ -317,146 +313,6 @@
 		}
 		$(roleRightDialog).dialog('open');
 	};
-	//========================================系统提醒================================
-	var sysRemindDialog = $('#sysRemindDialog_'+id,$this);
-    var sysRemindRoleList =  $('#sysRemindRoleList_'+id,$this);
-    var sysRemindList =  $('#sysRemindList_'+id,$this);
-	//系统提醒框
-	$(sysRemindDialog).dialog({  
-	    title: '系统提醒',  
-	    width:1100,
-	    height:500,
-	    cache: false, 
-	    closed: true,  
-	    modal: true,
-	    closable:false,
-	    onOpen:function(){
-			$(sysRemindRoleList).datagrid({
-				url:'sysRemindRole/querySysRemindRole.do',
-		  		queryParams:{'role.roleId':selectRow.roleId}
-			});
-			$(sysRemindList).datagrid({
-				url:'system/skipQuerySysRemind.do',
-		  		queryParams:{roleId:selectRow.roleId}
-			});
-	    },
-	    onClose:function(){
-	    	$(sysRemindRoleList).datagrid('loadData',{total: 0,rows:[]});
-	    	$(sysRemindList).datagrid('loadData',{total: 0,rows:[]});
-	    }
-	}); 
-	$(sysRemindRoleList).datagrid({
-			singleSelect:false,
-			method:"POST",
-			nowrap:true,
-			striped: true,
-			collapsible:true,
-			pagination:false,
-			rownumbers:true,
-			selectOnCheck:true,
-			checkOnSelect:true,
-			fit:true,
-			toolbar:[	
-						{text:'删除',iconCls:'icon-remove',handler:function(){onDeleteSysRemindRole();}},
-						{text:'退出',iconCls:'icon-cancel',handler:function(){$(sysRemindDialog).dialog('close');}}
-					],
-			columns:[[
-			      {field:'ck',checkbox:true},
-				{field:'title',title:'标题',width:200,align:"center"},
-				{field:'message',title:'提示信息',width:250,align:"center"}
-			]]
-	  });
-	$(sysRemindList).datagrid({
-			singleSelect:false,
-			method:"POST",
-			nowrap:true,
-			striped: true,
-			collapsible:true,
-			pagination:false,
-			rownumbers:true,
-			selectOnCheck:true,
-			checkOnSelect:true,
-			fit:true,
-			toolbar:[	
-						{text:'添加',iconCls:'icon-add',handler:function(){onAddSysRemindRole();}}
-					],
-			columns:[[
-			      {field:'ck',checkbox:true},
-				{field:'title',title:'标题',width:200,align:"center"},
-				{field:'message',title:'提示信息',width:250,align:"center"}
-			]]
-	  });
-	var onSysRemind = function(){
-		if(selectRow==null){
-			$.messager.alert("警告","请选择要数据行","warning");
-			return;
-		}
-		$(sysRemindDialog).dialog('open');
-	};
-	var onAddSysRemindRole = function(){
-		var rows = $(sysRemindList).datagrid('getChecked');
-		if(rows.length==0){
-			 $.messager.alert('警告',"请勾选要添加的系统提醒","warning");
-			 return;	
-		}
-		var idArray = new Array();
-		for(var i=0;i<rows.length;i++){
-			idArray.push(rows[i].sysRemindId);
-		}
-		var ids = idArray.join(CSIT.join);
-		var url = "sysRemindRole/saveSysRemindRole.do";
-		var content = {ids:ids,'role.roleId':selectRow.roleId};
-		$.post(url,content,
-			function(result){
-				if(result.isSuccess){
-					var fn = function(){
-						$(sysRemindRoleList).datagrid({
-							url:'sysRemindRole/querySysRemindRole.do',
-					  		queryParams:{'role.roleId':selectRow.roleId}
-						});
-						$(rows).each(function(index,row){
-							var checkIndex = $(sysRemindList).datagrid('getRowIndex',row);
-							$(sysRemindList).datagrid('deleteRow',checkIndex);
-						});
-					};
-					$.messager.alert('提示','成功添加系统提醒','info',fn);
-				}else{
-					$.messager.alert('错误',result.message,"error");
-				}
-			}, "json");
-	};
-	var onDeleteSysRemindRole = function(){
-		var rows = $(sysRemindRoleList).datagrid('getChecked');
-		if(rows.length==0){
-			 $.messager.alert('提示',"请选中要删除的纪录","warning");
-			 return;	
-		}
-		$.messager.confirm("提示！","确定要删除选中的记录?",function(t){ 
-			if(!t) return;
-			var idArray = new Array();
-			for(var i=0;i<rows.length;i++){
-				idArray.push(rows[i].sysRemindRoleId);
-			}
-			var ids = idArray.join(CSIT.join);
-			var url = "sysRemindRole/mulDeleteSysRemindRole.do";
-			var content = {ids:ids};
-			$.post(url,content,
-				function(result){
-					if(result.isSuccess){
-						$(sysRemindList).datagrid({
-							url:'system/skipQuerySysRemind.do',
-					  		queryParams:{roleId:selectRow.roleId}
-						});
-						$(rows).each(function(index,row){
-							var checkIndex = $(sysRemindRoleList).datagrid('getRowIndex',row);
-							$(sysRemindRoleList).datagrid('deleteRow',checkIndex);
-						});
-					}else{
-						$.messager.alert('提示',result.message,"error");
-					}
-				}, "json");
-		});
-	};
 	//移动
 	var onMove = function(direction){
 		if(selectRow == null){
@@ -480,14 +336,9 @@
 		var roleId = selectRow.roleId;
 		var roleCode = selectRow.roleCode;
 		var roleName = selectRow.roleName;
-		var roleType = selectRow.roleType;
-		var state = selectRow.state;
-		var note = selectRow.note;
+		var status = selectRow.status;
 		var array = updateRow.array;
 		updateRow.array = selectRow.array;
-		if(updateRow.note==null){
-			updateRow.note = '';
-		}
 		//后台更新排序
 		var url = "system/updateArrayRole.do";
 		var content = {roleId:roleId,updateRoleId:updateRow.roleId};
@@ -499,9 +350,7 @@
 					roleId:updateRow.roleId,
 					roleCode:updateRow.roleCode,
 					roleName:updateRow.roleName,
-					roleType:updateRow.roleType,
-					state:updateRow.state,
-					note:updateRow.note,
+					status:updateRow.status,
 					array:updateRow.array
 				}
 			});
@@ -511,9 +360,7 @@
 					roleId:roleId,
 					roleCode:roleCode,
 					roleName:roleName,
-					roleType:roleType,
-					state:state,
-					note:note,
+					status:status,
 					array:array
 				}
 			});

@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
 import org.linys.dao.system.RightDAO;
+import org.linys.dao.system.RoleRightDAO;
 import org.linys.model.system.Right;
 import org.linys.service.system.RightService;
 import org.linys.util.JSONUtil;
@@ -26,8 +27,8 @@ public class RightServiceImpl implements RightService {
 	private RightDAO rightDAO;
 //	@Resource
 //	private RoleDAO roleDAO;
-//	@Resource
-//	private RoleRightDAO roleRightDAO;
+	@Resource
+	private RoleRightDAO roleRightDAO;
 	public String getRootTreeNode() {
 		Right root = rightDAO.getRootTreeNode();
 		if(root!=null){
@@ -129,26 +130,7 @@ public class RightServiceImpl implements RightService {
 			model.setArray(maxArray+1);
 			model.setIsLeaf(1);
 			rightDAO.insert(model);
-//			if(model.getParentRight()!=null){
-//				rightDAO.updateIsLeaf(model.getParentRight().getRightId(),false);
-//				//为所有角色添加权限
-//				List<Role> allRole = roleDAO.queryAll();
-//				for (Role role : allRole) {
-//					RoleRight roleRight = new RoleRight();
-//					RoleRightId roleRightId = new RoleRightId();
-//					roleRightId.setRoleId(role.getRoleId());
-//					roleRightId.setRightId(model.getRightId());
-//					roleRight.setId(roleRightId);
-//					
-//					roleRight.setRole(role);
-//					roleRight.setRight(model);
-//					
-//					roleRight.setState(0);
-//					roleRightDAO.save(roleRight);
-//					//更新权限树
-////					setParentTrue(roleRight);
-//				}
-//			}
+			roleRightDAO.insertByRightId(model.getRightId());
 		}else{
 			/*
 			 * 1.验证权限配置

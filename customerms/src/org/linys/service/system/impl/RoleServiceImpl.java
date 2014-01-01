@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
 import org.linys.dao.system.RoleDAO;
+import org.linys.dao.system.RoleRightDAO;
 import org.linys.model.system.Role;
 import org.linys.service.system.RoleService;
 import org.linys.util.JSONUtil;
@@ -24,8 +25,8 @@ public class RoleServiceImpl  implements RoleService {
 	private RoleDAO roleDAO;
 //	@Resource
 //	private TeacherDAO teacherDAO;
-//	@Resource
-//	private RoleRightDAO roleRightDAO;
+	@Resource
+	private RoleRightDAO roleRightDAO;
 	/*
 	 * (non-Javadoc)   
 	 * @see com.csit.service.RoleService#save(com.csit.model.Role, java.lang.Integer)
@@ -55,30 +56,8 @@ public class RoleServiceImpl  implements RoleService {
 			Integer maxArray = roleDAO.getMaxArray();
 			model.setArray(maxArray+1);
 			roleDAO.insert(model);
-//			/*
-//			 * 新增角色，并将当前教师的权限赋值给新增的角色
-//			 */
-//			List<Map<String,Object>> list = teacherDAO.queryTeacherRight(teacherId);
-//			//取出当前教师整合后的角色权限
-//			for (Map<String, Object> map : list) {
-//				RoleRight roleRight = new RoleRight();
-//				
-//				RoleRightId roleRightId = new RoleRightId();
-//				roleRightId.setRoleId(model.getRoleId());
-//				
-//				String rightId = map.get("RightID").toString();
-//				roleRightId.setRightId(rightId);
-//				
-//				String state = map.get("State").toString();
-//				if("1".equals(state)){
-//					roleRight.setState(1);
-//				}else{
-//					roleRight.setState(0);
-//				}
-//				
-//				roleRight.setId(roleRightId);
-//				roleRightDAO.save(roleRight);
-//			}
+			//创建出角色对应的角色权限
+			roleRightDAO.insertByRoleId(model.getRoleId());
 		}else{
 			if(oldRole!=null&&!oldRole.getRoleId().equals(model.getRoleId())){
 				result.setMessage("其他权限已使用该角色编号");
