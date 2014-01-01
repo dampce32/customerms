@@ -147,5 +147,13 @@ public interface RightDAO {
 	 * @param sourceRight
 	 */
 	void updateDragChange(Right right);
+	/**
+	 * @description: 取得
+	 * @created: 2014-1-1 下午10:42:06
+	 * @author 以宋
+	 * @param rightId
+	 * @return
+	 */
+	Right getParentRight(Integer rightId);
 	
 }

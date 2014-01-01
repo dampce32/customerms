@@ -100,4 +100,8 @@ public class RightDAOImpl implements RightDAO{
 		map.put("targetArray", targetRight.getArray());
  		sqlSession.update("RightMapper.dropUpdateArray",map);
 	}
+
+	public Right getParentRight(Integer rightId) {
+		return (Right) sqlSession.selectOne("RightMapper.getParentRight",rightId);
+	}
 }

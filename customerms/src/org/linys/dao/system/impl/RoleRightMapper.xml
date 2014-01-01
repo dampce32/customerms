@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="RoleRightMapper" >
+  	<!-- 取得树的跟节点 -->
+	<select id="getRootTreeNode" parameterType="RoleRight"  resultType="Right">
+		select a.rightId,b.rightName,a.status,b.isLeaf
+		from(select rightId,status
+		from t_roleright
+		where roleId = #{roleId})a
+		left join t_right b on a.rightId = b.rightId
+		where b.parentRightId is null
+	</select>
+	<!-- 取得树的节点下的子节点 -->
+	<select id="getChildrenTreeNode"  resultType="Right" parameterType="RoleRight">
+		select a.rightId,b.rightName,a.status,b.isLeaf
+		from(select rightId,status
+		from t_roleright
+		where roleId = #{roleId})a
+		left join t_right b on a.rightId = b.rightId
+		where b.parentRightId =#{rightId}
+		order by b.array
+	</select>
+	<!-- 根据roleId和rightId取得角色权限 -->
+	<select id="loadByRoleIdRightId"  resultType="RoleRight" parameterType="RoleRight">
+		select *
+		from t_roleright
+		where roleId = #{roleId} and rightId = #{rightId}
+	</select>
+	<!-- 统计相同父节点下相同状态的子节点个数 -->
+	<select id="countChildrenSameParent"  resultType="int" parameterType="RoleRight">
+		select count(1)
+		from(select parentRightId
+			from t_right
+			where rightId = #{rightId})a
+		left join t_right b on a.parentRightId = b.parentRightId
+		left join(select *
+			from t_roleright 
+			where roleId = #{roleId})c on b.rightId = c.rightId
+		where c.status = #{status}
+	</select>
+	<!-- 更新角色权限状态 -->
+	<update id="updateStatus" parameterType="RoleRight" >
+	    update t_roleright
+	    set status = #{status}
+	    where roleId = #{roleId,jdbcType=INTEGER} and rightId = #{rightId,jdbcType=INTEGER}
+	</update>
+	
+  <delete id="deleteByPrimaryKey" parameterType="Integer" >
+    delete from t_roleright
+    where roleRightId = #{roleRightId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="RoleRight" >
+    insert into t_roleright (roleRightId, rightId, roleId
+      )
+    values (#{roleRightId,jdbcType=INTEGER}, #{rightId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="RoleRight" >
+    insert into t_roleright
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleRightId != null" >
+        roleRightId,
+      </if>
+      <if test="rightId != null" >
+        rightId,
+      </if>
+      <if test="roleId != null" >
+        roleId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleRightId != null" >
+        #{roleRightId,jdbcType=INTEGER},
+      </if>
+      <if test="rightId != null" >
+        #{rightId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="RoleRight" >
+    update t_roleright
+    set rightId = #{rightId,jdbcType=INTEGER},
+      roleId = #{roleId,jdbcType=INTEGER}
+    where roleRightId = #{roleRightId,jdbcType=INTEGER}
+  </update>
+</mapper>

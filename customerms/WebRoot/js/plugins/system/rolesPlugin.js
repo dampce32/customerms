@@ -270,12 +270,11 @@
 		}],
 		onOpen:function(){
 			$(roleRightTree).tree({
-					url: 'system/getRootRoleRight.do?roleId='+selectRow.roleId,
+					url: 'system/getRootTreeNodeRoleRight.do?roleId='+selectRow.roleId,
 					checkbox:true,
 					onBeforeExpand:function(node){
-						var roleRightId = node.id;
-						var rightId = roleRightId.split('_')[1];
-						var url = 'system/getChildrenRoleRight.do?roleId='+selectRow.roleId+'&rightId='+rightId;
+						var rightId = node.id;
+						var url = 'system/getChildrenTreeNodeRoleRight.do?roleId='+selectRow.roleId+'&rightId='+rightId;
 						$(roleRightTree).tree('options').url = url;
 			        },
 			        onBeforeLoad:function(node, param){ 
@@ -290,16 +289,15 @@
 		            onCheck:function(node,checked){
 		            	if(!loading){
 		            		$(roleRightDialog).mask({maskMsg:'正在更新权限'});
-		            		var roleRightId = node.id;
-		    				var rightId = roleRightId.split('_')[1];
-		    				var state = null;
+		            		var rightId = node.id;
+		    				var status = null;
 		    				if(checked){
-		    					state=1;
+		    					status=1;
 		    				}else{
-		    					state=0;
+		    					status=0;
 		    				}
-		    				var url = 'system/updateStateRoleRight.do?roleId='+selectRow.roleId+'&rightId='+rightId+'&state='+state;
-		            		$.post(url,
+		    				var url = 'system/updateStatusRoleRight.do?roleId='+selectRow.roleId+'&rightId='+rightId+'&status='+status;
+		    				$.post(url,
 							  function(result){
 		            			if(!result.isSuccess){
 									$.messager.alert('提示',result.message,"error");
@@ -317,50 +315,6 @@
 			$.messager.alert("警告","请选择数据行","warning");
 			return;
 		}
-//		if(selectRow.roleName=='超级管理员'){
-//			$.messager.alert('警告','超级管理员不能修改',"warning");
-//			return false;
-//		}
-		$(roleRightTree).tree({
-			url: 'system/getRootRoleRight.do?role.roleId='+selectRow.roleId,
-			checkbox:true,
-			onBeforeExpand:function(node,param){
-				var roleRightId = node.id;
-				var rightId = roleRightId.split('_')[1];
-				var url = 'system/getChildrenRoleRight.do?id=null&&role.roleId='+selectRow.roleId+'&right.rightId='+rightId;
-				$(roleRightTree).tree('options').url = url;
-	        },
-	        onBeforeLoad:function(node, param){ 
-				loading=true; 
-			}, 
-			onLoadSuccess:function(node, data){ 
-			    loading=false; 
-			},
-			onClick:function(node){ 
-				$(roleRightTree).tree('expand',node.target);
-			},
-            onCheck:function(node,checked){
-            	$(roleRightDialog).mask({maskMsg:'正在更新权限'});
-            	if(!loading){
-            		var roleRightId = node.id;
-    				var rightId = roleRightId.split('_')[1];
-    				var state = null;
-    				if(checked){
-    					state=1;
-    				}else{
-    					state=0;
-    				}
-    				var url = 'system/updateStateRoleRight.do?role.roleId='+selectRow.roleId+'&right.rightId='+rightId+'&state='+state;
-            		$.post(url,
-					  function(result){
-            			if(!result.isSuccess){
-							$.messager.alert('提示',result.message,"error");
-						}
-            			$(roleRightDialog).mask('hide');
-            		},'json');
-            	}
-            }
-	  });
 		$(roleRightDialog).dialog('open');
 	};
 	//========================================系统提醒================================
