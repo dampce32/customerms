@@ -312,6 +312,18 @@ public class BaseAction extends ActionSupport {
 	public String getParameter(String name) {
 		return getRequest().getParameter(name);
 	}
+	/**
+	 * @Description: 取得IntegerParameter
+	 * @Create: 2012-10-26 下午11:21:01
+	 * @author lys
+	 * @update logs
+	 * @param name
+	 * @return
+	 * @throws Exception
+	 */
+	public Integer getParameterInteger(String name) {
+		return Integer.parseInt(getRequest().getParameter(name));
+	}
 	
 	/**
 	 * @Description: 取得报表模板路径

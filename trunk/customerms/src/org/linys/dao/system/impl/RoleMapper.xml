@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="RoleMapper" >
+	<!-- 根据角色编号查询 -->
+	<select id="loadByRoleCode" parameterType="String" resultType="Role">
+		select *
+		from T_Role
+		where roleCode=#{roleCode}
+	</select>
+	<!-- 取得最大排序 -->
+	<select id="getMaxArray" parameterType="int" resultType="Integer">
+		select max(array)
+		from T_Role
+	</select>
+	<!-- 查询角色 -->
+	<select id="query"  resultType="Role" parameterType="Role">
+		select *
+		from T_Role
+		where 1 = 1  
+		<if test="roleCode != null and roleCode !=''">
+			and roleCode like '%${roleCode}%'
+		</if>
+		<if test="roleName != null and roleName !=''">
+			and roleName like '%${roleName}%'
+		</if>
+		order by array
+	</select>
+	<!-- 统计角色 -->
+	<select id="count" parameterType="Role" resultType="Long">
+		select count(1)
+		from T_Role
+		where 1 = 1  
+		<if test="roleCode != null and roleCode !=''">
+			and roleCode like '%${roleCode}%'
+		</if>
+		<if test="roleName != null and roleName !=''">
+			and roleName like '%${roleName}%'
+		</if>
+	</select>
+	<!-- 根据角色Id取得角色 -->
+	<select id="loadByRoleId" parameterType="int" resultType="Role">
+		select *
+		from T_Role
+		where roleId=#{roleId}
+	</select>
+	
+	<insert id="insert" parameterType="Role"  useGeneratedKeys="true" keyProperty="roleId">
+	  insert into t_role (roleCode, roleName,array, status)
+	  values (#{roleCode,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, 
+	    #{array,jdbcType=INTEGER}, #{status,jdbcType=INTEGER})
+	</insert>
+  	<!-- 更新 -->
+  	<update id="update" parameterType="Role">
+		update T_Role 
+		set roleCode = #{roleCode},roleName = #{roleName},
+		status=#{status}
+		where roleId = #{roleId}
+	</update>
+	<!-- 更新状态 -->
+  	<update id="updateStatus" parameterType="Role">
+		update T_Role 
+		set status = #{status}
+		where roleId = #{roleId}
+	</update>
+	<!-- 更新排序 -->
+  	<update id="updateArray" parameterType="java.util.Map">
+	    set @updateRoleArray =(select array from T_Role where roleId=#{updateRoleId});
+		set @roleArray =(select array from T_Role where roleId=#{roleId});
+		update T_Role 
+		set array = case 
+	    	when roleId = #{roleId} then  @updateRoleArray
+	    	else  @roleArray
+	    	end 
+	    where roleId in (#{roleId},#{updateRoleId})
+	</update>
+	<!-- 删除 -->
+  	<delete id="delete" parameterType="int">
+		delete from T_Role where roleId = #{roleId}
+	</delete>
+</mapper>

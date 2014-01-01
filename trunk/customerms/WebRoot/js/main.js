@@ -1,3 +1,4 @@
+var base = null;
 $(function(){
 	//当前选中的节点
     var currentNode = null;
@@ -8,7 +9,8 @@ $(function(){
     var height = $(document.body).height();
 	var width = $(document.body).width();
 	tabCloseEven();
- 	$('#rightTree li a').click(function(){
+	base = $('#baseMain').val();
+ 	$('#rightTree a').click(function(){
 		var href =$(this).attr('name');
 		var title = $(this).text();
 		if(href==null){
@@ -17,7 +19,21 @@ $(function(){
 		addTab(title,href);
 		return false;
 	});
- 	
+ 	$('#rightTree').tree({
+		onBeforeExpand:function(node,param){
+			var roleId = $('#currRolesMain').combobox('getValue');
+			$('#rightTree').tree('options').url = 'system/getChildrenUrlRightTeacher.do?rightId='+node.id+"&roleId="+roleId;  
+	    },
+		onSelect:function (node) {
+			$(this).tree('toggle',node.target);
+            if (currentNode != null && node.id == currentNode.id) return;
+            if (node.attributes == null) return;
+            var url = node.attributes.rightUrl;
+            var title = node.text;
+            CSIT.currTabRightId = node.id;
+            addTab(title, url);
+        }
+	});
  	//退出系统
  	 $('#exitSystem').click(function(){
      	$.messager.confirm('提示','确定要退出系统吗?',function(r){
@@ -60,7 +76,81 @@ $(function(){
      	$('#modifyPwdForm').form('clear');
       	$('#modifyPwdDialog').dialog('open');
       });
+      //保存前检验表单值
+ 	  var setValue = function(){
+ 		  var passwords = $('#passwords').val();
+ 		  if('' == passwords){
+ 			  $.messager.alert('提示','请输入原密码','warning');
+ 			  return false;
+ 		  }
+ 		  var newTeacherPwd = $('#newTeacherPwd').val();
+ 		  if('' == newTeacherPwd){
+ 			  $.messager.alert('提示','请输入新密码','warning');
+ 			  return false;
+ 		  }
+ 		  var newTeacherPwd2 = $('#newTeacherPwd2').val();
+ 		  if(newTeacherPwd!=newTeacherPwd2){
+ 			  $.messager.alert('提示','两次输入的新密码不一样','warning');
+ 			  return false;
+ 		  }
+ 		  return true;
+ 	  };
+ 	  
+ 	  var onSaveModifyPwd = function(){
+ 		  $('#modifyPwdForm').form('submit',{
+ 			url: 'system/modifyPwdTeacher.do',
+ 			onSubmit: function(){
+ 				return setValue();
+ 			},
+ 			success: function(data){
+ 				var result = eval('('+data+')');
+ 				if(result.isSuccess){
+ 					$('#modifyPwdDialog').dialog('close');
+ 					$.messager.alert('提示','密码修改成功','info');
+ 				}else{
+ 					$.messager.alert('警告',result.message,"warning");
+ 				}
+ 			}
+ 		  });
+ 	  };
+ 	//上传前的赋值操作
+	var setUploadValue = function(){
+		var file = $('#fileMain').val();
+		if(file == ''){
+			$.messager.alert('警告','文件不能为空!','warning');
+			return false;
+		}
+		
+		$('#uploadDialogMain').mask({maskMsg:'正在上传'});
+		return true;
+	};
+	//保存
+	var onUploadSave = function(){
+		var urlUploadMain =$('#urlUploadMain').val();
+		var searchBtnIdMain = $('#searchBtnIdMain').val();
+		$('#uploadFormMain').form('submit',{
+			url:urlUploadMain,
+			onSubmit: function(){
+				return setUploadValue();
+			},
+			success: function(data){
+				var result = eval('('+data+')');
+				if(result.isSuccess){
+					var fn = function(){
+						$('#searchBtn_'+searchBtnIdMain).click();
+					};
+					$.messager.alert('警告','上传成功','info',fn);
+					$('#uploadDialogMain').dialog('close');
+					$('#uploadDialogMain').mask('hide');
+				}else{
+					$.messager.alert('错误',result.message,"error");
+					$('#uploadDialogMain').mask('hide');
+				}
+			}
+		});
+	};
 });
+
 function addTab(title,href){
 	if($('#tabs').tabs('exists',title)){//选择并更新tab
 		$('#tabs').tabs('select',title);
@@ -76,6 +166,10 @@ function addTab(title,href){
 	                        return d;
 	                    }
 	                    var currTabRightId = CSIT.currTabRightId;
+	                    d = d.replace(/\$\{rightId\}/g, currTabRightId);
+	                    if(CSIT.queryVariable!=null){
+	                    	d = d.replace(/\$\{queryVariable\}/g, CSIT.queryVariable);
+	                    }
 	                    if (window['CSIT']) {
 	                        var id = CSIT.genId();
 	                        var d = d.replace(/\$\{id\}/g, id);
