@@ -2,6 +2,7 @@ package org.linys.dao.system;
 
 import java.util.List;
 
+import org.linys.model.system.Right;
 import org.linys.model.system.User;
 
 /**
@@ -84,5 +85,22 @@ public interface UserDAO {
 	 * @return
 	 */
 	User login(String userCode, String passwords);
+	/**
+	 * @description: 取得当前用户所拥有的url权限跟节点
+	 * @created: 2014-1-2 下午9:48:13
+	 * @author 以宋
+	 * @param userId
+	 * @return
+	 */
+	Right getRootUrlRightTreeNode(Integer userId);
+	/**
+	 * @description: 取得当前用户所拥有的url权限rightId下的子权限
+	 * @created: 2014-1-2 下午9:48:46
+	 * @author 以宋
+	 * @param userId
+	 * @param rightId
+	 * @return
+	 */
+	List<Right> getChildrenUrlRightTreeNode(Integer userId, Integer rightId);
 
 }

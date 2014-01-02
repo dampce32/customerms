@@ -110,4 +110,25 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 		ServiceResult result = new ServiceResult(true);
 		ajaxJson(result.toJSON());
 	}
+	/**
+	 * @Description: 取得当前用户所拥有的url权限跟节点
+	 * @Created: 2013-9-7 下午11:03:52
+	 * @Author lys
+	 */
+	public void getRootUrlRightTreeNode(){
+		Integer userId = getIntegerSession(User.LOGIN_USERID);
+		String ajaxString = userService.getRootUrlRightTreeNode(userId);
+		ajaxJson(ajaxString);
+	}
+	/**
+	 * @Description: 取得当前用户所拥有的url权限rightId下的子权限
+	 * @Created: 2013-9-7 下午11:03:52
+	 * @Author lys
+	 */
+	public void getChildrenUrlRightTreeNode(){
+		Integer userId = getIntegerSession(User.LOGIN_USERID);
+		Integer rightId = getIntegerParameter("rightId");
+		String ajaxString = userService.getChildrenUrlRightTreeNode(userId,rightId);
+		ajaxJson(ajaxString);
+	}
 }

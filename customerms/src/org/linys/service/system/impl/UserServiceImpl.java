@@ -5,12 +5,15 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.linys.dao.system.RightDAO;
 import org.linys.dao.system.UserDAO;
+import org.linys.model.system.Right;
 import org.linys.model.system.User;
 import org.linys.service.system.UserService;
 import org.linys.util.JSONUtil;
 import org.linys.util.MD5Util;
 import org.linys.util.StringUtil;
+import org.linys.util.TreeUtil;
 import org.linys.vo.GlobalConstants;
 import org.linys.vo.ServiceResult;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,9 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 	@Resource
 	private UserDAO userDAO;
+	@Resource
+	private RightDAO rightDAO;
+	
 	String[] properties = {"userId","userCode","userName","status"};
 	public ServiceResult save(User model) {
 		ServiceResult result = new ServiceResult(false);
@@ -116,6 +122,24 @@ public class UserServiceImpl implements UserService {
 
 	public User login(String userCode, String passwords) {
 		return userDAO.login(userCode,passwords);
+	}
+
+	public String getRootUrlRightTreeNode(Integer userId) {
+		Right root = rightDAO.getRootTreeNode();
+		if(root!=null){
+			if(root.getIsLeaf()==0){//不是叶子节点
+				List<Right> childrenRights = userDAO.getChildrenUrlRightTreeNode(userId,root.getRightId());
+				root.setChildrenRights(childrenRights);
+			}
+		}
+		String jsonString = TreeUtil.toJSONRightList(root.getChildrenRights());
+		return jsonString;
+	}
+
+	public String getChildrenUrlRightTreeNode(Integer userId, Integer rightId) {
+		List<Right> childrenRights = userDAO.getChildrenUrlRightTreeNode(userId,rightId);
+		String jsonString = TreeUtil.toJSONRightList(childrenRights);
+		return jsonString;
 	}
 
 }

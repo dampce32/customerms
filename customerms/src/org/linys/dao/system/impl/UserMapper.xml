@@ -43,6 +43,33 @@
 		from T_User
 		where userCode=#{userCode} and passwords =#{passwords} 
 	</select>
+	<select id="getChildrenUrlRightTreeNode" parameterType="java.util.Map" resultType="Right">
+		select a.rightId,b.rightName,b.rightUrl,case when a.countChildren>0 then 0 else 1 end isLeaf
+		from(select a.rightId,count(b.rightId) countChildren
+			from (select distinct a.rightId 
+				from(select a.rightId
+					from t_right a
+					where a.parentRightId = #{rightId} and a.`status` = 1 and a.rightKind=1)a
+				left join(select a.roleId
+					from(select roleId
+						from t_userrole 
+						where userId = #{userId})a
+						left join t_role b on a.roleId = b.roleId and b.`status` = 1
+						where b.`status`=1)b on 1=1
+				left join t_roleright c on a.rightId = c.rightId and b.roleId=c.roleId and c.`status`=1
+				where c.`status`=1) a
+			left join t_right b on a.rightId=b.parentRightId and b.`status`=1 and b.rightKind=1
+			left join(select a.roleId
+				from(select roleId
+					from t_userrole 
+					where userId = #{userId})a
+					left join t_role b on a.roleId = b.roleId and b.`status` = 1
+					where b.`status`=1)c on 1=1
+			left join t_roleright d on b.rightId = d.rightId and c.roleId=d.roleId and d.`status`=1
+			group by a.rightId)a
+		left join t_right b on a.rightId=b.rightId and b.rightKind=1
+		order by b.array
+	</select>
 	<!-- 插入 -->
 	<insert id="insert" parameterType="User" useGeneratedKeys="true" keyProperty="userId">
 	   insert into t_user (userCode, userName, 
