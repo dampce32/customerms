@@ -58,4 +58,11 @@ public class UserDAOImpl implements UserDAO {
 		sqlSession.update("UserMapper.updateStatus",user);
 	}
 
+	public User login(String userCode, String passwords) {
+		User user = new User();
+		user.setUserCode(userCode);
+		user.setPasswords(passwords);
+		return (User) sqlSession.selectOne("UserMapper.login",user);
+	}
+
 }

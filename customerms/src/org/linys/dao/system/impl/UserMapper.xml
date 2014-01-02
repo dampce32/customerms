@@ -37,12 +37,18 @@
 			and userName like '%${userName}%'
 		</if>
 	</select>
+	<!-- 根据用户编号，用户密码查询用户 -->
+	<select id="login" parameterType="User" resultType="User">
+		select *
+		from T_User
+		where userCode=#{userCode} and passwords =#{passwords} 
+	</select>
 	<!-- 插入 -->
 	<insert id="insert" parameterType="User" useGeneratedKeys="true" keyProperty="userId">
 	   insert into t_user (userCode, userName, 
 	     passwords,status)
 	   values ( #{userCode,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
-	     #{passwords,jdbcType=VARCHAR},status=#{status,jdbcType=INTEGER})
+	     #{passwords,jdbcType=VARCHAR},#{status,jdbcType=INTEGER})
 	</insert>
 	<!-- 更新 -->  
 	<update id="update" parameterType="User" >

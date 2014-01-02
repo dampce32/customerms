@@ -38,7 +38,7 @@ $(function(){
  	 $('#exitSystem').click(function(){
      	$.messager.confirm('提示','确定要退出系统吗?',function(r){
      		if(r){
-     			asyncCallService('system/logoutTeacher.do',function(result){
+     			asyncCallService('system/logoutUser.do',function(result){
      				if(result.isSuccess){
      					window.location.href='login.html';
      				}

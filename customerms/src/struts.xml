@@ -8,8 +8,13 @@
 	<!-- 后缀 -->
 	<constant name="struts.action.extension" value="do" />
 	<constant name="struts.multipart.maxSize" value="100000000"/>
+	<!-- 登陆 -->
+	<package name="login" extends="struts-default" namespace="/login">
+		<action name="userLogin" class="loginAction" method="userLogin"></action>
+	</package>
 	<!-- 系统管理 -->
 	<package name="system" namespace="/system" extends="struts-default">
+		<action name="*UserRole" class="userRoleAction" method="{1}"></action>
 		<action name="*User" class="userAction" method="{1}"></action>
 		<action name="*RoleRight" class="roleRightAction" method="{1}"></action>
 		<action name="*Role" class="roleAction" method="{1}"></action>
