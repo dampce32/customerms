@@ -8,12 +8,45 @@
 	<!-- 后缀 -->
 	<constant name="struts.action.extension" value="do" />
 	<constant name="struts.multipart.maxSize" value="100000000"/>
+	
+	<package name="basePackage" extends="struts-default">
+		<interceptors>
+			<interceptor name="trimInterceptor" class="org.linys.filter.TrimInterceptor"/>
+			<interceptor-stack name="baseStack">
+				<interceptor-ref name="trimInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="baseStack"/>
+		<global-results>
+			<result name="loginUser" type="redirect">/login.html</result>
+			<result name="error">/error.html</result>
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping result="error" exception="java.lang.Exception"/>
+		</global-exception-mappings> 
+	</package>
+	
+	<!--用户端的拦截器-->
+	<package name="userPackage" extends="basePackage">
+		<interceptors>
+			<interceptor name="trimInterceptor" class="org.linys.filter.TrimInterceptor"/>
+			<interceptor name="userLoginInterceptor" class="org.linys.filter.UserLoginVerifyInterceptor"/>
+			<interceptor-stack name="userStack">
+				<interceptor-ref name="trimInterceptor"/>
+				<interceptor-ref name="userLoginInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+			</interceptor-stack>
+		</interceptors>
+		<!-- 配置默认拦截器栈 -->
+		<default-interceptor-ref name="userStack" />
+	</package>
 	<!-- 登陆 -->
-	<package name="login" extends="struts-default" namespace="/login">
+	<package name="login" extends="basePackage" namespace="/login">
 		<action name="userLogin" class="loginAction" method="userLogin"></action>
 	</package>
 	<!-- 系统管理 -->
-	<package name="system" namespace="/system" extends="struts-default">
+	<package name="system" namespace="/system" extends="userPackage">
 		<action name="*UserRole" class="userRoleAction" method="{1}"></action>
 		<action name="*User" class="userAction" method="{1}"></action>
 		<action name="*RoleRight" class="roleRightAction" method="{1}"></action>
@@ -21,10 +54,15 @@
 		<action name="*Right" class="rightAction" method="{1}"></action>
 	</package>
 	<!-- 公共方法 -->
-	<package name="common" namespace="/common" extends="struts-default">
+	<package name="common" namespace="/common" extends="userPackage">
 		<action name="*Common" class="commonAction" method="{1}"></action>
 	</package>
-	<package name="global" namespace="/" extends="struts-default">
+	<package name="main" namespace="/" extends="userPackage">
+		<action name="main">
+			<result>/WEB-INF/main.jsp</result>
+		</action>
+	</package>
+	<package name="global" namespace="/" extends="basePackage">
 		<action name="*">
 			<result>/WEB-INF/{1}.jsp</result>
 		</action>

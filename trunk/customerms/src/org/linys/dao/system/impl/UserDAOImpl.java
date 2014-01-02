@@ -1,12 +1,15 @@
 package org.linys.dao.system.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.linys.dao.system.UserDAO;
+import org.linys.model.system.Right;
 import org.linys.model.system.User;
 import org.linys.util.PageUtil;
 import org.springframework.stereotype.Repository;
@@ -63,6 +66,19 @@ public class UserDAOImpl implements UserDAO {
 		user.setUserCode(userCode);
 		user.setPasswords(passwords);
 		return (User) sqlSession.selectOne("UserMapper.login",user);
+	}
+
+	public Right getRootUrlRightTreeNode(Integer userId) {
+		return (Right) sqlSession.selectOne("UserMapper.getRootUrlRightTreeNode",userId);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Right> getChildrenUrlRightTreeNode(Integer userId,
+			Integer rightId) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("userId", userId);
+		map.put("rightId", rightId);
+		return (List<Right>) sqlSession.selectList("UserMapper.getChildrenUrlRightTreeNode",map);
 	}
 
 }

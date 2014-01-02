@@ -20,9 +20,9 @@ $(function(){
 		return false;
 	});
  	$('#rightTree').tree({
+ 		url: 'system/getRootUrlRightTreeNodeUser.do',
 		onBeforeExpand:function(node,param){
-			var roleId = $('#currRolesMain').combobox('getValue');
-			$('#rightTree').tree('options').url = 'system/getChildrenUrlRightTeacher.do?rightId='+node.id+"&roleId="+roleId;  
+			$('#rightTree').tree('options').url = 'system/getChildrenUrlRightTreeNodeUser.do?rightId='+node.id;  
 	    },
 		onSelect:function (node) {
 			$(this).tree('toggle',node.target);
