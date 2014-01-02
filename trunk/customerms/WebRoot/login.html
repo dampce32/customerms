@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  	<head>
+  		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    	<title>会员管理系统</title>
+		<meta http-equiv="pragma" content="no-cache"/>
+		<meta http-equiv="cache-control" content="no-cache"/>
+		<meta http-equiv="expires" content="0"/>    
+		<meta http-equiv="keywords" content="keyword1,keyword2,keyword3"/>
+		<meta http-equiv="description" content="This is my page"/>
+		<style type="text/css">
+			<!--
+			body {
+				background:#3c7fb5 url(style/v1/images/login/bg_login.jpg) repeat-x left top;
+				margin-left: 0px;
+				margin-top: 0px;
+				margin-right: 0px;
+				margin-bottom: 0px;
+			}
+			body,table,td,div {
+				font-size: 12px;
+				line-height: 24px;
+			}
+			.textfile {background:url(style/v1/images/login/bg_login_textfile.gif) no-repeat left top; padding: 0px 2px; height: 29px; width: 143px; border: 0; }
+			-->
+		</style>
+		<link rel="stylesheet" type="text/css" href="style/v1/easyui/easyui.css"/>
+		<script type="text/javascript" src="js/common/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="js/common/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="js/common/easyui-lang-zh_CN.js"></script>
+		<script type="text/javascript" src="js/common/jquery-cookies.js"></script>
+		<script type="text/javascript" src="js/common/mask.js"></script>
+		<script type="text/javascript" src="js/login.js"></script>
+	</head>
+
+	<body>
+		<table width="95" border="0" align="center" cellpadding="0" cellspacing="0">
+		  	<tr>
+		    	<td><img src="style/v1/images/login/top_login.jpg" width="596" height="331" /></td>
+		  	</tr>
+		  	<tr>
+		    	<td>
+		    		<table width="100%" border="0" cellspacing="0" cellpadding="0" >
+		      			<tr>
+		        			<td width="99">
+		        			</td>
+		        			<td style="background-image: url('style/v1/images/login/bg_form.jpg');">
+		        				<form id="loginForm"  method="post" >
+			        				<table width="250" border="0" align="center" cellpadding="0" cellspacing="0">
+			       						<tr>
+				            				<td height="34" align="right">登录名：</td>
+				            				<td>
+				              					<label>
+				                					<input type="text" class="textfile" name="userCode" id="userCode"/>
+				                				</label>            
+				                			</td>
+			       						</tr>
+						            	<tr>
+						              		<td height="34" align="right">密&nbsp;&nbsp;码：</td>
+						              		<td>
+						              			<label>
+						                			<input name="userPwd" type="password" class="textfile"  id="userPwd"/>
+						              			</label>
+						              		</td>
+						            	</tr>
+		         						<tr>
+		             						<td height="34" align="right">验证码：</td>
+		             						<td>
+		             							<label>
+		             								<input name="loginCaptcha" id="loginCaptcha" type="text" class="textfile" size="6" style="width:70px; border-right:#BFD7F0 solid 1px;text-transform: uppercase;"/>
+		             							</label>
+		             							<img id="loginCaptchaImage" src="style/v1/images/login/img.jsp" title="点击图片切换" style="cursor: pointer; margin-bottom:-4px"/>
+		             						</td>
+			           					</tr>
+			       						<tr>
+			           						<td height="34">&nbsp;</td>
+			           						<td>
+			           	    					&nbsp;
+			           						</td>
+			       						</tr>
+			       						<tr>
+			           						<td height="34">&nbsp;</td>
+			           						<td>
+			           	    					<div id="loginBtn" style="background: url(style/v1/images/login/btn_login.gif) no-repeat;display: inline-block;width: 64px;height: 28px" >&nbsp;</div>
+			           							<input type="checkbox" id="mindpwd" style="vertical-align:middle"/>记住密码
+			           						</td>
+			       						</tr>
+			       						
+			        				</table>
+			        			</form>
+		        			</td>
+		        			<td width="98" align="right">
+		        			</td>
+		      			</tr>
+		    		</table>
+		    	</td>
+		  	</tr>
+		  	<tr>
+		   	 	<td><img src="style/v1/images/login/bottom_login.jpg" width="596" height="39" /></td>
+		  	</tr>
+		  	<tr>
+		    	<td>&nbsp;</td>
+		  	</tr>
+		  	<tr>
+		    	<td align="center">版权所有：</td>
+		  	</tr>
+		</table>
+	</body>
+</html>

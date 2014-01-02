@@ -8,6 +8,14 @@ package org.linys.model.system;
  */
 public class User {
 	/**
+	 * 登录用户Id
+	 */
+	public static final String LOGIN_USERID = "loginUserId";
+	/**
+	 * 登录用户名称
+	 */
+	public static final String LOGIN_USERNAME = "loginUserName";
+	/**
 	 * 用户Id
 	 */
     private Integer userId;

@@ -75,5 +75,14 @@ public interface UserDAO {
 	 * @param status
 	 */
 	void updateStatus(Integer userId, Integer status);
+	/**
+	 * @description: 根据用户编号，用户密码查询用户
+	 * @created: 2014-1-2 下午8:54:33
+	 * @author 以宋
+	 * @param userCode
+	 * @param passwords
+	 * @return
+	 */
+	User login(String userCode, String passwords);
 
 }

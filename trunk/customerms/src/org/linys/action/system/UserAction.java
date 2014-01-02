@@ -99,4 +99,15 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 		String jsonString = result.toJSON();
 		ajaxJson(jsonString);
 	}
+	/**
+	 * @Description: 退出系统
+	 * @Create: 2012-11-15 上午11:07:41
+	 * @author lys
+	 * @update logs
+	 */
+	public void logout(){
+		getSession().clear();
+		ServiceResult result = new ServiceResult(true);
+		ajaxJson(result.toJSON());
+	}
 }

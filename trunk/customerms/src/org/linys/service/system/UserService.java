@@ -46,5 +46,14 @@ public interface UserService {
 	 * @return
 	 */
 	ServiceResult mulUpdateStatus(String ids, User model);
+	/**
+	 * @description: 根据用户编号，用户密码查询用户
+	 * @created: 2014-1-2 下午8:52:55
+	 * @author 以宋
+	 * @param userCode
+	 * @param md5
+	 * @return
+	 */
+	User login(String userCode, String passwords);
 
 }

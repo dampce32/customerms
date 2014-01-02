@@ -72,7 +72,7 @@
        	<columnOverride column="rightid" property="rightId" javaType="Integer"></columnOverride>
     </table>
     -->
-    <!-- 用户  -->
+    <!-- 用户 
     <table schema="customerms" tableName="T_User" domainObjectName="User"
    		enableInsert="true" enableDeleteByPrimaryKey="true"
    		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
@@ -82,6 +82,18 @@
        	<columnOverride column="userid" property="userId" javaType="Integer"></columnOverride>
        	<columnOverride column="usercode" property="userCode" javaType="String"></columnOverride>
        	<columnOverride column="username" property="userName" javaType="String"></columnOverride>
+    </table>
+     -->
+     <!-- 用户 角色 -->
+    <table schema="customerms" tableName="T_UserRole" domainObjectName="UserRole"
+   		enableInsert="true" enableDeleteByPrimaryKey="true"
+   		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
+  		enableCountByExample="false" enableUpdateByExample="false"
+       	enableDeleteByExample="false" enableSelectByExample="false"
+       	selectByExampleQueryId="false"> 
+       	<columnOverride column="userroleid" property="userRoleId" javaType="Integer"></columnOverride>
+       	<columnOverride column="roleid" property="roleId" javaType="Integer"></columnOverride>
+       	<columnOverride column="userid" property="userId" javaType="Integer"></columnOverride>
     </table>
   </context>
 </generatorConfiguration>

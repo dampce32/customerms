@@ -13,10 +13,11 @@
 	</settings>
 	
 	<typeAliases>
-		<typeAlias alias="RoleRight" type="org.linys.model.system.RoleRight" />
+		<typeAlias alias="RoleRight" type="org.linys.model.system.RoleRight"/>
 		<typeAlias alias="Right" type="org.linys.model.system.Right" />
 		<typeAlias alias="Role" type="org.linys.model.system.Role" />
 		<typeAlias alias="User" type="org.linys.model.system.User" />
+		<typeAlias alias="UserRole" type="org.linys.model.system.UserRole" />
 	</typeAliases>
 
 </configuration>

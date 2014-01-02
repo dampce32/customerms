@@ -250,8 +250,7 @@
 		}
 		 //加载列表
 		$(userRoleList).datagrid({
-			url:'system/queryRoleUserRole.do?user.userId='+
-				selectRow.userId+'&role.roleType=0',
+			url:'system/queryRoleUserRole.do?userId='+selectRow.userId,
 			fit:true,
 			method:"POST",
 			nowrap:true,
@@ -267,7 +266,7 @@
 				var rows = $(userRoleList).datagrid('getRows');
 				oldIdArray = new Array();
 				for(var i=0;i<rows.length;i++){
-					if(rows[i].checked){
+					if(rows[i].status==1){
 						oldIdArray.push(rows[i].roleId);
 						$(userRoleList).datagrid('selectRow',i);
 					}
@@ -324,7 +323,7 @@
 	var onSaveUserRole = function(){
 		if(setValueUserRole()){
 			var userId = selectRow.userId;
-			var content = {'user.userId':userId,ids: idArray.join(CSIT.join),oldIds:oldIdArray.join(CSIT.join)};
+			var content = {'userId':userId,ids: idArray.join(CSIT.join),oldIds:oldIdArray.join(CSIT.join)};
 			var url = "system/updateRoleUserRole.do";
 			$.post(url,content,
 				function(result){

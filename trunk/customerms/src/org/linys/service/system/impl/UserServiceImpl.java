@@ -114,4 +114,8 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
+	public User login(String userCode, String passwords) {
+		return userDAO.login(userCode,passwords);
+	}
+
 }
