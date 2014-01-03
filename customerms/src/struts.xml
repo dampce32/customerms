@@ -55,6 +55,7 @@
 	</package>
 	<!-- 会员类型 -->
 	<package name="dict" namespace="/dict" extends="userPackage">
+		<action name="*SaleItem" class="saleItemAction" method="{1}"></action>
 		<action name="*CustomerType" class="customerTypeAction" method="{1}"></action>
 	</package>
 	<!-- 公共方法 -->

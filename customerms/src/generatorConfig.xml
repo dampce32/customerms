@@ -96,7 +96,7 @@
        	<columnOverride column="userid" property="userId" javaType="Integer"></columnOverride>
     </table>
     -->
-    <!-- 会员类型 -->
+    <!-- 会员类型 
     <table schema="customerms" tableName="T_CustomerType" domainObjectName="CustomerType"
    		enableInsert="true" enableDeleteByPrimaryKey="true"
    		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
@@ -106,6 +106,19 @@
        	<columnOverride column="customerTypeId" property="customerTypeId" javaType="Integer"></columnOverride>
        	<columnOverride column="customerTypeName" property="customerTypeName" javaType="String"></columnOverride>
        	<columnOverride column="discount" property="discount" javaType="Float"></columnOverride>
+    </table>
+    -->
+    <!-- 消费项目 -->
+    <table schema="customerms" tableName="T_SaleItem" domainObjectName="SaleItem"
+   		enableInsert="true" enableDeleteByPrimaryKey="true"
+   		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
+  		enableCountByExample="false" enableUpdateByExample="false"
+       	enableDeleteByExample="false" enableSelectByExample="false"
+       	selectByExampleQueryId="false"> 
+       	<columnOverride column="saleItemId" property="saleItemId" javaType="Integer"></columnOverride>
+       	<columnOverride column="saleItemName" property="saleItemName" javaType="String"></columnOverride>
+       	<columnOverride column="amount" property="amount" javaType="Float"></columnOverride>
+       	<columnOverride column="isDiscount" property="isDiscount" javaType="Integer"></columnOverride>
     </table>
   </context>
 </generatorConfiguration>
