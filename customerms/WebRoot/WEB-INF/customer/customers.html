@@ -1,0 +1,53 @@
+<div class="easyui-layout plugins" data-options="fit:true" ui="customers_customerInit"  id="${id}" rightId ="${rightId}" rights = '${rights}' reportRights = '${reportRights}'>
+	<div data-options="region:'north',border:false"  class="queryContent" id="queryContent_${id}">
+		会员名称：&nbsp;&nbsp;<input name="customerName" id="customerNameSearch" type="text" class="queryInput"/>&nbsp;&nbsp;&nbsp;
+		<a href="javascript:void(0)" class="easyui-linkbutton" id="search" data-options="iconCls:'icon-search'" style="cursor: pointer;">查 询</a>
+	</div>
+	<div data-options="region:'center',border:false">
+		<div id="viewList_${id}"></div>
+	</div>
+	
+	<div id="tb_${id}">
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" id="add_${id}" >添加</a>  
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" id="update_${id}" >修改</a>  
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" id="delete_${id}" >删除</a>  
+	</div>
+	
+	<div id="editDialog_${id}">
+		<form method="post" name="editForm" id="editForm_${id}">
+			<input type="hidden" name="customerId"  />
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="tdTitle tdRequired">会员号：</td>
+					<td class="tdContent">
+						<input type="text" name="customerCode" id="customerCode"  class="contentInput"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="tdTitle tdRequired">会员名称：</td>
+					<td class="tdContent">
+						<input type="text" name="customerName" id="customerName"  class="contentInput"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="tdTitle tdRequired">会员类型：</td>
+					<td class="tdContent">
+						<input type="text" name="customerTypeId" id="customerType"  class="contentInput"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="tdTitle">电话：</td>
+					<td class="tdContent">
+						<input type="text" name="telephone" id="telephone"  class="contentInput"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="tdTitle">微信：</td>
+					<td class="tdContent">
+						<input type="text" name="wechat" id="wechat"  class="contentInput"/>
+					</td>
+				</tr>
+			</table>
+    	</form>
+	</div>
+</div>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CustomerMapper" >
+	<select id="load"  resultType="Customer" parameterType="Customer">
+		select *
+		from T_Customer
+		where 1=1
+		<if test="customerCode != null and customerCode !=''">
+			and customerCode = #{customerCode}
+		</if>
+	</select>
+  	<select id="loadByCustomerName"  resultType="Customer" parameterType="String">
+		select *
+		from T_Customer
+		where customerName=#{customerName}
+	</select>
+	<select id="query"  resultType="Customer" parameterType="Customer">
+		select *
+		from T_Customer
+		where 1 = 1  
+		<if test="customerName != null and customerName !=''">
+			and customerName like '%${customerName}%'
+		</if>
+		order by customerId
+	</select>
+	<select id="count"  resultType="Long" parameterType="Customer">
+		select count(1)
+		from T_Customer
+		where 1 = 1  
+		<if test="customerName != null and customerName !=''">
+			and customerName like '%${customerName}%'
+		</if>
+	</select>
+  <insert id="insert" parameterType="Customer"  useGeneratedKeys="true" keyProperty="customerId">
+    insert into t_customer ( customerCode, customerName, customerTypeId,telephone,wechat)
+    values (#{customerCode,jdbcType=VARCHAR},#{customerName,jdbcType=VARCHAR}, 
+      #{customerTypeId,jdbcType=INTEGER}, #{telephone,jdbcType=VARCHAR}, 
+      #{wechat,jdbcType=VARCHAR})
+  </insert>
+  <update id="update" parameterType="Customer" >
+    update t_customer
+    set customerCode = #{customerCode,jdbcType=VARCHAR},
+      customerName = #{customerName,jdbcType=VARCHAR},
+      customerTypeId = #{customerTypeId,jdbcType=INTEGER},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      wechat = #{wechat,jdbcType=VARCHAR}
+    where customerId = #{customerId,jdbcType=INTEGER}
+  </update>
+  <delete id="delete" parameterType="Integer" >
+    delete from t_customer
+    where customerId = #{customerId,jdbcType=INTEGER}
+  </delete>
+</mapper>

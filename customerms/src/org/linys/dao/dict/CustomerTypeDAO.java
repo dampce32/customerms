@@ -59,5 +59,12 @@ public interface CustomerTypeDAO {
 	 * @param customerTypeId
 	 */
 	void delete(Integer customerTypeId);
+	/**
+	 * @description: 会员类型Combobox
+	 * @created: 2014-1-4 上午1:16:21
+	 * @author 以宋
+	 * @return
+	 */
+	List<CustomerType> queryCombobox();
 
 }

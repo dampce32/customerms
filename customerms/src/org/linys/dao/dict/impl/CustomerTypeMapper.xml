@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="CustomerTypeMapper" >
+  	<select id="queryCombobox"  resultType="CustomerType">
+		select customerTypeId,customerTypeName
+		from T_CustomerType
+	</select>
   	<select id="loadByCustomerTypeName"  resultType="CustomerType" parameterType="String">
 		select *
 		from T_CustomerType
