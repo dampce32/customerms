@@ -12,7 +12,7 @@
 	    <!--数据库连接的信息：驱动类、连接地址、用户名、密码 --> 
   	</commentGenerator> 
     <jdbcConnection driverClass="${driver}" connectionURL="${url}" userId="${username}" password="${password}"/>
-    <javaModelGenerator targetPackage="org.linys.model.system" targetProject="${project}"> 
+    <javaModelGenerator targetPackage="org.linys.model" targetProject="${project}"> 
       <!-- enableSubPackages:是否让schema作为包的后缀 -->      
       <property name="enableSubPackages" value="true" /> 
   	</javaModelGenerator>   
@@ -84,7 +84,7 @@
        	<columnOverride column="username" property="userName" javaType="String"></columnOverride>
     </table>
      -->
-     <!-- 用户 角色 -->
+     <!-- 用户 角色 
     <table schema="customerms" tableName="T_UserRole" domainObjectName="UserRole"
    		enableInsert="true" enableDeleteByPrimaryKey="true"
    		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
@@ -94,6 +94,18 @@
        	<columnOverride column="userroleid" property="userRoleId" javaType="Integer"></columnOverride>
        	<columnOverride column="roleid" property="roleId" javaType="Integer"></columnOverride>
        	<columnOverride column="userid" property="userId" javaType="Integer"></columnOverride>
+    </table>
+    -->
+    <!-- 会员类型 -->
+    <table schema="customerms" tableName="T_CustomerType" domainObjectName="CustomerType"
+   		enableInsert="true" enableDeleteByPrimaryKey="true"
+   		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
+  		enableCountByExample="false" enableUpdateByExample="false"
+       	enableDeleteByExample="false" enableSelectByExample="false"
+       	selectByExampleQueryId="false"> 
+       	<columnOverride column="customerTypeId" property="customerTypeId" javaType="Integer"></columnOverride>
+       	<columnOverride column="customerTypeName" property="customerTypeName" javaType="String"></columnOverride>
+       	<columnOverride column="discount" property="discount" javaType="Float"></columnOverride>
     </table>
   </context>
 </generatorConfiguration>

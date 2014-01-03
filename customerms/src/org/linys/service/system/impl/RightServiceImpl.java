@@ -127,6 +127,9 @@ public class RightServiceImpl implements RightService {
 			model.setRightPKCode(newRightPKCode);
 			//查找该父权限下的权限排序最大值
 			Integer maxArray = rightDAO.getMaxArray(model.getParentRightId());
+			if(maxArray==null){
+				maxArray=0;
+			}
 			model.setArray(maxArray+1);
 			model.setIsLeaf(1);
 			rightDAO.insert(model);
