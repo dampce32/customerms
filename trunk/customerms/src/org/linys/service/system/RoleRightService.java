@@ -1,7 +1,5 @@
 package org.linys.service.system;
 
-import java.util.List;
-
 import org.linys.model.system.RoleRight;
 import org.linys.vo.ServiceResult;
 
