@@ -1,20 +1,20 @@
 package org.linys.model.dict;
 /**
- * @description:消费项目
+ * @description:产品
  * @copyright:福州骏华信息有限公司 (c)2014
  * @created:2014-1-3
  * @author:以宋
  * @vesion:1.0
  */
-public class SaleItem {
+public class Goods {
 	/**
-	 * 消费项目Id
+	 * 产品Id
 	 */
-    private Integer saleItemId;
+    private Integer goodsId;
     /**
-	 * 消费项目名称
+	 * 产品名称
 	 */
-    private String saleItemName;
+    private String goodsName;
     /**
 	 * 消费金额
 	 */
@@ -24,20 +24,20 @@ public class SaleItem {
 	 */
     private Integer isDiscount;
 
-    public Integer getSaleItemId() {
-        return saleItemId;
+    public Integer getGoodsId() {
+        return goodsId;
     }
 
-    public void setSaleItemId(Integer saleItemId) {
-        this.saleItemId = saleItemId;
+    public void setGoodsId(Integer goodsId) {
+        this.goodsId = goodsId;
     }
 
-    public String getSaleItemName() {
-        return saleItemName;
+    public String getGoodsName() {
+        return goodsName;
     }
 
-    public void setSaleItemName(String saleItemName) {
-        this.saleItemName = saleItemName;
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
     }
 
     public Float getAmount() {

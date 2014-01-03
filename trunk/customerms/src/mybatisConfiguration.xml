@@ -20,6 +20,7 @@
 		<typeAlias alias="UserRole" type="org.linys.model.system.UserRole" />
 		<typeAlias alias="CustomerType" type="org.linys.model.dict.CustomerType" />
 		<typeAlias alias="SaleItem" type="org.linys.model.dict.SaleItem" />
+		<typeAlias alias="Goods" type="org.linys.model.dict.Goods" />
 	</typeAliases>
 
 </configuration>
