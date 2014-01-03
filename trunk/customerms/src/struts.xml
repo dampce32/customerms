@@ -59,6 +59,10 @@
 		<action name="*CustomerType" class="customerTypeAction" method="{1}"></action>
 		<action name="*Goods" class="goodsAction" method="{1}"></action>
 	</package>
+	<!-- 客户 -->
+	<package name="customer" namespace="/customer" extends="userPackage">
+		<action name="*Customer" class="customerAction" method="{1}"></action>
+	</package>
 	<!-- 公共方法 -->
 	<package name="common" namespace="/common" extends="userPackage">
 		<action name="*Common" class="commonAction" method="{1}"></action>

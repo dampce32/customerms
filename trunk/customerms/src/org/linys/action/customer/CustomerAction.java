@@ -1,37 +1,37 @@
-package org.linys.action.dict;
+package org.linys.action.customer;
 
 import javax.annotation.Resource;
 
 import org.linys.action.BaseAction;
-import org.linys.model.dict.CustomerType;
-import org.linys.service.dict.CustomerTypeService;
+import org.linys.model.customer.Customer;
+import org.linys.service.customer.CustomerService;
 import org.linys.vo.ServiceResult;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.opensymphony.xwork2.ModelDriven;
 /**
- * @Description:会员类型Action
+ * @Description:会员Action
  * @Copyright: 福州骏华信息有限公司 (c)2013
  * @Created Date : 2013-4-17
  * @Author lys
  */
 @Controller
 @Scope("prototype")
-public class CustomerTypeAction extends BaseAction implements ModelDriven<CustomerType> {
+public class CustomerAction extends BaseAction implements ModelDriven<Customer> {
 
 	private static final long serialVersionUID = -3899336650807315718L;
-	private CustomerType model = new CustomerType();
+	private Customer model = new Customer();
 
 	@Resource
-	private CustomerTypeService customerTypeService;
+	private CustomerService customerService;
 
-	public CustomerType getModel() {
+	public Customer getModel() {
 		return model;
 	}
 	
 	/**
-	 * @Description: 保存会员类型
+	 * @Description: 保存会员
 	 * @Create: 2013-1-22 上午10:33:19
 	 * @author lys
 	 * @update logs
@@ -39,17 +39,17 @@ public class CustomerTypeAction extends BaseAction implements ModelDriven<Custom
 	public void save(){
 		ServiceResult result = new ServiceResult(false);
 		try {
-			result = customerTypeService.save(model);
+			result = customerService.save(model);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result.setMessage("保存会员类型失败");
+			result.setMessage("保存会员失败");
 		}
 		String jsonString = result.toJSON();
 		ajaxJson(jsonString);
 	}
 	
 	/**
-	 * @Description: 分页查询会员类型
+	 * @Description: 分页查询会员
 	 * @Create: 2012-10-27 上午9:46:10
 	 * @author lys
 	 * @update logs
@@ -57,7 +57,7 @@ public class CustomerTypeAction extends BaseAction implements ModelDriven<Custom
 	 */
 	public void query(){
 		try {
-			String jsonArray = customerTypeService.query(page, rows, model);
+			String jsonArray = customerService.query(page, rows, model);
 			ajaxJson(jsonArray);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,7 +65,7 @@ public class CustomerTypeAction extends BaseAction implements ModelDriven<Custom
 	}
 	
 	/**
-	 * @Description: 批量会员类型删除
+	 * @Description: 批量会员删除
 	 * @Create: 2012-10-27 下午12:00:30
 	 * @author lys
 	 * @update logs
@@ -74,29 +74,14 @@ public class CustomerTypeAction extends BaseAction implements ModelDriven<Custom
 	public void mulDelete(){
 		ServiceResult result = new ServiceResult(false);	
 		try {
-			result = customerTypeService.mulDelete(ids);
+			result = customerService.mulDelete(ids);
 		} catch (Throwable e) {
 			if(e instanceof org.springframework.dao.DataIntegrityViolationException){
-				result.setMessage("其他模块已使用要删除的会员类型信息了");
+				result.setMessage("其他模块已使用要删除的会员信息了");
 			}else{
-				result.setMessage("批量会员类型删除失败");
+				result.setMessage("批量会员删除失败");
 			}
 		}
 		ajaxJson(result.toJSON());
-	}
-	/**
-	 * @Description: combobox查询
-	 * @Created: 2013-8-3 下午11:07:22
-	 * @author lys
-	 * @update logs
-	 * @throws Exception
-	 */
-	public void queryCombobox() {
-		try {
-			String jsonString = customerTypeService.queryCombobox();
-			ajaxJson(jsonString);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

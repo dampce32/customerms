@@ -47,4 +47,9 @@ public class CustomerTypeDAOImpl implements CustomerTypeDAO {
 	public void delete(Integer customerTypeId) {
 		sqlSession.update("CustomerTypeMapper.delete",customerTypeId);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<CustomerType> queryCombobox() {
+		return sqlSession.selectList("CustomerTypeMapper.queryCombobox");
+	}
 }

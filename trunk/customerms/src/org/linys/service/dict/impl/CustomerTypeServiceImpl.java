@@ -1,10 +1,14 @@
 package org.linys.service.dict.impl;
 
+import java.io.File;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.struts2.ServletActionContext;
 import org.linys.dao.dict.CustomerTypeDAO;
 import org.linys.model.dict.CustomerType;
 import org.linys.service.dict.CustomerTypeService;
@@ -79,6 +83,27 @@ public class CustomerTypeServiceImpl implements CustomerTypeService {
 		}
 		result.setIsSuccess(true);
 		return result;
+	}
+
+	public String queryCombobox() {
+		ServletContext servletContext = ServletActionContext.getServletContext();
+		String jsonFilePath = "/WEB-INF/dictJson/"+CustomerType.class.getSimpleName()+".json";
+		File jsonFile = new File(servletContext.getRealPath(jsonFilePath));
+		String jsonString = null;
+		try {
+			if(!jsonFile.exists()){
+				List<CustomerType> list = customerTypeDAO.queryCombobox();
+				String[] properties = {"customerTypeId","customerTypeName"};
+				jsonString = JSONUtil.toJsonWithoutRows(list,properties);
+				FileUtils.writeStringToFile(jsonFile, jsonString,"UTF-8");
+			}else{
+				jsonString = FileUtils.readFileToString(jsonFile,"UTF-8");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("会员类型combobox查询失败");
+		}
+		return jsonString;
 	}
 	
 	
