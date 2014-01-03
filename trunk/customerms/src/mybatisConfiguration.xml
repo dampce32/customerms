@@ -18,6 +18,7 @@
 		<typeAlias alias="Role" type="org.linys.model.system.Role" />
 		<typeAlias alias="User" type="org.linys.model.system.User" />
 		<typeAlias alias="UserRole" type="org.linys.model.system.UserRole" />
+		<typeAlias alias="CustomerType" type="org.linys.model.dict.CustomerType" />
 	</typeAliases>
 
 </configuration>

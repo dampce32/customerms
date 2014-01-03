@@ -53,6 +53,10 @@
 		<action name="*Role" class="roleAction" method="{1}"></action>
 		<action name="*Right" class="rightAction" method="{1}"></action>
 	</package>
+	<!-- 会员类型 -->
+	<package name="dict" namespace="/dict" extends="userPackage">
+		<action name="*CustomerType" class="customerTypeAction" method="{1}"></action>
+	</package>
 	<!-- 公共方法 -->
 	<package name="common" namespace="/common" extends="userPackage">
 		<action name="*Common" class="commonAction" method="{1}"></action>
