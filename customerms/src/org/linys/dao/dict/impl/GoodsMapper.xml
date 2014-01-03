@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="GoodsMapper" >
+  	<select id="loadByGoodsName"  resultType="Goods" parameterType="String">
+		select *
+		from T_Goods
+		where goodsName=#{goodsName}
+	</select>
+	<select id="query"  resultType="Goods" parameterType="Goods">
+		select *
+		from T_Goods
+		where 1 = 1  
+		<if test="goodsName != null and goodsName !=''">
+			and goodsName like '%${goodsName}%'
+		</if>
+		order by goodsId
+	</select>
+	<select id="count"  resultType="Long" parameterType="Goods">
+		select count(1)
+		from T_Goods
+		where 1 = 1  
+		<if test="goodsName != null and goodsName !=''">
+			and goodsName like '%${goodsName}%'
+		</if>
+	</select>
+  <insert id="insert" parameterType="Goods"  useGeneratedKeys="true" keyProperty="goodsId">
+    insert into t_goods ( goodsName, amount, 
+      isDiscount)
+    values (#{goodsName,jdbcType=VARCHAR}, #{amount,jdbcType=REAL}, 
+      #{isDiscount,jdbcType=INTEGER})
+  </insert>
+  <update id="update" parameterType="Goods" >
+    update t_goods
+    set goodsName = #{goodsName,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=REAL},
+      isDiscount = #{isDiscount,jdbcType=INTEGER}
+    where goodsId = #{goodsId,jdbcType=INTEGER}
+  </update>
+  <delete id="delete" parameterType="Integer" >
+    delete from t_goods
+    where goodsId = #{goodsId,jdbcType=INTEGER}
+  </delete>
+</mapper>
