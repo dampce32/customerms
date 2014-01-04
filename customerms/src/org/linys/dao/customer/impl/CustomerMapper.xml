@@ -15,9 +15,13 @@
 		where customerName=#{customerName}
 	</select>
 	<select id="query"  resultType="Customer" parameterType="Customer">
-		select *
-		from T_Customer
+		select a.*,b.customerTypeName,b.discount
+		from T_Customer a
+		left join T_CustomerType b on a.customerTypeId = b.customerTypeId
 		where 1 = 1  
+		<if test="customerCode != null and customerCode !=''">
+			and customerCode like '%${customerCode}%'
+		</if>
 		<if test="customerName != null and customerName !=''">
 			and customerName like '%${customerName}%'
 		</if>

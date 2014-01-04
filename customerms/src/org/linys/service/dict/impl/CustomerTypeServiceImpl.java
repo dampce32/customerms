@@ -12,6 +12,7 @@ import org.apache.struts2.ServletActionContext;
 import org.linys.dao.dict.CustomerTypeDAO;
 import org.linys.model.dict.CustomerType;
 import org.linys.service.dict.CustomerTypeService;
+import org.linys.util.CommonUtil;
 import org.linys.util.JSONUtil;
 import org.linys.util.StringUtil;
 import org.linys.vo.ServiceResult;
@@ -50,6 +51,7 @@ public class CustomerTypeServiceImpl implements CustomerTypeService {
 			customerTypeDAO.update(model);
 		}
 		result.getData().put("customerTypeId", model.getCustomerTypeId());
+		CommonUtil.deleteDictJsonFile(CustomerType.class.getSimpleName());
 		result.setIsSuccess(true);
 		return result;
 	}
@@ -81,6 +83,7 @@ public class CustomerTypeServiceImpl implements CustomerTypeService {
 			result.setMessage("没有可删除的会员类型");
 			return result;
 		}
+		CommonUtil.deleteDictJsonFile(CustomerType.class.getSimpleName());
 		result.setIsSuccess(true);
 		return result;
 	}

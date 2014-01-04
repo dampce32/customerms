@@ -81,4 +81,9 @@ public class UserDAOImpl implements UserDAO {
 		return (List<Right>) sqlSession.selectList("UserMapper.getChildrenUrlRightTreeNode",map);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<User> queryCombobox() {
+		return sqlSession.selectList("UserMapper.queryCombobox");
+	}
+
 }

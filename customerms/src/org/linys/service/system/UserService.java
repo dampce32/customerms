@@ -72,5 +72,12 @@ public interface UserService {
 	 * @return
 	 */
 	String getChildrenUrlRightTreeNode(Integer userId, Integer rightId);
+	/**
+	 * @description: combobox查询
+	 * @created: 2014-1-4 下午12:05:20
+	 * @author 以宋
+	 * @return
+	 */
+	String queryCombobox();
 
 }

@@ -63,6 +63,10 @@
 	<package name="customer" namespace="/customer" extends="userPackage">
 		<action name="*Customer" class="customerAction" method="{1}"></action>
 	</package>
+	<!-- 消费 -->
+	<package name="sale" namespace="/sale" extends="userPackage">
+		<action name="*Sale" class="saleAction" method="{1}"></action>
+	</package>
 	<!-- 公共方法 -->
 	<package name="common" namespace="/common" extends="userPackage">
 		<action name="*Common" class="commonAction" method="{1}"></action>

@@ -131,4 +131,30 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 		String ajaxString = userService.getChildrenUrlRightTreeNode(userId,rightId);
 		ajaxJson(ajaxString);
 	}
+	
+	/**
+	 * @Description: combobox查询
+	 * @Created: 2013-8-3 下午11:07:22
+	 * @author lys
+	 * @update logs
+	 * @throws Exception
+	 */
+	public void queryCombobox() {
+		String jsonString = userService.queryCombobox();
+		ajaxJson(jsonString);
+	}
+	/**
+	 * @Description: 取得当前操作用户
+	 * @Created Time: 2013-4-29 下午8:12:19
+	 * @Author lys
+	 */
+	public void getCurr(){
+		ServiceResult result = new ServiceResult(true);
+		Integer userId = getIntegerSession(User.LOGIN_USERID);
+		String userName = getStringSession(User.LOGIN_USERNAME);
+		result.addData("userId", userId);
+		result.addData("userName", userName);
+		String jsonString = result.toJSON();
+		ajaxJson(jsonString);
+	}
 }

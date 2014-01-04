@@ -134,7 +134,7 @@
        	<columnOverride column="isDiscount" property="isDiscount" javaType="Integer"></columnOverride>
     </table>
     -->
-    <!-- 会员 -->
+    <!-- 会员 
     <table schema="customerms" tableName="T_Customer" domainObjectName="Customer"
    		enableInsert="true" enableDeleteByPrimaryKey="true"
    		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
@@ -147,6 +147,22 @@
        	<columnOverride column="customerName" property="customerName" javaType="String"></columnOverride>
        	<columnOverride column="telephone" property="telephone" javaType="String"></columnOverride>
        	<columnOverride column="wechat" property="wechat" javaType="String"></columnOverride>
+    </table>
+    -->
+    <!-- 消费 -->
+    <table schema="customerms" tableName="T_Sale" domainObjectName="Sale"
+   		enableInsert="true" enableDeleteByPrimaryKey="true"
+   		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
+  		enableCountByExample="false" enableUpdateByExample="false"
+       	enableDeleteByExample="false" enableSelectByExample="false"
+       	selectByExampleQueryId="false"> 
+       	<columnOverride column="saleId" property="saleId" javaType="Integer"></columnOverride>
+       	<columnOverride column="customerId" property="customerId" javaType="Integer"></columnOverride>
+       	<columnOverride column="userId" property="userId" javaType="Integer"></columnOverride>
+       	<columnOverride column="saleDate" property="saleDate" javaType="Date"></columnOverride>
+       	<columnOverride column="sourceAmount" property="sourceAmount" javaType="Float"></columnOverride>
+       	<columnOverride column="discount" property="discount" javaType="Float"></columnOverride>
+       	<columnOverride column="amount" property="amount" javaType="Float"></columnOverride>
     </table>
   </context>
 </generatorConfiguration>

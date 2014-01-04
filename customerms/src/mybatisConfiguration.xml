@@ -22,6 +22,7 @@
 		<typeAlias alias="SaleItem" type="org.linys.model.dict.SaleItem" />
 		<typeAlias alias="Goods" type="org.linys.model.dict.Goods" />
 		<typeAlias alias="Customer" type="org.linys.model.customer.Customer" />
+		<typeAlias alias="Sale" type="org.linys.model.sale.Sale" />
 	</typeAliases>
 
 </configuration>
