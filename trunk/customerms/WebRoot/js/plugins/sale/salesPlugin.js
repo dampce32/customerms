@@ -273,6 +273,11 @@
 		$('#discount',editDialog).numberbox('setValue', selectCustomer.discount);
 		$(customerDialog).dialog('close');
 	}
+	$('#discount',editDialog).numberbox({onChange: function(newValue,oldValue){
+		var sourceAmount = $('#sourceAmount',editDialog).numberbox('getValue'); 
+		var amount = sourceAmount*newValue/10;
+		$('#amount',editDialog).numberbox('setValue',amount);
+	}});
 	//----------检查权限--------------
 	var rights = null;
 	var checkBtnRight = function(){
