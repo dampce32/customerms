@@ -31,8 +31,32 @@ public class Customer {
 	 * 微信
 	 */
     private String wechat;
+    /**
+     * 会员类型
+     */
+    private String customerTypeName;
+    /**
+     * 折扣
+     */
+    private Float discount;
 
-    public Integer getCustomerId() {
+    public String getCustomerTypeName() {
+		return customerTypeName;
+	}
+
+	public void setCustomerTypeName(String customerTypeName) {
+		this.customerTypeName = customerTypeName;
+	}
+
+	public Float getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(Float discount) {
+		this.discount = discount;
+	}
+
+	public Integer getCustomerId() {
         return customerId;
     }
 

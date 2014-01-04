@@ -25,6 +25,8 @@ String base = request.getScheme()+"://"+request.getServerName()+":"+request.getS
 	<script type="text/javascript" src="js/common/customers.cache.js"></script>
 	<script type="text/javascript" src="js/common/easyuiUtil.js"></script>
 	<script type="text/javascript" src="js/common/mask.js"></script>
+	<script type="text/javascript" src="js/common/dateUtil.js"></script>
+	<script type="text/javascript" src="js/My97DatePicker/WdatePicker.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 	<script type="text/javascript">
 		var sessionId = '${pageContext.session.id}' ;	

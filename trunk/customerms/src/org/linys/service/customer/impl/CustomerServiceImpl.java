@@ -60,7 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public String query(Integer page, Integer rows, Customer model) {
 		List<Customer> list = customerDAO.query(page,rows,model);
 		Long total = customerDAO.count(model);
-		String[] properties = {"customerId","customerCode","customerName","customerTypeId","telephone","wechat"};
+		String[] properties = {"customerId","customerCode","customerName","customerTypeId","telephone","wechat","customerTypeName","discount"};
 		return JSONUtil.toJson(list, properties, total);
 	}
 
