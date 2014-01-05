@@ -80,6 +80,15 @@ public class SaleItemServiceImpl implements SaleItemService {
 		result.setIsSuccess(true);
 		return result;
 	}
+
+	public String querySelect(Integer page, Integer rows, SaleItem model, String ids) {
+		Integer[] idArray = StringUtil.splitToInteger(ids);
+		model.setIdArray(idArray);
+		List<SaleItem> list = saleItemDAO.querySelect(page,rows,model);
+		Long total = saleItemDAO.countSelect(model);
+		String[] properties = {"saleItemId","saleItemName","amount","isDiscount"};
+		return JSONUtil.toJson(list, properties, total);
+	}
 	
 	
 }

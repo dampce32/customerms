@@ -59,5 +59,24 @@ public interface SaleItemDAO {
 	 * @param saleItemId
 	 */
 	void delete(Integer saleItemId);
+	/**
+	 * @description: 添加查询消费项目
+	 * @created: 2014-1-4 下午4:47:09
+	 * @author 以宋
+	 * @param page
+	 * @param rows
+	 * @param model
+	 * @return
+	 */
+	List<SaleItem> querySelect(Integer page, Integer rows, SaleItem model);
+	/**
+	 * @description: 统计添加查询消费项目
+	 * @created: 2014-1-4 下午4:47:50
+	 * @author 以宋
+	 * @param model
+	 * @param ids
+	 * @return
+	 */
+	Long countSelect(SaleItem model);
 
 }

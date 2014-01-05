@@ -17,44 +17,78 @@
 	</div>
 	
 	<div id="editDialog_${id}">
-		<form method="post" name="editForm" id="editForm_${id}">
-			<input type="hidden" name="saleId"  />
-			<table border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td class="tdTitle tdRequired">消费日期：</td>
-					<td class="tdContent">
-						<input type="text" name="saleDate" id="saleDate"  class="contentInput Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
-					</td>
-					<td class="tdTitle tdRequired">会员：</td>
-					<td class="tdContent">
-						<input type="hidden" name="customerId" id=customerId />
-						<input type="text"  id="customerName" name="customerName" style="width: 172px" disabled="disabled"/>
-						<a href="javascript:void(0)" class="easyui-linkbutton" id="customerAddBtn_${id}" data-options="iconCls:'icon-add',plain:true">选择会员</a>
-					</td>
-				</tr>
-				<tr>
-					<td class="tdTitle tdRequired">消费原价：</td>
-					<td class="tdContent">
-						<input type="text" name="sourceAmount" id="sourceAmount"   class="contentInput easyui-numberbox" data-options="min:0,precision:2"/>
-					</td>
-					<td class="tdTitle tdRequired">折扣：</td>
-					<td class="tdContent">
-						<input type="text" name="discount" id="discount"  class="contentInput easyui-numberbox" data-options="min:0,precision:2"/>
-					</td>
-				</tr>
-				<tr>
-					<td class="tdTitle tdRequired">消费金额：</td>
-					<td class="tdContent">
-						<input type="text" name="amount" id="amount"  class="contentInput easyui-numberbox" data-options="min:0,precision:2"/>
-					</td>
-					<td class="tdTitle tdRequired">录入人：</td>
-					<td class="tdContent">
-						<input type="hidden" name="userId" id="userId"/>
-						<input type="text" id="userName" name="userName"  class="contentInput" disabled="disabled"/>
-					</td>
-				</tr>
-			</table>
-    	</form>
+		<div class="easyui-layout" data-options="fit:true">
+				<div data-options="region:'north',border:false" style="height:115px;">
+					<form method="post" name="editForm" id="editForm_${id}">
+						<input type="hidden" name="saleId" id="saleId" />
+						<table border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td class="tdTitle tdRequired">消费日期：</td>
+								<td class="tdContent">
+									<input type="text" name="saleDate" id="saleDate"  class="contentInput Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+								</td>
+								<td class="tdTitle tdRequired">会员：</td>
+								<td class="tdContent">
+									<input type="hidden" name="customerId" id=customerId />
+									<input type="text"  id="customerName" name="customerName" style="width: 172px" disabled="disabled"/>
+									<a href="javascript:void(0)" class="easyui-linkbutton" id="customerAddBtn_${id}" data-options="iconCls:'icon-add',plain:true">选择会员</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="tdTitle tdRequired">不打折金额：</td>
+								<td class="tdContent">
+									<input type="text" name="notIntoDiscountAmount" id="notIntoDiscountAmount"   class="contentInput easyui-numberbox inputBorderNone" data-options="min:0,precision:2"/>
+								</td>
+								<td class="tdTitle tdRequired">打折金额：</td>
+								<td class="tdContent">
+									<input type="text" name="intoDiscountAmount" id="intoDiscountAmount"   class="contentInput easyui-numberbox inputBorderNone" data-options="min:0,precision:2"/>
+								</td>
+								
+							</tr>
+							<tr>
+								<td class="tdTitle tdRequired">折扣：</td>
+								<td class="tdContent">
+									<input type="text" name="discount" id="discount"  class="contentInput easyui-numberbox" data-options="min:0,precision:2"/>
+								</td>
+								<td class="tdTitle tdRequired">消费金额：</td>
+								<td class="tdContent">
+									<input type="text" name="amount" id="amount"  class="contentInput easyui-numberbox inputBorderNone" data-options="min:0,precision:2"/>
+								</td>
+							</tr>
+							<tr>
+								<td class="tdTitle tdRequired">录入人：</td>
+								<td class="tdContent">
+									<input type="hidden" name="userId" id="userId"/>
+									<input type="text" id="userName" name="userName"  class="contentInput" disabled="disabled"/>
+								</td>
+							</tr>
+						</table>
+						<input type="hidden" name="saleItemDetailIds" id="saleItemDetailIds"/>
+						<input type="hidden" name="saleItemIds" id="saleItemIds"/>
+						<input type="hidden" name="amounts" id="amounts"/>
+						<input type="hidden" name="isDiscounts" id="isDiscounts"/>
+						<input type="hidden" name="userIds" id="userIds"/>
+						<input type="hidden" name="delSaleItemDetailIds" id="delSaleItemDetailIds"/>
+						
+						<input type="hidden" name="saleGoodsDetailIds" id="saleGoodsDetailIds"/>
+						<input type="hidden" name="goodsIds" id="goodsIds"/>
+						<input type="hidden" name="amountsGoods" id="amountsGoods"/>
+						<input type="hidden" name="isDiscountsGoods" id="isDiscountsGoods"/>
+						<input type="hidden" name="userIdsGoods" id="userIdsGoods"/>
+						<input type="hidden" name="delSaleGoodsDetailIds" id="delSaleGoodsDetailIds"/>
+			    	</form>
+    			</div>
+    			<div data-options="region:'center',border:false">
+					<div id="saleTabs_${id}" class="easyui-tabs"  data-options="fit:true,border:false" >
+						<div title="消费项目">
+							<div id="saleItemDetailList_${id}" data-options="border:false"></div>
+						</div>
+						<div title="消费产品">
+							<div id="saleGoodsDetailList_${id}" data-options="border:false"></div>
+						</div>
+					</div>
+				</div>
+			</div>
 	</div>
 	<div id="customerDialog_${id}">
 		<div class="easyui-layout" data-options="fit:true">
@@ -65,6 +99,28 @@
 			</div>
 			<div data-options="region:'center',border:false">
 				<div id="customerList_${id}"></div>
+			</div>
+		</div>
+	</div>
+	<div id="saleItemDialog_${id}">
+		<div class="easyui-layout" data-options="fit:true">
+			<div data-options="region:'north',border:false" class="queryContent">
+				消费项目名称：&nbsp;&nbsp;<input id="saleItemNameSearch" type="text" class="queryInput"/>&nbsp;&nbsp;&nbsp;
+				<a href="javascript:void(0)" class="easyui-linkbutton" id="searchSaleItemBtn_${id}" data-options="iconCls:'icon-search'" style="cursor: pointer;">查 询</a>
+			</div>
+			<div data-options="region:'center',border:false">
+				<div id="saleItemList_${id}"></div>
+			</div>
+		</div>
+	</div>
+	<div id="goodsDialog_${id}">
+		<div class="easyui-layout" data-options="fit:true">
+			<div data-options="region:'north',border:false" class="queryContent">
+				产品名称：&nbsp;&nbsp;<input id="goodsNameSearch" type="text" class="queryInput"/>&nbsp;&nbsp;&nbsp;
+				<a href="javascript:void(0)" class="easyui-linkbutton" id="searchGoodsBtn_${id}" data-options="iconCls:'icon-search'" style="cursor: pointer;">查 询</a>
+			</div>
+			<div data-options="region:'center',border:false">
+				<div id="goodsList_${id}"></div>
 			</div>
 		</div>
 	</div>

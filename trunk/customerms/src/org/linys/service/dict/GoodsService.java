@@ -37,5 +37,16 @@ public interface GoodsService {
 	 * @return
 	 */
 	ServiceResult mulDelete(String ids);
+	/**
+	 * @description: 添加查询消费产品
+	 * @created: 2014-1-5 上午12:47:17
+	 * @author 以宋
+	 * @param page
+	 * @param rows
+	 * @param model
+	 * @param ids
+	 * @return
+	 */
+	String querySelect(Integer page, Integer rows, Goods model, String ids);
 
 }

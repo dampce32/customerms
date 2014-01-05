@@ -47,4 +47,13 @@ public class GoodsDAOImpl implements GoodsDAO {
 	public void delete(Integer goodsId) {
 		sqlSession.update("GoodsMapper.delete",goodsId);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Goods> querySelect(Integer page, Integer rows, Goods model) {
+		return sqlSession.selectList("GoodsMapper.querySelect", model, new RowBounds(PageUtil.getPageBegin(page, rows),rows));
+	}
+
+	public Long countSelect(Goods model) {
+		return (Long) sqlSession.selectOne("GoodsMapper.countSelect",model);
+	}
 }

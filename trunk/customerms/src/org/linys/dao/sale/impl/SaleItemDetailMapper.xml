@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SaleItemDetailMapper" >
+	<select id="queryBySale"  resultType="SaleItemDetail" parameterType="Sale">
+		select a.*,b.saleItemName,c.userName
+		from t_saleitemdetail a
+		left join t_saleitem b on a.saleItemId = b.saleItemId
+		left join t_user c on a.userId = c.userId
+		where saleId = #{saleId}
+		order by a.saleItemDetailId
+	</select>
+  <insert id="insert" parameterType="SaleItemDetail"  useGeneratedKeys="true" keyProperty="saleItemDetailId">
+   insert into T_SaleItemDetail (saleId, saleItemId, userId, amount, isDiscount)
+    values (#{saleId,jdbcType=INTEGER}, #{saleItemId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{amount,jdbcType=REAL}, #{isDiscount,jdbcType=INTEGER})
+  </insert>
+  <update id="update" parameterType="SaleItemDetail" >
+    update T_SaleItemDetail
+    set saleItemId = #{saleItemId,jdbcType=INTEGER},
+      userId = #{userId,jdbcType=INTEGER},
+      isDiscount = #{isDiscount,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=REAL}
+    where saleItemDetailId = #{saleItemDetailId,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteArray" parameterType="SaleItemDetail">
+    delete from T_SaleItemDetail
+    <if test="idArray != null and idArray.length >0">
+		where  saleItemDetailId  in 
+		<foreach item="item" index="index" collection="idArray"
+	      open="(" separator="," close=")">
+	        #{item}
+	 	 </foreach>
+	</if>
+  </delete>
+</mapper>

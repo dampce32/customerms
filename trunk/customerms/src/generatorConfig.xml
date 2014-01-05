@@ -149,7 +149,7 @@
        	<columnOverride column="wechat" property="wechat" javaType="String"></columnOverride>
     </table>
     -->
-    <!-- 消费 -->
+    <!-- 消费
     <table schema="customerms" tableName="T_Sale" domainObjectName="Sale"
    		enableInsert="true" enableDeleteByPrimaryKey="true"
    		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
@@ -163,6 +163,37 @@
        	<columnOverride column="sourceAmount" property="sourceAmount" javaType="Float"></columnOverride>
        	<columnOverride column="discount" property="discount" javaType="Float"></columnOverride>
        	<columnOverride column="amount" property="amount" javaType="Float"></columnOverride>
+    </table>
+     -->
+    
+    <!-- 消费项目明细 
+    <table schema="customerms" tableName="T_SaleItemDetail" domainObjectName="SaleItemDetail"
+   		enableInsert="true" enableDeleteByPrimaryKey="true"
+   		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
+  		enableCountByExample="false" enableUpdateByExample="false"
+       	enableDeleteByExample="false" enableSelectByExample="false"
+       	selectByExampleQueryId="false"> 
+       	<columnOverride column="saleItemDetailId" property="saleItemDetailId" javaType="Integer"></columnOverride>
+       	<columnOverride column="saleId" property="saleId" javaType="Integer"></columnOverride>
+       	<columnOverride column="saleItemId" property="saleItemId" javaType="Integer"></columnOverride>
+       	<columnOverride column="userId" property="userId" javaType="Integer"></columnOverride>
+       	<columnOverride column="amount" property="amount" javaType="Float"></columnOverride>
+       	<columnOverride column="isDiscount" property="isDiscount" javaType="Integer"></columnOverride>
+    </table>
+    -->
+    <!-- 消费产品明细 -->
+    <table schema="customerms" tableName="T_SaleGoodsDetail" domainObjectName="SaleGoodsDetail"
+   		enableInsert="true" enableDeleteByPrimaryKey="true"
+   		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
+  		enableCountByExample="false" enableUpdateByExample="false"
+       	enableDeleteByExample="false" enableSelectByExample="false"
+       	selectByExampleQueryId="false"> 
+       	<columnOverride column="saleGoodsDetailId" property="saleGoodsDetailId" javaType="Integer"></columnOverride>
+       	<columnOverride column="saleId" property="saleId" javaType="Integer"></columnOverride>
+       	<columnOverride column="goodsId" property="goodsId" javaType="Integer"></columnOverride>
+       	<columnOverride column="userId" property="userId" javaType="Integer"></columnOverride>
+       	<columnOverride column="amount" property="amount" javaType="Float"></columnOverride>
+       	<columnOverride column="isDiscount" property="isDiscount" javaType="Integer"></columnOverride>
     </table>
   </context>
 </generatorConfiguration>

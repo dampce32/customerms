@@ -26,10 +26,30 @@ public class Sale extends BaseModel{
 	 */
     private String saleDate;
     /**
-	 * 消费原价
+	 * 不打折金额
 	 */
-    private Float sourceAmount;
+    private Float notIntoDiscountAmount;
     /**
+	 * 打折金额
+	 */
+    private Float intoDiscountAmount;
+    public Float getNotIntoDiscountAmount() {
+		return notIntoDiscountAmount;
+	}
+
+	public void setNotIntoDiscountAmount(Float notIntoDiscountAmount) {
+		this.notIntoDiscountAmount = notIntoDiscountAmount;
+	}
+
+	public Float getIntoDiscountAmount() {
+		return intoDiscountAmount;
+	}
+
+	public void setIntoDiscountAmount(Float intoDiscountAmount) {
+		this.intoDiscountAmount = intoDiscountAmount;
+	}
+
+	/**
 	 * 折扣
 	 */
     private Float discount;
@@ -92,14 +112,6 @@ public class Sale extends BaseModel{
 
     public void setSaleDate(String saleDate) {
         this.saleDate = saleDate;
-    }
-
-    public Float getSourceAmount() {
-        return sourceAmount;
-    }
-
-    public void setSourceAmount(Float sourceAmount) {
-        this.sourceAmount = sourceAmount;
     }
 
     public Float getDiscount() {

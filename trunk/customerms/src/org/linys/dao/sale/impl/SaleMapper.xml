@@ -2,11 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="SaleMapper" >
 	<select id="load"  resultType="Sale" parameterType="Sale">
-		select *
-		from T_Sale
+		select a.*,b.customerName,c.userName
+		from T_Sale a
+		left join t_Customer b on a.customerId = b.customerId
+		left join t_user c on a.userId=c.userId
 		where 1=1
-		<if test="saleCode != null and saleCode !=''">
-			and saleCode = #{saleCode}
+		<if test="saleId != null and saleId !=''">
+			and saleId = #{saleId}
 		</if>
 	</select>
 	<select id="query"  resultType="Sale" parameterType="Sale">
@@ -43,24 +45,30 @@
 		</if>
 	</select>
   <insert id="insert" parameterType="Sale"  useGeneratedKeys="true" keyProperty="saleId">
-   insert into t_sale (saleId, customerId, userId, 
-      saleDate, sourceAmount, discount, 
+   insert into t_sale (customerId, userId, 
+      saleDate, notIntoDiscountAmount,intoDiscountAmount, discount, 
       amount)
-    values (#{saleId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
-      #{saleDate,jdbcType=TIMESTAMP}, #{sourceAmount,jdbcType=REAL}, #{discount,jdbcType=REAL}, 
+    values (#{customerId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{saleDate,jdbcType=TIMESTAMP}, #{notIntoDiscountAmount,jdbcType=REAL}, #{intoDiscountAmount,jdbcType=REAL}, #{discount,jdbcType=REAL}, 
       #{amount,jdbcType=REAL})
   </insert>
   <update id="update" parameterType="Sale" >
     update t_sale
     set customerId = #{customerId,jdbcType=INTEGER},
-      userId = #{userId,jdbcType=INTEGER},
       saleDate = #{saleDate,jdbcType=TIMESTAMP},
-      sourceAmount = #{sourceAmount,jdbcType=REAL},
+      notIntoDiscountAmount = #{notIntoDiscountAmount,jdbcType=REAL},
+      intoDiscountAmount = #{intoDiscountAmount,jdbcType=REAL},
       discount = #{discount,jdbcType=REAL},
       amount = #{amount,jdbcType=REAL}
     where saleId = #{saleId,jdbcType=INTEGER}
   </update>
   <delete id="delete" parameterType="Integer" >
+  	delete from t_saleGoodsDetail
+    where saleId = #{saleId,jdbcType=INTEGER};
+    
+    delete from t_saleItemDetail
+    where saleId = #{saleId,jdbcType=INTEGER};
+    
     delete from t_sale
     where saleId = #{saleId,jdbcType=INTEGER}
   </delete>

@@ -80,6 +80,14 @@ public class GoodsServiceImpl implements GoodsService {
 		result.setIsSuccess(true);
 		return result;
 	}
-	
-	
+
+	public String querySelect(Integer page, Integer rows, Goods model,
+			String ids) {
+		Integer[] idArray = StringUtil.splitToInteger(ids);
+		model.setIdArray(idArray);
+		List<Goods> list = goodsDAO.querySelect(page,rows,model);
+		Long total = goodsDAO.countSelect(model);
+		String[] properties = {"goodsId","goodsName","amount","isDiscount"};
+		return JSONUtil.toJson(list, properties, total);
+	}
 }

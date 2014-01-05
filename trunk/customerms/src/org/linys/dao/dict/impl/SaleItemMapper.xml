@@ -40,4 +40,35 @@
     delete from t_saleItem
     where saleItemId = #{saleItemId,jdbcType=INTEGER}
   </delete>
+  <select id="querySelect"  resultType="SaleItem" parameterType="SaleItem">
+		select *
+		from T_SaleItem
+		where 1 = 1  
+		<if test="saleItemName != null and saleItemName !=''">
+			and saleItemName like '%${saleItemName}%'
+		</if>
+		<if test="idArray != null and idArray.length >0">
+			and saleItemId not in 
+			<foreach item="item" index="index" collection="idArray"
+		      open="(" separator="," close=")">
+		        #{item}
+		 	 </foreach>
+		</if>
+		order by saleItemId
+	</select>
+	<select id="countSelect"  resultType="Long" parameterType="SaleItem">
+		select count(1)
+		from T_SaleItem
+		where 1 = 1  
+		<if test="saleItemName != null and saleItemName !=''">
+			and saleItemName like '%${saleItemName}%'
+		</if>
+		<if test="idArray != null and idArray.length >0">
+			and saleItemId not in 
+			<foreach item="item" index="index" collection="idArray"
+		      open="(" separator="," close=")">
+		        #{item}
+		 	 </foreach>
+		</if>
+	</select>
 </mapper>
