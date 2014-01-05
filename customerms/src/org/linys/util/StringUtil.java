@@ -52,7 +52,7 @@ public class StringUtil {
 	 */
 	public static Integer[] splitToInteger(String source,String separator){
 		Integer[] distArray ={};
-		if(source==null){
+		if(StringUtils.isEmpty(source)){
 			return distArray;
 		}
 		int i = 0;
@@ -230,6 +230,34 @@ public class StringUtil {
 			System.out.println(string);
 		}
 	}
+	public static Float[] splitToFloat(String source) {
+		return splitToFloat(source,GlobalConstants.SPLIT_SEPARATOR);
+	}
 	
+	/**
+	 * @Description: 将字符串source根据separator分割成Boolean数组
+	 * @Created Time: 2013-3-4 下午10:15:04
+	 * @Author lys
+	 * @param source
+	 * @param separator
+	 * @return
+	 */
+	public static Float[] splitToFloat(String source,String separator){
+		Float[] distArray ={};
+		if(source==null){
+			return distArray;
+		}
+		int i = 0;
+		distArray = new Float[StringUtils.countMatches(source, separator)+1];
+		while(source.length()>0){
+			String value = StringUtils.substringBefore(source,separator);
+			distArray[i++] = StringUtils.isEmpty(value)?null:Float.parseFloat(value);
+			source = StringUtils.substringAfter(source,separator);
+		}
+		if(distArray[distArray.length-1]==null){//排除最后一个分隔符后放空
+			distArray[distArray.length-1] = null;
+		}
+		return distArray;
+	}
 	
 }

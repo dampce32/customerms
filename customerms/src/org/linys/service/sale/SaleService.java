@@ -16,9 +16,22 @@ public interface SaleService {
 	 * @created: 2014-1-3 下午7:42:11
 	 * @author 以宋
 	 * @param model
+	 * @param delSaleItemDetailIds 
+	 * @param isDiscounts 
+	 * @param amounts 
+	 * @param saleItemIds 
+	 * @param saleItemDetailIds 
+	 * @param delSaleGoodsDetailIds 
+	 * @param userIdsGoods 
+	 * @param isDiscountsGoods 
+	 * @param amountsGoods 
+	 * @param goodsIds 
+	 * @param saleGoodsDetailIds 
+	 * @param delSaleItemDetailIds2 
 	 * @return
 	 */
-	ServiceResult save(Sale model);
+	ServiceResult save(Sale model, String saleItemDetailIds, String saleItemIds, String amounts, String isDiscounts, String userIds, String delSaleItemDetailIds, 
+			String saleGoodsDetailIds, String goodsIds, String amountsGoods, String isDiscountsGoods, String userIdsGoods, String delSaleGoodsDetailIds);
 	/**
 	 * @description: 分页查询消费
 	 * @created: 2014-1-3 下午7:42:24
@@ -37,5 +50,13 @@ public interface SaleService {
 	 * @return
 	 */
 	ServiceResult mulDelete(String ids);
+	/**
+	 * @description: 打开初始化
+	 * @created: 2014-1-4 下午8:56:54
+	 * @author 以宋
+	 * @param model
+	 * @return
+	 */
+	ServiceResult init(Sale model);
 
 }

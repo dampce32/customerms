@@ -47,4 +47,15 @@ public class SaleItemDAOImpl implements SaleItemDAO {
 	public void delete(Integer saleItemId) {
 		sqlSession.update("SaleItemMapper.delete",saleItemId);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<SaleItem> querySelect(Integer page, Integer rows,SaleItem model) {
+		return sqlSession.selectList("SaleItemMapper.querySelect", model, new RowBounds(PageUtil.getPageBegin(page, rows),rows));
+	}
+
+	public Long countSelect(SaleItem model) {
+		return (Long) sqlSession.selectOne("SaleItemMapper.countSelect",model);
+	}
+	
+	
 }

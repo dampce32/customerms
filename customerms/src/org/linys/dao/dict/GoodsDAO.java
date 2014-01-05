@@ -59,5 +59,23 @@ public interface GoodsDAO {
 	 * @param goodsId
 	 */
 	void delete(Integer goodsId);
+	/**
+	 * @description: 添加查询消费产品
+	 * @created: 2014-1-5 上午12:49:31
+	 * @author 以宋
+	 * @param page
+	 * @param rows
+	 * @param model
+	 * @return
+	 */
+	List<Goods> querySelect(Integer page, Integer rows, Goods model);
+	/**
+	 * @description: 统计添加查询消费产品
+	 * @created: 2014-1-5 上午12:49:58
+	 * @author 以宋
+	 * @param model
+	 * @return
+	 */
+	Long countSelect(Goods model);
 
 }

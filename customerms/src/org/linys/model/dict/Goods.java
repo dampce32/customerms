@@ -1,4 +1,7 @@
 package org.linys.model.dict;
+
+import org.linys.model.BaseModel;
+
 /**
  * @description:产品
  * @copyright:福州骏华信息有限公司 (c)2014
@@ -6,7 +9,7 @@ package org.linys.model.dict;
  * @author:以宋
  * @vesion:1.0
  */
-public class Goods {
+public class Goods  extends BaseModel{
 	/**
 	 * 产品Id
 	 */

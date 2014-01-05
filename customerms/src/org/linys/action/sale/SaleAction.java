@@ -39,7 +39,23 @@ public class SaleAction extends BaseAction implements ModelDriven<Sale> {
 	public void save(){
 		ServiceResult result = new ServiceResult(false);
 		try {
-			result = saleService.save(model);
+			String saleItemDetailIds = getParameter("saleItemDetailIds");
+			String saleItemIds = getParameter("saleItemIds");
+			String amounts = getParameter("amounts");
+			String isDiscounts = getParameter("isDiscounts");
+			String userIds = getParameter("userIds");
+			String delSaleItemDetailIds = getParameter("delSaleItemDetailIds");
+			
+			
+			String saleGoodsDetailIds = getParameter("saleGoodsDetailIds");
+			String goodsIds = getParameter("goodsIds");
+			String amountsGoods = getParameter("amountsGoods");
+			String isDiscountsGoods = getParameter("isDiscountsGoods");
+			String userIdsGoods = getParameter("userIdsGoods");
+			String delSaleGoodsDetailIds = getParameter("delSaleGoodsDetailIds");
+			
+			result = saleService.save(model,saleItemDetailIds,saleItemIds,amounts,isDiscounts,userIds,delSaleItemDetailIds,
+					saleGoodsDetailIds,goodsIds,amountsGoods,isDiscountsGoods,userIdsGoods,delSaleGoodsDetailIds);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setMessage("保存消费失败");
@@ -84,4 +100,21 @@ public class SaleAction extends BaseAction implements ModelDriven<Sale> {
 		}
 		ajaxJson(result.toJSON());
 	}
+	/**
+	 * @description: 打开初始化
+	 * @created: 2014-1-4 下午8:55:39
+	 * @author 以宋
+	 */
+	public void init(){
+		ServiceResult result = new ServiceResult(false);	
+		try {
+			result = saleService.init(model);
+		} catch (Throwable e) {
+			e.printStackTrace();
+				result.setMessage("打开初始化失败");
+		}
+		ajaxJson(result.toJSON());
+	}
+	
+	
 }

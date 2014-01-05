@@ -84,4 +84,13 @@ public class GoodsAction extends BaseAction implements ModelDriven<Goods> {
 		}
 		ajaxJson(result.toJSON());
 	}
+	/**
+	 * @description: 添加查询消费产品
+	 * @created: 2014-1-4 下午4:43:52
+	 * @author 以宋
+	 */
+	public void querySelect(){
+		String jsonArray = goodsService.querySelect(page, rows, model,ids);
+		ajaxJson(jsonArray);
+	}
 }

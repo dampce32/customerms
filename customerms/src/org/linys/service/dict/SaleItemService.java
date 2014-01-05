@@ -37,5 +37,16 @@ public interface SaleItemService {
 	 * @return
 	 */
 	ServiceResult mulDelete(String ids);
+	/**
+	 * @description: 添加查询消费项目
+	 * @created: 2014-1-4 下午4:45:39
+	 * @author 以宋
+	 * @param page
+	 * @param rows
+	 * @param model
+	 * @param ids 
+	 * @return
+	 */
+	String querySelect(Integer page, Integer rows, SaleItem model, String ids);
 
 }

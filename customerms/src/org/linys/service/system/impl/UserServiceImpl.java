@@ -14,6 +14,7 @@ import org.linys.dao.system.UserDAO;
 import org.linys.model.system.Right;
 import org.linys.model.system.User;
 import org.linys.service.system.UserService;
+import org.linys.util.CommonUtil;
 import org.linys.util.JSONUtil;
 import org.linys.util.MD5Util;
 import org.linys.util.StringUtil;
@@ -63,6 +64,7 @@ public class UserServiceImpl implements UserService {
 			userDAO.update(model);
 		}
 		result.getData().put("userId", model.getUserId());
+		CommonUtil.deleteDictJsonFile(User.class.getSimpleName());
 		result.setIsSuccess(true);
 		return result;
 	}
@@ -89,6 +91,7 @@ public class UserServiceImpl implements UserService {
 				userDAO.delete(id);
 			}
 		}
+		CommonUtil.deleteDictJsonFile(User.class.getSimpleName());
 		result.setIsSuccess(true);
 		return result;
 	}
@@ -120,6 +123,7 @@ public class UserServiceImpl implements UserService {
 			result.setMessage("没有可修改状态的用户");
 			return result;
 		}
+		CommonUtil.deleteDictJsonFile(User.class.getSimpleName());
 		result.setIsSuccess(true);
 		return result;
 	}

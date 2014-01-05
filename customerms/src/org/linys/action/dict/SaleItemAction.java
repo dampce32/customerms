@@ -84,4 +84,13 @@ public class SaleItemAction extends BaseAction implements ModelDriven<SaleItem> 
 		}
 		ajaxJson(result.toJSON());
 	}
+	/**
+	 * @description: 添加查询消费项目
+	 * @created: 2014-1-4 下午4:43:52
+	 * @author 以宋
+	 */
+	public void querySelect(){
+		String jsonArray = saleItemService.querySelect(page, rows, model,ids);
+		ajaxJson(jsonArray);
+	}
 }
