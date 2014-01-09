@@ -8,6 +8,9 @@
 		<if test="customerCode != null and customerCode !=''">
 			and customerCode = #{customerCode}
 		</if>
+		<if test="customerId != null and customerId !=''">
+			and customerId = #{customerId}
+		</if>
 	</select>
   	<select id="loadByCustomerName"  resultType="Customer" parameterType="String">
 		select *
@@ -36,10 +39,10 @@
 		</if>
 	</select>
   <insert id="insert" parameterType="Customer"  useGeneratedKeys="true" keyProperty="customerId">
-    insert into t_customer ( customerCode, customerName, customerTypeId,telephone,wechat)
+    insert into t_customer ( customerCode, customerName, customerTypeId,telephone,wechat,amount)
     values (#{customerCode,jdbcType=VARCHAR},#{customerName,jdbcType=VARCHAR}, 
       #{customerTypeId,jdbcType=INTEGER}, #{telephone,jdbcType=VARCHAR}, 
-      #{wechat,jdbcType=VARCHAR})
+      #{wechat,jdbcType=VARCHAR},#{amount,jdbcType=REAL})
   </insert>
   <update id="update" parameterType="Customer" >
     update t_customer
@@ -49,6 +52,11 @@
       telephone = #{telephone,jdbcType=VARCHAR},
       wechat = #{wechat,jdbcType=VARCHAR}
     where customerId = #{customerId,jdbcType=INTEGER}
+  </update>
+   <update id="saleUpdate" parameterType="Sale" >
+	    update t_customer
+	    set  amount = #{amount}
+	    where  customerId = #{customerId,jdbcType=INTEGER} ;
   </update>
   <delete id="delete" parameterType="Integer" >
     delete from t_customer

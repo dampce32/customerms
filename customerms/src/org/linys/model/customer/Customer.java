@@ -39,8 +39,20 @@ public class Customer {
      * 折扣
      */
     private Float discount;
+    /**
+     * 会员卡金额
+     */
+    private Float amount;
 
-    public String getCustomerTypeName() {
+    public Float getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Float amount) {
+		this.amount = amount;
+	}
+
+	public String getCustomerTypeName() {
 		return customerTypeName;
 	}
 

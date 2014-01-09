@@ -181,7 +181,7 @@
        	<columnOverride column="isDiscount" property="isDiscount" javaType="Integer"></columnOverride>
     </table>
     -->
-    <!-- 消费产品明细 -->
+    <!-- 消费产品明细 
     <table schema="customerms" tableName="T_SaleGoodsDetail" domainObjectName="SaleGoodsDetail"
    		enableInsert="true" enableDeleteByPrimaryKey="true"
    		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
@@ -194,6 +194,19 @@
        	<columnOverride column="userId" property="userId" javaType="Integer"></columnOverride>
        	<columnOverride column="amount" property="amount" javaType="Float"></columnOverride>
        	<columnOverride column="isDiscount" property="isDiscount" javaType="Integer"></columnOverride>
+    </table>
+    -->
+    <!-- 会员充值 -->
+    <table schema="customerms" tableName="T_CustomerRecharge" domainObjectName="CustomerRecharge"
+   		enableInsert="true" enableDeleteByPrimaryKey="true"
+   		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
+  		enableCountByExample="false" enableUpdateByExample="false"
+       	enableDeleteByExample="false" enableSelectByExample="false"
+       	selectByExampleQueryId="false"> 
+       	<columnOverride column="customerRechargeId" property="customerRechargeId" javaType="Integer"></columnOverride>
+       	<columnOverride column="customerId" property="customerId" javaType="Integer"></columnOverride>
+       	<columnOverride column="rechargeDate" property="rechargeDate" javaType="String"></columnOverride>
+       	<columnOverride column="amount" property="amount" javaType="Float"></columnOverride>
     </table>
   </context>
 </generatorConfiguration>

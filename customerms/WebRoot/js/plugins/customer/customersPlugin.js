@@ -42,7 +42,8 @@
 								return customerTypeList[customerType].customerTypeName;
 							}
 						}
-				 }}
+				 }},
+				 {field:'amount',title:'会员卡余额',width:100,align:"center"}
 			]],
 			onClickRow:function(rowIndex, rowData){
 				selectRow = rowData;

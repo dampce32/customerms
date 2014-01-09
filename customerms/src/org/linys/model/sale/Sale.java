@@ -33,22 +33,10 @@ public class Sale extends BaseModel{
 	 * 打折金额
 	 */
     private Float intoDiscountAmount;
-    public Float getNotIntoDiscountAmount() {
-		return notIntoDiscountAmount;
-	}
-
-	public void setNotIntoDiscountAmount(Float notIntoDiscountAmount) {
-		this.notIntoDiscountAmount = notIntoDiscountAmount;
-	}
-
-	public Float getIntoDiscountAmount() {
-		return intoDiscountAmount;
-	}
-
-	public void setIntoDiscountAmount(Float intoDiscountAmount) {
-		this.intoDiscountAmount = intoDiscountAmount;
-	}
-
+    /**
+     * 付款类型
+     */
+    private String payType;
 	/**
 	 * 折扣
 	 */
@@ -62,9 +50,14 @@ public class Sale extends BaseModel{
      */
     private String customerName;
     /**
+     * 会员卡余额
+     */
+    private Float customerAmount;
+    /**
      * 录入名
      */
     private String userName;
+    
 
     public String getCustomerName() {
 		return customerName;
@@ -129,4 +122,36 @@ public class Sale extends BaseModel{
     public void setAmount(Float amount) {
         this.amount = amount;
     }
+    
+    public String getPayType() {
+		return payType;
+	}
+
+	public void setPayType(String payType) {
+		this.payType = payType;
+	}
+
+	public Float getNotIntoDiscountAmount() {
+		return notIntoDiscountAmount;
+	}
+
+	public void setNotIntoDiscountAmount(Float notIntoDiscountAmount) {
+		this.notIntoDiscountAmount = notIntoDiscountAmount;
+	}
+
+	public Float getIntoDiscountAmount() {
+		return intoDiscountAmount;
+	}
+
+	public void setIntoDiscountAmount(Float intoDiscountAmount) {
+		this.intoDiscountAmount = intoDiscountAmount;
+	}
+
+	public Float getCustomerAmount() {
+		return customerAmount;
+	}
+
+	public void setCustomerAmount(Float customerAmount) {
+		this.customerAmount = customerAmount;
+	}
 }

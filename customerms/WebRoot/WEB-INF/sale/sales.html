@@ -18,51 +18,61 @@
 	
 	<div id="editDialog_${id}">
 		<div class="easyui-layout" data-options="fit:true">
-				<div data-options="region:'north',border:false" style="height:115px;">
+				<div data-options="region:'north',border:false" style="height:170px;">
 					<form method="post" name="editForm" id="editForm_${id}">
 						<input type="hidden" name="saleId" id="saleId" />
-						<table border="0" cellpadding="0" cellspacing="0">
-							<tr>
-								<td class="tdTitle tdRequired">消费日期：</td>
-								<td class="tdContent">
-									<input type="text" name="saleDate" id="saleDate"  class="contentInput Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
-								</td>
-								<td class="tdTitle tdRequired">会员：</td>
-								<td class="tdContent">
-									<input type="hidden" name="customerId" id=customerId />
-									<input type="text"  id="customerName" name="customerName" style="width: 172px" disabled="disabled"/>
-									<a href="javascript:void(0)" class="easyui-linkbutton" id="customerAddBtn_${id}" data-options="iconCls:'icon-add',plain:true">选择会员</a>
-								</td>
-							</tr>
-							<tr>
-								<td class="tdTitle tdRequired">不打折金额：</td>
-								<td class="tdContent">
-									<input type="text" name="notIntoDiscountAmount" id="notIntoDiscountAmount"   class="contentInput easyui-numberbox inputBorderNone" data-options="min:0,precision:2"/>
-								</td>
-								<td class="tdTitle tdRequired">打折金额：</td>
-								<td class="tdContent">
-									<input type="text" name="intoDiscountAmount" id="intoDiscountAmount"   class="contentInput easyui-numberbox inputBorderNone" data-options="min:0,precision:2"/>
-								</td>
-								
-							</tr>
-							<tr>
-								<td class="tdTitle tdRequired">折扣：</td>
-								<td class="tdContent">
-									<input type="text" name="discount" id="discount"  class="contentInput easyui-numberbox" data-options="min:0,precision:2"/>
-								</td>
-								<td class="tdTitle tdRequired">消费金额：</td>
-								<td class="tdContent">
-									<input type="text" name="amount" id="amount"  class="contentInput easyui-numberbox inputBorderNone" data-options="min:0,precision:2"/>
-								</td>
-							</tr>
-							<tr>
-								<td class="tdTitle tdRequired">录入人：</td>
-								<td class="tdContent">
-									<input type="hidden" name="userId" id="userId"/>
-									<input type="text" id="userName" name="userName"  class="contentInput" disabled="disabled"/>
-								</td>
-							</tr>
-						</table>
+						<div class="easyui-panel" title="会员信息" style="height:65px;" >  
+						   <table border="0" cellpadding="0" cellspacing="0">
+								<tr>
+									<td class="tdTitle">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;会员：</td>
+									<td class="tdContent">
+										<input type="hidden" name="customerId" id="customerId" />
+										<input type="hidden" name="payType" id="payType"/>
+										<input type="text"  id="customerName" name="customerName" style="width: 172px" disabled="disabled"/>
+										<a href="javascript:void(0)" class="easyui-linkbutton" id="customerAddBtn_${id}" data-options="iconCls:'icon-add',plain:true">选择会员</a>
+									</td>
+									<td class="tdTitle">会员卡余额：</td>
+									<td class="tdContent">
+										<input type="text" name="customerAmount" id="customerAmount"  class="contentInput easyui-numberbox inputBorderNone" data-options="min:0,precision:2" readonly="readonly"/>
+									</td>
+								</tr>
+							</table>  
+						</div> 
+						<div class="easyui-panel" title="消费" style="height:100px;"  data-options="border:false">
+							<table border="0" cellpadding="0" cellspacing="0">
+								<tr>
+									<td class="tdTitle tdRequired">消费日期：</td>
+									<td class="tdContent">
+										<input type="text" name="saleDate" id="saleDate"  class="contentInput Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+									</td>
+									<td class="tdTitle tdRequired">录入人：</td>
+									<td class="tdContent">
+										<input type="hidden" name="userId" id="userId"/>
+										<input type="text" id="userName" name="userName"  class="contentInput inputBorderNone" readonly="readonly"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="tdTitle tdRequired">不打折金额：</td>
+									<td class="tdContent">
+										<input type="text" name="notIntoDiscountAmount" id="notIntoDiscountAmount"   class="contentInput easyui-numberbox inputBorderNone" data-options="min:0,precision:2" readonly="readonly"/>
+									</td>
+									<td class="tdTitle tdRequired">打折金额：</td>
+									<td class="tdContent">
+										<input type="text" name="intoDiscountAmount" id="intoDiscountAmount"   class="contentInput easyui-numberbox inputBorderNone" data-options="min:0,precision:2" readonly="readonly"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="tdTitle">折扣：</td>
+									<td class="tdContent">
+										<input type="text" name="discount" id="discount"  class="contentInput easyui-numberbox inputBorderNone" data-options="min:0,precision:2" readonly="readonly"/>
+									</td>
+									<td class="tdTitle tdRequired">消费金额：</td>
+									<td class="tdContent">
+										<input type="text" name="amount" id="amount"  class="contentInput easyui-numberbox inputBorderNone" data-options="min:0,precision:2" readonly="readonly"/>
+									</td>
+								</tr>
+							</table>
+						</div>
 						<input type="hidden" name="saleItemDetailIds" id="saleItemDetailIds"/>
 						<input type="hidden" name="saleItemIds" id="saleItemIds"/>
 						<input type="hidden" name="amounts" id="amounts"/>
@@ -124,4 +134,87 @@
 			</div>
 		</div>
 	</div>
+	<!-- 余额不足界面 -->
+	<div id="amountLessDialog_${id}">
+		<div class="easyui-layout" data-options="fit:true">
+			<div data-options="region:'north',border:false" style="height:75px;">
+				<div class="easyui-panel" title="消费信息" data-options="border:false,fit:true"> 
+					<table border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td class="tdTitle">会员：</td>
+							<td class="tdContent">
+								<input type="text"  id="customerName" name="customerName" class=" inputBorderNone" readonly="readonly"/>
+							</td>
+							<td class="tdTitle">会员卡余额：</td>
+							<td class="tdContent">
+								<input type="text" name="customerAmount" id="customerAmount"  class=" easyui-numberbox inputBorderNone" data-options="min:0,precision:2" readonly="readonly"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="tdTitle">消费金额：</td>
+							<td class="tdContent">
+								<input type="text" name="amount" id="amount"  class=" easyui-numberbox inputBorderNone" data-options="min:0,precision:2" readonly="readonly"/>
+							</td>
+							<td class="tdTitle">不足金额：</td>
+							<td class="tdContent">
+								<input type="text" name="lessAmount" id="lessAmount"  class=" easyui-numberbox inputBorderNone" data-options="min:0,precision:2" readonly="readonly"/>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div data-options="region:'center',border:false,title:'付款方式'">
+				<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="tdContent">
+						1.&nbsp;&nbsp;<a href="javascript:void(0)" class="easyui-linkbutton" id="unitPayBtn_${id}" data-options="iconCls:'icon-search'" style="cursor: pointer;">联合结账</a>&nbsp;&nbsp;使用联合结账：会员卡付款<span id="customerAmountLabel"></span>元，现金付款<span id="lessAmountLabel"></span>元
+						<br><br>
+						2.&nbsp;&nbsp;<a href="javascript:void(0)" class="easyui-linkbutton" id="rechargePayBtn_${id}" data-options="iconCls:'icon-search'" style="cursor: pointer;">充值结账</a>&nbsp;&nbsp;会员卡充值后自动结账
+						<br><br>
+						3.&nbsp;&nbsp;<a href="javascript:void(0)" class="easyui-linkbutton" id="exitAmountLessDialogBtn_${id}" data-options="iconCls:'icon-exit'" style="cursor: pointer;">取消结账</a>&nbsp;&nbsp;退出余额不足界面
+					</td>
+				</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<!-- 充值界面 -->
+	<div id="rechargeDialog_${id}">
+		<form method="post" name="editForm" id="rechargeForm_${id}">
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="tdTitle">会员：</td>
+					<td class="tdContent">
+						<input type="hidden" name="customerId" id="customerId" />
+						<input type="text"  id="customerName" class="contentInput inputBorderNone" readonly="readonly"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="tdTitle">会员卡余额：</td>
+					<td class="tdContent">
+						<input type="text" id="customerAmount"  class="contentInput easyui-numberbox inputBorderNone" data-options="min:0,precision:2" readonly="readonly"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="tdTitle">消费金额：</td>
+					<td class="tdContent">
+						<input type="text" id="amountSale"  class="contentInput easyui-numberbox inputBorderNone" data-options="min:0,precision:2" readonly="readonly"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="tdTitle">不足金额：</td>
+					<td class="tdContent">
+						<input type="text" id="lessAmount"  class="contentInput easyui-numberbox inputBorderNone" data-options="min:0,precision:2" readonly="readonly"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="tdTitle tdRequired">充值金额：</td>
+					<td class="tdContent">
+						<input type="text" name="amount" id="amount"  class="contentInput easyui-numberbox" data-options="min:0,precision:2"/>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
 </div>

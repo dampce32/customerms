@@ -3,6 +3,7 @@ package org.linys.dao.customer;
 import java.util.List;
 
 import org.linys.model.customer.Customer;
+import org.linys.model.sale.Sale;
 
 /**
  * @description:会员DAO
@@ -67,5 +68,12 @@ public interface CustomerDAO {
 	 * @return
 	 */
 	Customer load(Customer model);
+	/**
+	 * @description: 消费更新用户账号信息
+	 * @created: 2014-1-8 下午8:49:34
+	 * @author 以宋
+	 * @param model
+	 */
+	void saleUpdate(Sale model);
 
 }
