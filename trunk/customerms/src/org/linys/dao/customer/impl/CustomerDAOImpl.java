@@ -8,6 +8,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.linys.dao.customer.CustomerDAO;
 import org.linys.model.customer.Customer;
+import org.linys.model.sale.Sale;
 import org.linys.util.PageUtil;
 import org.springframework.stereotype.Repository;
 /**
@@ -50,5 +51,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 	public Customer load(Customer model) {
 		return (Customer) sqlSession.selectOne("CustomerMapper.load",model);
+	}
+
+	public void saleUpdate(Sale model) {
+		sqlSession.update("CustomerMapper.saleUpdate",model);
 	}
 }

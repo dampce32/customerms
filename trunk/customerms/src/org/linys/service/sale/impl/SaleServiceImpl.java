@@ -5,9 +5,11 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.linys.dao.customer.CustomerDAO;
 import org.linys.dao.sale.SaleDAO;
 import org.linys.dao.sale.SaleGoodsDetailDAO;
 import org.linys.dao.sale.SaleItemDetailDAO;
+import org.linys.model.customer.Customer;
 import org.linys.model.sale.Sale;
 import org.linys.model.sale.SaleGoodsDetail;
 import org.linys.model.sale.SaleItemDetail;
@@ -31,6 +33,8 @@ public class SaleServiceImpl implements SaleService {
 	private SaleItemDetailDAO saleItemDetailDAO;
 	@Resource
 	private SaleGoodsDetailDAO saleGoodsDetailDAO;
+	@Resource
+	private CustomerDAO customerDAO;
 	
 
 	public ServiceResult save(Sale model, String saleItemDetailIds, String saleItemIds, String amounts, String isDiscounts, String userIds, String delSaleItemDetailIds,
@@ -84,6 +88,16 @@ public class SaleServiceImpl implements SaleService {
 				saleGoodsDetail.setUserId(userId);
 				saleGoodsDetailDAO.insert(saleGoodsDetail);
 			}
+			//更新会员的账号信息
+			Customer customer = new Customer();
+			customer.setCustomerId(model.getCustomerId());
+			customer=customerDAO.load(customer);
+			if(customer.getAmount()>=model.getAmount()){//帐号的钱够付
+				model.setAmount(customer.getAmount()-model.getAmount());
+			}else{
+				model.setAmount(0.0f);
+			}
+			customerDAO.saleUpdate(model);
 		}else{
 			//更新消费项目
 			//删除
@@ -192,7 +206,7 @@ public class SaleServiceImpl implements SaleService {
 			return result;
 		}
 		Sale sale = saleDAO.load(model);
-		String[] properties ={"saleId","saleDate","customerId","notIntoDiscountAmount","intoDiscountAmount","discount","amount","userId","userName","customerName"};
+		String[] properties ={"saleId","saleDate","customerId","notIntoDiscountAmount","intoDiscountAmount","discount","amount","userId","userName","customerName","customerAmount"};
 		result.addData("saleData", JSONUtil.toJson(sale, properties));
 		
 		//查找消费单下的消费项目明细

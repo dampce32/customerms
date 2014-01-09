@@ -5,12 +5,6 @@ public class BaseModel {
 	 * ids
 	 */
 	protected Integer [] idArray;
-	public Integer[] getIdArray() {
-		return idArray;
-	}
-	public void setIdArray(Integer[] idArray) {
-		this.idArray = idArray;
-	}
 	/**
 	 * 开始日期
 	 */
@@ -30,5 +24,11 @@ public class BaseModel {
 	}
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
+	}
+	public Integer[] getIdArray() {
+		return idArray;
+	}
+	public void setIdArray(Integer[] idArray) {
+		this.idArray = idArray;
 	}
 }

@@ -111,14 +111,14 @@
 	};
 	//保存前的赋值操作
 	var setValue = function(){
-		var saleDate = $.trim($('#saleDate',editForm).val());
-		if(''==saleDate){
-			$.messager.alert('提示','请填写消费日期','warning');
-			return false;
-		}
 		var customerId = $.trim($('#customerId',editForm).val());
 		if(''==customerId){
 			$.messager.alert('提示','请选择会员','warning');
+			return false;
+		}
+		var saleDate = $.trim($('#saleDate',editForm).val());
+		if(''==saleDate){
+			$.messager.alert('提示','请填写消费日期','warning');
 			return false;
 		}
 		var notIntoDiscountAmount = $('#notIntoDiscountAmount',editForm).numberbox('getValue');
@@ -132,12 +132,11 @@
 			$.messager.alert('提示','请填写折扣','warning');
 			return false;
 		}
-		var amount = $.trim($('#amount',editForm).val());
-		if(''==amount){
+		var amount = $('#amount',editForm).numberbox('getValue');
+		if(0==amount){
 			$.messager.alert('提示','请填写消费金额','warning');
 			return false;
 		}
-		
 		//消费项目明细
 		//验证添加的消费项目
 		if(lastIndexSaleItemDetail!=null){
@@ -218,6 +217,22 @@
 		$('#isDiscountsGoods',editForm).val(isDiscountArray.join(CSIT.join));
 		$('#userIdsGoods',editForm).val(userIdArray.join(CSIT.join));
 		$('#delSaleGoodsDetailIds',editForm).val(delSaleGoodsDetailIdArray.join(CSIT.join));
+		
+		var customerAmount  = $('#customerAmount',editForm).numberbox('getValue');
+		var saleId = $('#saleId',editForm).val();
+		if(saleId==''){
+			if(customerAmount<amount){
+				$('#customerName',amountLessDialog).val($('#customerName',editDialog).val());
+				$('#customerAmount',amountLessDialog).numberbox('setValue',customerAmount);
+				$('#customerAmountLabel',amountLessDialog).html(customerAmount);
+				$('#amount',amountLessDialog).numberbox('setValue',amount);
+				$('#lessAmount',amountLessDialog).numberbox('setValue',amount-customerAmount);
+				$('#lessAmountLabel',amountLessDialog).html(amount-customerAmount);
+				
+				$(amountLessDialog).dialog('open');
+				return false;
+			}
+		}
 		$(editDialog).mask({maskMsg:'正在保存'});
 		return true;
 	};
@@ -234,6 +249,7 @@
 				$('#saleDate',editDialog).val(saleData.saleDate);
 				$('#customerId',editDialog).val(saleData.customerId);
 				$('#customerName',editDialog).val(saleData.customerName);
+				$('#customerAmount',editDialog).numberbox('setValue',saleData.customerAmount);
 				$('#notIntoDiscountAmount',editDialog).numberbox('setValue',saleData.notIntoDiscountAmount);
 				$('#intoDiscountAmount',editDialog).numberbox('setValue',saleData.intoDiscountAmount);
 				$('#discount',editDialog).numberbox('setValue',saleData.discount);
@@ -251,7 +267,7 @@
 		});
 	}
 	//保存
-	var onSave = function(){
+	var onSave = function(saveType){
 		$(editForm).form('submit',{
 			url:'sale/saveSale.do',
 			onSubmit: function(){
@@ -260,10 +276,10 @@
 			success: function(data){
 				var result = eval('('+data+')');
 				if(result.isSuccess){
-					var fn = function(){
-						onOpen(result.data.saleId);
-					};
-					$.messager.alert('提示','保存成功','info',fn);
+					if(saveType!='rechargeSave'){
+						$.messager.alert('提示','保存成功','info');
+					}
+					$(editDialog).dialog('close');
 				}else{
 					$.messager.alert('提示',result.message,"error");
 				}
@@ -371,7 +387,8 @@
 				{field:'customerCode',title:'会员号',width:100,align:"center"},
 				{field:'customerName',title:'会员名称',width:100,align:"center"},
 				{field:'customerTypeName',title:'会员类型',width:100,align:"center"},
-				{field:'discount',title:'折扣',width:100,align:"center"}
+				{field:'discount',title:'折扣',width:100,align:"center"},
+				{field:'amount',title:'会员卡余额',width:100,align:"center"}
 				
 			]],
 			onDblClickRow:function(rowIndex,rowData){
@@ -394,6 +411,7 @@
 		$('#customerId',editDialog).val(selectCustomer.customerId);
 		$('#customerName',editDialog).val(selectCustomer.customerName);
 		$('#discount',editDialog).numberbox('setValue', selectCustomer.discount);
+		$('#customerAmount',editDialog).numberbox('setValue', selectCustomer.amount);
 		$(customerDialog).dialog('close');
 	}
 	//修改折扣
@@ -572,19 +590,21 @@
 		$('#amount',editDialog).numberbox('setValue',notIntoDiscountAmountTotal+intoDiscountAmountTotal*discount/10);
 	}
 	var onSelectSaleItem = function(){
-		var addedSaleItems = $(saleItemDetailList).datagrid('getRows');
-		var addedSaleItemArray = new Array();
-		for (var saleItem in addedSaleItems) {
-			addedSaleItemArray.push(addedSaleItems[saleItem].saleItemId);
-		}
-		var ids=addedSaleItemArray.join(CSIT.join);
-		$(saleItemDialog).dialog('open');
-		$(saleItemList).datagrid({
-			url:'dict/querySelectSaleItem.do',
-			queryParams: {
-				ids: ids
+		if(checkCustomerChoosed()){
+			var addedSaleItems = $(saleItemDetailList).datagrid('getRows');
+			var addedSaleItemArray = new Array();
+			for (var saleItem in addedSaleItems) {
+				addedSaleItemArray.push(addedSaleItems[saleItem].saleItemId);
 			}
-		});
+			var ids=addedSaleItemArray.join(CSIT.join);
+			$(saleItemDialog).dialog('open');
+			$(saleItemList).datagrid({
+				url:'dict/querySelectSaleItem.do',
+				queryParams: {
+					ids: ids
+				}
+			});
+		}
 	}
 	//----------选择消费项目--------------
 	var saleItemDialog = $('#saleItemDialog_'+id,$this);
@@ -664,15 +684,17 @@
 		calculate(-2);
 	}
 	var onDeleteSaleItemDetail = function(){
-		var selectSaleItemDetailRow = $(saleItemDetailList).datagrid('getSelected');
-		if(selectSaleItemDetailRow==null){
-			 $.messager.alert('提示','请选中要删除的消费项目明细',"warning");
-			 return;
+		if(checkCustomerChoosed()){
+			var selectSaleItemDetailRow = $(saleItemDetailList).datagrid('getSelected');
+			if(selectSaleItemDetailRow==null){
+				$.messager.alert('提示','请选中要删除的消费项目明细',"warning");
+				return;
+			}
+			var rowIndex = $(saleItemDetailList).datagrid('getRowIndex',selectSaleItemDetailRow);
+			$(saleItemDetailList).datagrid('deleteRow',rowIndex);
+			lastIndexSaleItemDetail = null;
+			calculate(-2);
 		}
-		 var rowIndex = $(saleItemDetailList).datagrid('getRowIndex',selectSaleItemDetailRow);
-		 $(saleItemDetailList).datagrid('deleteRow',rowIndex);
-		 lastIndexSaleItemDetail = null;
-		 calculate(-2);
 	}
 	//----------消费产品--------------
 	var saleGoodsDetailList = $('#saleGoodsDetailList_'+id,editDialog);
@@ -759,19 +781,21 @@
 	    });
 	}
 	var onSelectGoods = function(){
-		var addedGoodss = $(saleGoodsDetailList).datagrid('getRows');
-		var addedGoodsArray = new Array();
-		for (var saleGoods in addedGoodss) {
-			addedGoodsArray.push(addedGoodss[saleGoods].goodsId);
-		}
-		var ids=addedGoodsArray.join(CSIT.join);
-		$(goodsDialog).dialog('open');
-		$(goodsList).datagrid({
-			url:'dict/querySelectGoods.do',
-			queryParams: {
-				ids: ids
+		if(checkCustomerChoosed()){
+			var addedGoodss = $(saleGoodsDetailList).datagrid('getRows');
+			var addedGoodsArray = new Array();
+			for (var saleGoods in addedGoodss) {
+				addedGoodsArray.push(addedGoodss[saleGoods].goodsId);
 			}
-		});
+			var ids=addedGoodsArray.join(CSIT.join);
+			$(goodsDialog).dialog('open');
+			$(goodsList).datagrid({
+				url:'dict/querySelectGoods.do',
+				queryParams: {
+					ids: ids
+				}
+			});
+		}
 	}
 	//----------选择消费产品--------------
 	var goodsDialog = $('#goodsDialog_'+id,$this);
@@ -851,15 +875,17 @@
 		calculate(-2);
 	}
 	var onDeleteSaleGoodsDetail = function(){
-		var selectSaleGoodsDetailRow = $(saleGoodsDetailList).datagrid('getSelected');
-		if(selectSaleGoodsDetailRow==null){
-			 $.messager.alert('提示','请选中要删除的消费产品明细',"warning");
-			 return;
+		if(checkCustomerChoosed()){
+			var selectSaleGoodsDetailRow = $(saleGoodsDetailList).datagrid('getSelected');
+			if(selectSaleGoodsDetailRow==null){
+				$.messager.alert('提示','请选中要删除的消费产品明细',"warning");
+				return;
+			}
+			var rowIndex = $(saleGoodsDetailList).datagrid('getRowIndex',selectSaleGoodsDetailRow);
+			$(saleGoodsDetailList).datagrid('deleteRow',rowIndex);
+			lastIndexSaleGoodsDetail = null;
+			calculate(-2);
 		}
-		 var rowIndex = $(saleGoodsDetailList).datagrid('getRowIndex',selectSaleGoodsDetailRow);
-		 $(saleGoodsDetailList).datagrid('deleteRow',rowIndex);
-		 lastIndexSaleGoodsDetail = null;
-		 calculate(-2);
 	}
 	//消费项目和消费产品切换
 	$('#saleTabs_'+id).tabs({
@@ -879,7 +905,132 @@
 			}
 		}
 	})
-	//----------检查权限--------------
+	//----------充值-----------------
+	//余额不足
+	var amountLessDialog = $('#amountLessDialog_'+id,$this);
+	$(amountLessDialog).dialog({  
+	    title: '余额不足',  
+	    width:600,
+	    height:276,
+	    closed: true,  
+	    cache: false,  
+	    modal: true,
+	    closable:false,
+		onClose:function(){
+			$(amountLessDialog).form('clear');
+		}
+	}); 
+	//检查会员是否已选择
+	var checkCustomerChoosed = function(){
+		var customerId = $('#customerId',editDialog).val();
+		if(customerId==''){
+			$.messager.alert('提示','请先选择会员',"warning");
+			 return false;
+		}
+		return true;
+	}
+	$('#exitAmountLessDialogBtn_'+id,amountLessDialog).click(function(){
+		$(amountLessDialog).dialog('close');
+	})
+	$('#rechargeBtn_'+id,editDialog).click(function(){
+		$(rechargeDialog).dialog('open');
+	});
+	//联合付款
+	$('#unitPayBtn_'+id,amountLessDialog).click(function(){
+		$(editForm).form('submit',{
+			url:'sale/saveSale.do',
+			success: function(data){
+				var result = eval('('+data+')');
+				if(result.isSuccess){
+					var fn = function(){
+						search();
+						$('#payType',editDialog).val('');
+						$(amountLessDialog).dialog('close');
+						$(editDialog).dialog('close');
+					};
+					$.messager.alert('提示','付款成功','info',fn);
+				}else{
+					$.messager.alert('提示',result.message,"error");
+				}
+			}
+		});
+		
+	});
+	//----------充值-----------------
+	var rechargeDialog = $('#rechargeDialog_'+id,$this);
+	$(rechargeDialog).dialog({  
+	    title: '会员充值',  
+	    width:400,
+	    height:276,
+	    closed: true,  
+	    cache: false,  
+	    modal: true,
+	    closable:false,
+		onClose:function(){
+			$(rechargeDialog).form('clear');
+		},
+		toolbar:[{
+			text:'充值',
+			iconCls:'icon-ok',
+			handler:function(){
+				onRecharge();
+			}
+		},{
+			text:'退出',
+			iconCls:'icon-exit',
+			handler:function(){
+				$(rechargeDialog).dialog('close');
+			}
+		}]
+	}); 
+	$('#rechargePayBtn_'+id,amountLessDialog).click(function(){
+		$('#customerId',rechargeDialog).val($('#customerId',editDialog).val());
+		$('#customerName',rechargeDialog).val($('#customerName',amountLessDialog).val());
+		$('#customerAmount',rechargeDialog).numberbox('setValue',$('#customerAmount',amountLessDialog).numberbox('getValue'));
+		$('#amountSale',rechargeDialog).numberbox('setValue',$('#amount',amountLessDialog).numberbox('getValue'));
+		$('#lessAmount',rechargeDialog).numberbox('setValue',$('#lessAmount',amountLessDialog).numberbox('getValue'));
+		$(rechargeDialog).dialog('open');
+	})
+	var onRechargeSetValue = function(){
+		var amount = $('#amount',rechargeDialog).numberbox('getValue');
+		var lessAmount = $('#lessAmount',rechargeDialog).numberbox('getValue');
+		if(amount==0){
+			$.messager.alert('提示','请输入充值金额！','warning');
+			return false;
+		}
+		if(amount<lessAmount){
+			$.messager.alert('提示','不足金额：'+lessAmount+',充值金额：'+amount+'，请检查输入的充值金额！','warning');
+			return false;
+		}
+		return true;
+	}
+	
+	//保存
+	var onRecharge = function(){
+		$('#rechargeForm_'+id).form('submit',{
+			url:'customer/saveCustomerRecharge.do',
+			onSubmit: function(){
+				return onRechargeSetValue();
+			},
+			success: function(data){
+				var result = eval('('+data+')');
+				if(result.isSuccess){
+					var fn = function(){
+						var amount = $('#amount',rechargeDialog).numberbox('getValue');
+						var customerAmount  = $('#customerAmount',editDialog).numberbox('getValue');
+						$('#customerAmount',editDialog).numberbox('setValue',amount+customerAmount);
+						
+						$(rechargeDialog).dialog('close');
+						$(amountLessDialog).dialog('close');
+						onSave('rechargeSave');
+					};
+					$.messager.alert('提示','充值成功','info',fn);
+				}else{
+					$.messager.alert('提示',result.message,"error");
+				}
+			}
+		});
+	};
 	var rights = null;
 	var checkBtnRight = function(){
 	};

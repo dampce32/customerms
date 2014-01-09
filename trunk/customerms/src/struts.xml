@@ -61,6 +61,7 @@
 	</package>
 	<!-- 客户 -->
 	<package name="customer" namespace="/customer" extends="userPackage">
+		<action name="*CustomerRecharge" class="customerRechargeAction" method="{1}"></action>
 		<action name="*Customer" class="customerAction" method="{1}"></action>
 	</package>
 	<!-- 消费 -->
