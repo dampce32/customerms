@@ -54,12 +54,8 @@
   </insert>
   <update id="update" parameterType="Sale" >
     update t_sale
-    set customerId = #{customerId,jdbcType=INTEGER},
-      saleDate = #{saleDate,jdbcType=TIMESTAMP},
-      notIntoDiscountAmount = #{notIntoDiscountAmount,jdbcType=REAL},
-      intoDiscountAmount = #{intoDiscountAmount,jdbcType=REAL},
-      discount = #{discount,jdbcType=REAL},
-      amount = #{amount,jdbcType=REAL}
+    set 
+      saleDate = #{saleDate,jdbcType=TIMESTAMP}
     where saleId = #{saleId,jdbcType=INTEGER}
   </update>
   <delete id="delete" parameterType="Integer" >
