@@ -51,4 +51,7 @@ public class SaleDAOImpl implements SaleDAO {
 	public Sale load(Sale model) {
 		return (Sale) sqlSession.selectOne("SaleMapper.load",model);
 	}
+	public Sale loadDelete(Sale sale) {
+		return (Sale) sqlSession.selectOne("SaleMapper.loadDelete",sale);
+	}
 }

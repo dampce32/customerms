@@ -11,6 +11,12 @@
 			and saleId = #{saleId}
 		</if>
 	</select>
+	
+	<select id="loadDelete"  resultType="Sale" parameterType="Sale">
+		select a.saleId,a.amount,customerId
+		from T_Sale a
+		where saleId = #{saleId}
+	</select>
 	<select id="query"  resultType="Sale" parameterType="Sale">
 		select a.*,b.customerName,c.userName
 		from T_Sale a

@@ -48,6 +48,10 @@
 			onClickRow:function(rowIndex, rowData){
 				selectRow = rowData;
 				selectIndex = rowIndex;
+				$(customerRechargeList).datagrid({
+					url:'customer/queryCustomerRecharge.do',
+					queryParams:{customerId:selectRow.customerId}
+				});
 			},
 			onDblClickRow:function(rowIndex,rowData){
 				onUpdate();
@@ -62,6 +66,8 @@
 	  $('#add_'+id,$this).click(function(){
 		  onAdd();
 	  });
+	  
+	  
 	  //修改
 	  $('#update_'+id,$this).click(function(){
 		  onUpdate();
@@ -204,6 +210,95 @@
 				}, "json");
 		});
 	};
+	//----------会员充值--------------
+	var rechargeDialog = $('#rechargeDialog_'+id,$this);
+	var rechargeForm = $('#rechargeForm_'+id,rechargeDialog);
+	//编辑框
+	$(rechargeDialog).dialog({  
+	    title: '会员充值',  
+	    width:400,
+	    height:200,
+	    closed: true,  
+	    cache: false,  
+	    modal: true,
+	    closable:false,
+	    toolbar:[{
+			text:'充值',
+			iconCls:'icon-save',
+			handler:function(){
+				onRechargeOK();
+			}
+		},{
+			text:'退出',
+			iconCls:'icon-exit',
+			handler:function(){
+				$(rechargeDialog).dialog('close');
+			}
+		}],
+		onClose:function(){
+			$(rechargeForm).form('clear');
+		}
+	});  
+	//充值
+	  $('#recharge_'+id,$this).click(function(){
+		  onRecharge();
+	  });
+	var  onRecharge = function(){
+		if(selectRow==null){
+			$.messager.alert('提示','请选择会员',"warning");
+			return;
+		}
+		$('#customerId',rechargeDialog).val(selectRow.customerId);
+		$('#customerCode',rechargeDialog).val(selectRow.customerCode);
+		$('#customerName',rechargeDialog).val(selectRow.customerName);
+		$('#customerAmount',rechargeDialog).val(selectRow.amount);
+		$(rechargeDialog).dialog('open');
+	}
+	var setValueRechargeOK = function(){
+		var amount = $('#amount',rechargeDialog).numberbox('getValue');
+		if(amount==0){
+			$.messager.alert('提示','请填写充值金额',"warning");
+			return false;
+		}
+		return true;
+	}
+	var onRechargeOK = function(){
+		$(rechargeForm).form('submit',{
+			url:'customer/saveCustomerRecharge.do',
+			onSubmit: function(){
+				return setValueRechargeOK();
+			},
+			success: function(data){
+				var result = eval('('+data+')');
+				if(result.isSuccess){
+					var fn = function(){
+						search();
+						$(rechargeDialog).dialog('close');
+					};
+					$.messager.alert('提示','充值成功','info',fn);
+				}else{
+					$.messager.alert('提示',result.message,"error");
+				}
+			}
+		});
+	}
+	//----------充值列表--------------
+	var customerRechargeList = $('#customerRechargeList_'+id,$this);
+	$(customerRechargeList).datagrid({
+	  	singleSelect:true,
+		method:"POST",
+		nowrap:true,
+		striped: true,
+		collapsible:true,
+		pagination:true,
+		rownumbers:true,
+		fit:true,
+		columns:[[
+			{field:'rechargeDate',title:'充值时间',width:160,align:"center"},
+			 {field:'amount',title:'充值金额',width:100,align:"center"}
+		]]
+  });
+	
 	//----------检查权限--------------
 	var rights = null;
 	var checkBtnRight = function(){

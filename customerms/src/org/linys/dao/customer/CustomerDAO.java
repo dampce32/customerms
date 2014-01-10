@@ -75,5 +75,12 @@ public interface CustomerDAO {
 	 * @param model
 	 */
 	void saleUpdate(Sale model);
+	/**
+	 * @description: 消费删除更新会员的会员卡金额
+	 * @created: 2014-1-10 下午8:20:31
+	 * @author 以宋
+	 * @param sale
+	 */
+	void saleDeleteUpdate(Sale sale);
 
 }

@@ -56,4 +56,10 @@ public class CustomerDAOImpl implements CustomerDAO {
 	public void saleUpdate(Sale model) {
 		sqlSession.update("CustomerMapper.saleUpdate",model);
 	}
+
+	public void saleDeleteUpdate(Sale sale) {
+		sqlSession.update("CustomerMapper.saleDeleteUpdate",sale);
+	}
+	
+	
 }

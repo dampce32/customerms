@@ -1,5 +1,7 @@
 package org.linys.dao.customer;
 
+import java.util.List;
+
 import org.linys.model.customer.CustomerRecharge;
 
 /**
@@ -17,4 +19,23 @@ public interface CustomerRechargeDAO {
 	 * @param model
 	 */
 	void insert(CustomerRecharge model);
+	/**
+	 * @description: 分页查询会员充值历史
+	 * @created: 2014-1-10 下午10:04:01
+	 * @author 以宋
+	 * @param page
+	 * @param rows
+	 * @param model
+	 * @return
+	 */
+	List<CustomerRecharge> query(Integer page, Integer rows,
+			CustomerRecharge model);
+	/**
+	 * @description: 统计查询会员充值历史
+	 * @created: 2014-1-10 下午10:04:44
+	 * @author 以宋
+	 * @param model
+	 * @return
+	 */
+	Long count(CustomerRecharge model);
 }
