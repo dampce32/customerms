@@ -40,21 +40,19 @@ public class SaleServiceImpl implements SaleService {
 	public ServiceResult save(Sale model, String saleItemDetailIds, String saleItemIds, String amounts, String isDiscounts, String userIds, String delSaleItemDetailIds,
 			String saleGoodsDetailIds, String goodsIds, String amountsGoods, String isDiscountsGoods, String userIdsGoods, String delSaleGoodsDetailIds) {
 		ServiceResult result = new ServiceResult(false);
-		
 		//消费项目
-		Integer[] saleItemDetailIdArray = StringUtil.splitToInteger(saleItemDetailIds);
+//		Integer[] saleItemDetailIdArray = StringUtil.splitToInteger(saleItemDetailIds);
 		Integer[] saleItemIdArray = StringUtil.splitToInteger(saleItemIds);
 		Float[] amountArray = StringUtil.splitToFloat(amounts);
 		Integer[] isDiscountArray = StringUtil.splitToInteger(isDiscounts);
 		Integer[] userIdArray = StringUtil.splitToInteger(userIds);
-		Integer[] delSaleItemDetailIdArray = StringUtil.splitToInteger(delSaleItemDetailIds);
 		//消费产品
-		Integer[] saleGoodsDetailIdArray = StringUtil.splitToInteger(saleGoodsDetailIds);
+//		Integer[] saleGoodsDetailIdArray = StringUtil.splitToInteger(saleGoodsDetailIds);
 		Integer[] goodsIdArray = StringUtil.splitToInteger(goodsIds);
 		Float[] amountsGoodArray = StringUtil.splitToFloat(amountsGoods);
 		Integer[] isDiscountsGoodArray = StringUtil.splitToInteger(isDiscountsGoods);
 		Integer[] userIdsGoodArray = StringUtil.splitToInteger(userIdsGoods);
-		Integer[] delSaleGoodsDetailIdArray = StringUtil.splitToInteger(delSaleGoodsDetailIds);
+//		Integer[] delSaleGoodsDetailIdArray = StringUtil.splitToInteger(delSaleGoodsDetailIds);
 		
 		if(model.getSaleId()==null){//新增
 			saleDAO.insert(model);
@@ -99,68 +97,6 @@ public class SaleServiceImpl implements SaleService {
 			}
 			customerDAO.saleUpdate(model);
 		}else{
-			//更新消费项目
-			//删除
-			if(delSaleItemDetailIdArray.length>0){
-				saleItemDetailDAO.deleteArray(delSaleItemDetailIdArray);
-			}
-			//更新
-			for (int i = 0; i < saleItemDetailIdArray.length; i++) {
-				Integer saleItemDetailId = saleItemDetailIdArray[i];
-				Integer saleItemId = saleItemIdArray[i];
-				Float amount = amountArray[i];
-				Integer isDiscount = isDiscountArray[i];
-				Integer userId = userIdArray[i];
-				SaleItemDetail saleItemDetail = new SaleItemDetail();
-				if(saleItemDetailId==null){//新增
-					saleItemDetail.setSaleId(model.getSaleId());
-					saleItemDetail.setSaleItemId(saleItemId);
-					saleItemDetail.setAmount(amount);
-					saleItemDetail.setIsDiscount(isDiscount);
-					saleItemDetail.setUserId(userId);
-					saleItemDetailDAO.insert(saleItemDetail);
-				}else{
-					saleItemDetail.setSaleItemDetailId(saleItemDetailId);
-					saleItemDetail.setSaleItemId(saleItemId);
-					saleItemDetail.setAmount(amount);
-					saleItemDetail.setIsDiscount(isDiscount);
-					saleItemDetail.setUserId(userId);
-					saleItemDetailDAO.update(saleItemDetail);
-				}
-				
-			}
-			saleDAO.update(model);
-			
-			//更新消费产品
-			//删除
-			if(delSaleGoodsDetailIdArray.length>0){
-				saleGoodsDetailDAO.deleteArray(delSaleGoodsDetailIdArray);
-			}
-			//更新
-			for (int i = 0; i < saleGoodsDetailIdArray.length; i++) {
-				Integer saleGoodsDetailId = saleGoodsDetailIdArray[i];
-				Integer goodsId = goodsIdArray[i];
-				Float amount = amountArray[i];
-				Integer isDiscount = isDiscountArray[i];
-				Integer userId = userIdArray[i];
-				SaleGoodsDetail saleGoodsDetail = new SaleGoodsDetail();
-				if(saleGoodsDetailId==null){//新增
-					saleGoodsDetail.setSaleId(model.getSaleId());
-					saleGoodsDetail.setGoodsId(goodsId);
-					saleGoodsDetail.setAmount(amount);
-					saleGoodsDetail.setIsDiscount(isDiscount);
-					saleGoodsDetail.setUserId(userId);
-					saleGoodsDetailDAO.insert(saleGoodsDetail);
-				}else{
-					saleGoodsDetail.setSaleGoodsDetailId(saleGoodsDetailId);
-					saleGoodsDetail.setGoodsId(goodsId);
-					saleGoodsDetail.setAmount(amount);
-					saleGoodsDetail.setIsDiscount(isDiscount);
-					saleGoodsDetail.setUserId(userId);
-					saleGoodsDetailDAO.update(saleGoodsDetail);
-				}
-				
-			}
 			saleDAO.update(model);
 		}
 		result.getData().put("saleId", model.getSaleId());

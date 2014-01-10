@@ -107,129 +107,139 @@
 		$('#discount',editForm).numberbox('setValue',0);
 		$('#userId',editForm).val(Customers.getCurrUser().userId);
 		$('#userName',editForm).val(Customers.getCurrUser().userName);
+		
+		$('#customerAddBtn_'+id,editDialog).linkbutton('enable');
+		$('#selectSaleItemBtn_'+id,editDialog).linkbutton('enable');
+		$('#deleteSaleItemDetailBtn_'+id,editDialog).linkbutton('enable');
+		$('#selectGoodsBtn_'+id,editDialog).linkbutton('enable');
+		$('#deleteSaleGoodsDetailBtn_'+id,editDialog).linkbutton('enable');
 		$(editDialog).dialog('open');
 	};
 	//保存前的赋值操作
 	var setValue = function(){
-		var customerId = $.trim($('#customerId',editForm).val());
-		if(''==customerId){
-			$.messager.alert('提示','请选择会员','warning');
-			return false;
-		}
-		var saleDate = $.trim($('#saleDate',editForm).val());
-		if(''==saleDate){
-			$.messager.alert('提示','请填写消费日期','warning');
-			return false;
-		}
-		var notIntoDiscountAmount = $('#notIntoDiscountAmount',editForm).numberbox('getValue');
-		var intoDiscountAmount = $('#intoDiscountAmount',editForm).numberbox('getValue');
-		if(0==notIntoDiscountAmount&&0==intoDiscountAmount){
-			$.messager.alert('提示','请填写消费明细','warning');
-			return false;
-		}
-		var discount = $.trim($('#discount',editForm).val());
-		if(''==discount){
-			$.messager.alert('提示','请填写折扣','warning');
-			return false;
-		}
-		var amount = $('#amount',editForm).numberbox('getValue');
-		if(0==amount){
-			$.messager.alert('提示','请填写消费金额','warning');
-			return false;
-		}
-		//消费项目明细
-		//验证添加的消费项目
-		if(lastIndexSaleItemDetail!=null){
-			$(saleItemDetailList).datagrid('endEdit', lastIndexSaleItemDetail);
-		}
-		$(saleItemDetailList).datagrid('unselectAll');
-		lastIndexSaleItemDetail = null;
-		var rows = $(saleItemDetailList).datagrid('getRows');
-		var saleItemDetailIdArray = new Array();
-		var saleItemIdArray = new Array();
-		var amountArray = new Array();
-		var isDiscountArray = new Array();
-		var userIdArray = new Array();
-		for ( var i = 0; i < rows.length; i++) {
-			saleItemDetailIdArray.push(rows[i].saleItemDetailId);
-			saleItemIdArray.push(rows[i].saleItemId);
-			amountArray.push(rows[i].amount);
-			isDiscountArray.push(rows[i].isDiscount);
-			userIdArray.push(rows[i].userId);
-		}
-		var delSaleItemDetailIdArray = new Array();
-		//统计原记录中被删除的记录
-		for ( var i = 0; i < oldSaleItemDetailIdArray.length; i++) {
-			var haveDel = true;
-			for(var j=0;j<rows.length;j++){
-				if(oldSaleItemDetailIdArray[i]==rows[j].saleItemDetailId){
-					haveDel = false;
-					break;
+		var saleId = $.trim($('#saleId',editForm).val());
+		if(!saleId){
+			var customerId = $.trim($('#customerId',editForm).val());
+			if(''==customerId){
+				$.messager.alert('提示','请选择会员','warning');
+				return false;
+			}
+			var notIntoDiscountAmount = $('#notIntoDiscountAmount',editForm).numberbox('getValue');
+			var intoDiscountAmount = $('#intoDiscountAmount',editForm).numberbox('getValue');
+			if(0==notIntoDiscountAmount&&0==intoDiscountAmount){
+				$.messager.alert('提示','请填写消费明细','warning');
+				return false;
+			}
+			var discount = $.trim($('#discount',editForm).val());
+			if(''==discount){
+				$.messager.alert('提示','请填写折扣','warning');
+				return false;
+			}
+			var amount = $('#amount',editForm).numberbox('getValue');
+			if(0==amount){
+				$.messager.alert('提示','请填写消费金额','warning');
+				return false;
+			}
+			//消费项目明细
+			//验证添加的消费项目
+			if(lastIndexSaleItemDetail!=null){
+				$(saleItemDetailList).datagrid('endEdit', lastIndexSaleItemDetail);
+			}
+			$(saleItemDetailList).datagrid('unselectAll');
+			lastIndexSaleItemDetail = null;
+			var rows = $(saleItemDetailList).datagrid('getRows');
+			var saleItemDetailIdArray = new Array();
+			var saleItemIdArray = new Array();
+			var amountArray = new Array();
+			var isDiscountArray = new Array();
+			var userIdArray = new Array();
+			for ( var i = 0; i < rows.length; i++) {
+				saleItemDetailIdArray.push(rows[i].saleItemDetailId);
+				saleItemIdArray.push(rows[i].saleItemId);
+				amountArray.push(rows[i].amount);
+				isDiscountArray.push(rows[i].isDiscount);
+				userIdArray.push(rows[i].userId);
+			}
+			var delSaleItemDetailIdArray = new Array();
+			//统计原记录中被删除的记录
+			for ( var i = 0; i < oldSaleItemDetailIdArray.length; i++) {
+				var haveDel = true;
+				for(var j=0;j<rows.length;j++){
+					if(oldSaleItemDetailIdArray[i]==rows[j].saleItemDetailId){
+						haveDel = false;
+						break;
+					}
+				}
+				if(haveDel){
+					delSaleItemDetailIdArray.push(oldSaleItemDetailIdArray[i]);
 				}
 			}
-			if(haveDel){
-				delSaleItemDetailIdArray.push(oldSaleItemDetailIdArray[i]);
+			$('#saleItemDetailIds',editForm).val(saleItemDetailIdArray.join(CSIT.join));
+			$('#saleItemIds',editForm).val(saleItemIdArray.join(CSIT.join));
+			$('#amounts',editForm).val(amountArray.join(CSIT.join));
+			$('#isDiscounts',editForm).val(isDiscountArray.join(CSIT.join));
+			$('#userIds',editForm).val(userIdArray.join(CSIT.join));
+			$('#delSaleItemDetailIds',editForm).val(delSaleItemDetailIdArray.join(CSIT.join));
+			
+			//消费产品明细
+			if(lastIndexSaleGoodsDetail!=null){
+				$(saleGoodsDetailList).datagrid('endEdit', lastIndexSaleGoodsDetail);
 			}
-		}
-		$('#saleItemDetailIds',editForm).val(saleItemDetailIdArray.join(CSIT.join));
-		$('#saleItemIds',editForm).val(saleItemIdArray.join(CSIT.join));
-		$('#amounts',editForm).val(amountArray.join(CSIT.join));
-		$('#isDiscounts',editForm).val(isDiscountArray.join(CSIT.join));
-		$('#userIds',editForm).val(userIdArray.join(CSIT.join));
-		$('#delSaleItemDetailIds',editForm).val(delSaleItemDetailIdArray.join(CSIT.join));
-		
-		//消费产品明细
-		if(lastIndexSaleGoodsDetail!=null){
-			$(saleGoodsDetailList).datagrid('endEdit', lastIndexSaleGoodsDetail);
-		}
-		$(saleGoodsDetailList).datagrid('unselectAll');
-		lastIndexSaleGoodsDetail = null;
-		var rows = $(saleGoodsDetailList).datagrid('getRows');
-		var saleGoodsDetailIdArray = new Array();
-		var goodsIdArray = new Array();
-		var amountArray = new Array();
-		var isDiscountArray = new Array();
-		var userIdArray = new Array();
-		for ( var i = 0; i < rows.length; i++) {
-			saleGoodsDetailIdArray.push(rows[i].saleGoodsDetailId);
-			goodsIdArray.push(rows[i].goodsId);
-			amountArray.push(rows[i].amount);
-			isDiscountArray.push(rows[i].isDiscount);
-			userIdArray.push(rows[i].userId);
-		}
-		var delSaleGoodsDetailIdArray = new Array();
-		//统计原记录中被删除的记录
-		for ( var i = 0; i < oldSaleGoodsDetailIdArray.length; i++) {
-			var haveDel = true;
-			for(var j=0;j<rows.length;j++){
-				if(oldSaleGoodsDetailIdArray[i]==rows[j].saleGoodsDetailId){
-					haveDel = false;
-					break;
+			$(saleGoodsDetailList).datagrid('unselectAll');
+			lastIndexSaleGoodsDetail = null;
+			var rows = $(saleGoodsDetailList).datagrid('getRows');
+			var saleGoodsDetailIdArray = new Array();
+			var goodsIdArray = new Array();
+			var amountArray = new Array();
+			var isDiscountArray = new Array();
+			var userIdArray = new Array();
+			for ( var i = 0; i < rows.length; i++) {
+				saleGoodsDetailIdArray.push(rows[i].saleGoodsDetailId);
+				goodsIdArray.push(rows[i].goodsId);
+				amountArray.push(rows[i].amount);
+				isDiscountArray.push(rows[i].isDiscount);
+				userIdArray.push(rows[i].userId);
+			}
+			var delSaleGoodsDetailIdArray = new Array();
+			//统计原记录中被删除的记录
+			for ( var i = 0; i < oldSaleGoodsDetailIdArray.length; i++) {
+				var haveDel = true;
+				for(var j=0;j<rows.length;j++){
+					if(oldSaleGoodsDetailIdArray[i]==rows[j].saleGoodsDetailId){
+						haveDel = false;
+						break;
+					}
+				}
+				if(haveDel){
+					delSaleGoodsDetailIdArray.push(oldSaleGoodsDetailIdArray[i]);
 				}
 			}
-			if(haveDel){
-				delSaleGoodsDetailIdArray.push(oldSaleGoodsDetailIdArray[i]);
+			$('#saleGoodsDetailIds',editForm).val(saleGoodsDetailIdArray.join(CSIT.join));
+			$('#goodsIds',editForm).val(goodsIdArray.join(CSIT.join));
+			$('#amountsGoods',editForm).val(amountArray.join(CSIT.join));
+			$('#isDiscountsGoods',editForm).val(isDiscountArray.join(CSIT.join));
+			$('#userIdsGoods',editForm).val(userIdArray.join(CSIT.join));
+			$('#delSaleGoodsDetailIds',editForm).val(delSaleGoodsDetailIdArray.join(CSIT.join));
+			
+			var customerAmount  = $('#customerAmount',editForm).numberbox('getValue');
+			var saleId = $('#saleId',editForm).val();
+			if(saleId==''){
+				if(customerAmount<amount){
+					$('#customerName',amountLessDialog).val($('#customerName',editDialog).val());
+					$('#customerAmount',amountLessDialog).numberbox('setValue',customerAmount);
+					$('#customerAmountLabel',amountLessDialog).html(customerAmount);
+					$('#amount',amountLessDialog).numberbox('setValue',amount);
+					$('#lessAmount',amountLessDialog).numberbox('setValue',amount-customerAmount);
+					$('#lessAmountLabel',amountLessDialog).html(amount-customerAmount);
+					
+					$(amountLessDialog).dialog('open');
+					return false;
+				}
 			}
-		}
-		$('#saleGoodsDetailIds',editForm).val(saleGoodsDetailIdArray.join(CSIT.join));
-		$('#goodsIds',editForm).val(goodsIdArray.join(CSIT.join));
-		$('#amountsGoods',editForm).val(amountArray.join(CSIT.join));
-		$('#isDiscountsGoods',editForm).val(isDiscountArray.join(CSIT.join));
-		$('#userIdsGoods',editForm).val(userIdArray.join(CSIT.join));
-		$('#delSaleGoodsDetailIds',editForm).val(delSaleGoodsDetailIdArray.join(CSIT.join));
-		
-		var customerAmount  = $('#customerAmount',editForm).numberbox('getValue');
-		var saleId = $('#saleId',editForm).val();
-		if(saleId==''){
-			if(customerAmount<amount){
-				$('#customerName',amountLessDialog).val($('#customerName',editDialog).val());
-				$('#customerAmount',amountLessDialog).numberbox('setValue',customerAmount);
-				$('#customerAmountLabel',amountLessDialog).html(customerAmount);
-				$('#amount',amountLessDialog).numberbox('setValue',amount);
-				$('#lessAmount',amountLessDialog).numberbox('setValue',amount-customerAmount);
-				$('#lessAmountLabel',amountLessDialog).html(amount-customerAmount);
-				
-				$(amountLessDialog).dialog('open');
+		}else{//只能修改消费日期
+			var saleDate = $.trim($('#saleDate',editForm).val());
+			if(''==saleDate){
+				$.messager.alert('提示','请填写消费日期','warning');
 				return false;
 			}
 		}
@@ -297,6 +307,12 @@
 			initCombobox();
 			onOpen(selectRow.saleId);
 			$(editDialog).dialog('open');
+			
+			$('#customerAddBtn_'+id,editDialog).linkbutton('disable');
+			$('#selectSaleItemBtn_'+id,editDialog).linkbutton('disable');
+			$('#deleteSaleItemDetailBtn_'+id,editDialog).linkbutton('disable');
+			$('#selectGoodsBtn_'+id,editDialog).linkbutton('disable');
+			$('#deleteSaleGoodsDetailBtn_'+id,editDialog).linkbutton('disable');
 		}
 	 };
 	//查询
@@ -397,11 +413,15 @@
 	  });
 	
 	$('#customerAddBtn_'+id,editDialog).click(function(){
-		$(customerDialog).dialog('open');
-		 $(customerList).datagrid({
-			 url:"customer/queryCustomer.do"
-		 });
+		var disabled = $('#customerAddBtn_'+id,editDialog).linkbutton('options').disabled;
+		if(disabled==false){
+			$(customerDialog).dialog('open');
+			$(customerList).datagrid({
+				url:"customer/queryCustomer.do"
+			});
+		}
 	})
+	
 	var onSelectCustomerOK = function(){
 		var selectCustomer = $(customerList).datagrid('getSelected');
 		if(selectCustomer==null){
@@ -433,8 +453,8 @@
 		collapsible:true,
 		rownumbers:true,
 		fit:true,
-		toolbar: [{text:'添加',iconCls: 'icon-add',handler: function(){onSelectSaleItem();}},
-		          {text:'删除',iconCls: 'icon-remove',handler: function(){onDeleteSaleItemDetail();}}
+		toolbar: [{id:'selectSaleItemBtn_'+id,text:'添加',iconCls: 'icon-add',handler: function(){onSelectSaleItem();}},
+		          {id:'deleteSaleItemDetailBtn_'+id,text:'删除',iconCls: 'icon-remove',handler: function(){onDeleteSaleItemDetail();}}
 		],
 		columns:[[
 			{field:'saleItemName',title:'消费项目',width:100,align:"center"},
@@ -479,14 +499,17 @@
 				$(this).datagrid('rejectChanges');
 		  },
 		  onClickRow:function(rowIndex){
-			if (lastIndexSaleItemDetail != rowIndex){
-				if(lastIndexSaleItemDetail!=null){
-					$(saleItemDetailList).datagrid('endEdit', lastIndexSaleItemDetail);
+			var saleId = $('#saleId',editDialog).val();
+			if(!saleId){
+				if (lastIndexSaleItemDetail != rowIndex){
+					if(lastIndexSaleItemDetail!=null){
+						$(saleItemDetailList).datagrid('endEdit', lastIndexSaleItemDetail);
+					}
+					$(saleItemDetailList).datagrid('beginEdit', rowIndex);
+					setEditingSaleItemDetail(rowIndex);
 				}
-				$(saleItemDetailList).datagrid('beginEdit', rowIndex);
-				setEditingSaleItemDetail(rowIndex);
+				lastIndexSaleItemDetail = rowIndex;
 			}
-			lastIndexSaleItemDetail = rowIndex;
 		  },onLoadSuccess:function(data){
 				var rows = data.rows;
 				oldSaleItemDetailIdArray = new Array();
@@ -709,8 +732,8 @@
 		collapsible:true,
 		rownumbers:true,
 		fit:true,
-		toolbar: [{text:'添加',iconCls: 'icon-add',handler: function(){onSelectGoods();}},
-		          {text:'删除',iconCls: 'icon-remove',handler: function(){onDeleteSaleGoodsDetail();}}
+		toolbar: [{id:'selectGoodsBtn_'+id,text:'添加',iconCls: 'icon-add',handler: function(){onSelectGoods();}},
+		          {id:'deleteSaleGoodsDetailBtn_'+id,text:'删除',iconCls: 'icon-remove',handler: function(){onDeleteSaleGoodsDetail();}}
 		],
 		columns:[[
 			{field:'goodsName',title:'消费产品',width:100,align:"center"},
@@ -755,14 +778,17 @@
 				$(this).datagrid('rejectChanges');
 		  },
 		  onClickRow:function(rowIndex){
-			if (lastIndexSaleGoodsDetail != rowIndex){
-				if(lastIndexSaleGoodsDetail!=null){
-					$(saleGoodsDetailList).datagrid('endEdit', lastIndexSaleGoodsDetail);
-				}
-				$(saleGoodsDetailList).datagrid('beginEdit', rowIndex);
-				setEditingSaleGoodsDetail(rowIndex);
-			}
-			lastIndexSaleGoodsDetail = rowIndex;
+			  var saleId = $('#saleId',editDialog).val();
+			  if(!saleId){
+				  if (lastIndexSaleGoodsDetail != rowIndex){
+					if(lastIndexSaleGoodsDetail!=null){
+						$(saleGoodsDetailList).datagrid('endEdit', lastIndexSaleGoodsDetail);
+					}
+					$(saleGoodsDetailList).datagrid('beginEdit', rowIndex);
+					setEditingSaleGoodsDetail(rowIndex);
+				  }
+				  lastIndexSaleGoodsDetail = rowIndex;
+			  }
 		  },onLoadSuccess:function(data){
 				var rows = data.rows;
 				oldSaleGoodsDetailIdArray = new Array();
