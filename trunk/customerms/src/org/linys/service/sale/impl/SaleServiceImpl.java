@@ -124,6 +124,13 @@ public class SaleServiceImpl implements SaleService {
 		}
 		boolean haveDelete = false;
 		for (Integer id : idArray) {
+			//将订单表中的消费金额加入到客户账号中
+			Sale sale = new Sale();
+			sale.setSaleId(id);
+			sale =	saleDAO.loadDelete(sale);
+			
+			customerDAO.saleDeleteUpdate(sale);
+			
 			saleDAO.delete(id);
 			haveDelete = true;
 		}

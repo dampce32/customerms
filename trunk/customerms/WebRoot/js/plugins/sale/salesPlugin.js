@@ -55,8 +55,12 @@
 			}
 	  });
 	  //添加
-	  $('#add_'+id,$this).click(function(){
-		  onAdd();
+	  $('#addSale_'+id,$this).click(function(){
+		  onAddSale();
+	  });
+	  //添加退费
+	  $('#addRej_'+id,$this).click(function(){
+		  onAddRej();
 	  });
 	  //修改
 	  $('#update_'+id,$this).click(function(){
@@ -97,9 +101,13 @@
 	var initCombobox=function(){
 	}
 	//添加
-	var onAdd = function(){
+	var onAddSale = function(){
 		var now = nowTimestamp();
+		$(editDialog).dialog({  
+		    title: '添加消费'
+		});
 		$('#saleDate',editForm).val(now);
+		$('#payType',editForm).val('addSale');
 		$('#userId',editForm).val(Customers.getCurrUser().userId);
 		$('#intoDiscountAmount',editForm).numberbox('setValue',0);
 		$('#notIntoDiscountAmount',editForm).numberbox('setValue',0);
@@ -340,7 +348,7 @@
 			 $.messager.alert('警告',"请选中要删除的纪录","warning");
 			 return;	
 		}
-		$.messager.confirm("提示！","确定要删除选中的记录?",function(t){ 
+		$.messager.confirm("提示！","确定要删除选中的记录，删除后，消费金额将加到会员卡余额中？",function(t){ 
 			if(!t) return;
 			var idArray = new Array();
 			for(var i=0;i<rows.length;i++){

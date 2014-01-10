@@ -47,4 +47,13 @@ public class CustomerRechargeAction extends BaseAction implements ModelDriven<Cu
 		String jsonString = result.toJSON();
 		ajaxJson(jsonString);
 	}
+	/**
+	 * @description: 分页查询会员充值历史
+	 * @created: 2014-1-10 下午10:01:13
+	 * @author 以宋
+	 */
+	public void query(){
+		String jsonArray = customerRechargeService.query(page, rows, model);
+		ajaxJson(jsonArray);
+	}
 }

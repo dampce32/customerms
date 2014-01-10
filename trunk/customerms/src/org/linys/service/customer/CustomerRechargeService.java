@@ -19,5 +19,15 @@ public interface CustomerRechargeService {
 	 * @return
 	 */
 	ServiceResult save(CustomerRecharge model);
+	/**
+	 * @description: 分页查询会员充值历史
+	 * @created: 2014-1-10 下午10:02:32
+	 * @author 以宋
+	 * @param page
+	 * @param rows
+	 * @param model
+	 * @return
+	 */
+	String query(Integer page, Integer rows, CustomerRecharge model);
 
 }

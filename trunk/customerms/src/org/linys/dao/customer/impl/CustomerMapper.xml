@@ -58,6 +58,11 @@
 	    set  amount = #{amount}
 	    where  customerId = #{customerId,jdbcType=INTEGER} ;
   </update>
+   <update id="saleDeleteUpdate" parameterType="Sale" >
+	    update t_customer
+	    set  amount = amount+#{amount}
+	    where  customerId = #{customerId,jdbcType=INTEGER} ;
+  </update>
   <delete id="delete" parameterType="Integer" >
     delete from t_customer
     where customerId = #{customerId,jdbcType=INTEGER}

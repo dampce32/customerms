@@ -67,5 +67,13 @@ public interface SaleDAO {
 	 * @return
 	 */
 	Sale load(Sale model);
+	/**
+	 * @description: 删除消费时查询消费
+	 * @created: 2014-1-10 下午8:14:48
+	 * @author 以宋
+	 * @param sale
+	 * @return
+	 */
+	Sale loadDelete(Sale sale);
 
 }
