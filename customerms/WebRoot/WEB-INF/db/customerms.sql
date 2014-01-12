@@ -1,10 +1,12 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2014-01-05 23:15:41                          */
+/* Created on:     2014-01-12 22:28:27                          */
 /*==============================================================*/
 
 
 drop table if exists T_Customer;
+
+drop table if exists T_CustomerRecharge;
 
 drop table if exists T_CustomerType;
 
@@ -42,6 +44,18 @@ create table T_Customer
    amount               float,
    primary key (customerId),
    key AK_A_customerCode (customerCode)
+);
+
+/*==============================================================*/
+/* Table: T_CustomerRecharge                                    */
+/*==============================================================*/
+create table T_CustomerRecharge
+(
+   customerRechargeId   int not null auto_increment,
+   customerId           int,
+   rechargeDate         varchar(20) not null,
+   amount               float not null,
+   primary key (customerRechargeId)
 );
 
 /*==============================================================*/
@@ -199,6 +213,9 @@ create table T_UserRole
 
 alter table T_Customer add constraint FK_Reference_6 foreign key (customerTypeId)
       references T_CustomerType (customerTypeId) on delete restrict on update restrict;
+
+alter table T_CustomerRecharge add constraint FK_Reference_15 foreign key (customerId)
+      references T_Customer (customerId) on delete restrict on update restrict;
 
 alter table T_Right add constraint FK_Reference_5 foreign key (parentRightId)
       references T_Right (rightId) on delete restrict on update restrict;
