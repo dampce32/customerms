@@ -36,12 +36,10 @@ public interface SaleService {
 	 * @description: 分页查询消费
 	 * @created: 2014-1-3 下午7:42:24
 	 * @author 以宋
-	 * @param page
-	 * @param rows
 	 * @param model
 	 * @return
 	 */
-	String query(Integer page, Integer rows, Sale model);
+	String query(Sale model);
 	/**
 	 * @description: 批量消费删除
 	 * @created: 2014-1-3 下午7:42:44

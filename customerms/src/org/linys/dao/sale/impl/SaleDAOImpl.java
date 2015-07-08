@@ -8,7 +8,6 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.linys.dao.sale.SaleDAO;
 import org.linys.model.sale.Sale;
-import org.linys.util.PageUtil;
 import org.springframework.stereotype.Repository;
 /**
  * @description:消费DAO实现类
@@ -35,9 +34,8 @@ public class SaleDAOImpl implements SaleDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Sale> query(Integer page, Integer rows,
-			Sale model) {
-		return sqlSession.selectList("SaleMapper.query", model, new RowBounds(PageUtil.getPageBegin(page, rows),rows));
+	public List<Sale> query(Sale model) {
+		return sqlSession.selectList("SaleMapper.query", model, new RowBounds(model.getStart(),model.getRows()));
 	}
 
 	public Long count(Sale model) {

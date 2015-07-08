@@ -38,12 +38,10 @@ public interface SaleDAO {
 	 * @description: 分页查询消费
 	 * @created: 2014-1-3 下午7:51:50
 	 * @author 以宋
-	 * @param page
-	 * @param rows
 	 * @param model
 	 * @return
 	 */
-	List<Sale> query(Integer page, Integer rows, Sale model);
+	List<Sale> query(Sale model);
 	/**
 	 * @description: 统计消费
 	 * @created: 2014-1-3 下午7:52:20

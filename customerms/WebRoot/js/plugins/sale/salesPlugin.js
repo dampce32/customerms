@@ -23,8 +23,6 @@
 			collapsible:true,
 			pagination:true,
 			rownumbers:true,
-			selectOnCheck:false,
-			checkOnSelect:false,
 			singleSelect:true,
 			fit:true,
 			toolbar:'#tb_'+id,
@@ -51,7 +49,6 @@
 			onLoadSuccess:function(){
 				selectRow = null;
 		 		selectIndex = null;
-				pageNumber = 1;
 			}
 	  });
 	  //添加

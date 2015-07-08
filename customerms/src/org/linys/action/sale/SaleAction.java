@@ -73,7 +73,7 @@ public class SaleAction extends BaseAction implements ModelDriven<Sale> {
 	 */
 	public void query(){
 		try {
-			String jsonArray = saleService.query(page, rows, model);
+			String jsonArray = saleService.query(model);
 			ajaxJson(jsonArray);
 		} catch (Exception e) {
 			e.printStackTrace();

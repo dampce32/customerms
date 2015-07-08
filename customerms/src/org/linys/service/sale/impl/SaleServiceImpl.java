@@ -109,8 +109,8 @@ public class SaleServiceImpl implements SaleService {
 		return result;
 	}
 
-	public String query(Integer page, Integer rows, Sale model) {
-		List<Sale> list = saleDAO.query(page,rows,model);
+	public String query(Sale model) {
+		List<Sale> list = saleDAO.query(model);
 		Long total = saleDAO.count(model);
 		String[] properties = {"saleId","saleDate","customerId","notIntoDiscountAmount","intoDiscountAmount","discount","amount","balance","payByCash","payByCard","userId","userName","customerName"};
 		return JSONUtil.toJson(list, properties, total);
