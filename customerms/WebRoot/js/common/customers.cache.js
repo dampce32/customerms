@@ -32,3 +32,20 @@ Customers.getCurrUser = function(){
 	}
 	return Customers.currUser;
 };
+//计次卡类型
+Customers.CountCardTypeList = null;
+Customers.getCountCardTypeList = function(){
+	if(Customers.CountCardTypeList==null){
+		var url = 'dict/queryComboboxDataDict.do';
+		var content = {'dataDictType':'countCardType'};
+		Customers.CountCardTypeList = syncCallService(url,content);
+	}
+	return Customers.CountCardTypeList;
+};
+Customers.initCountCardTypeCombobox = function(id,range){
+	$(id,range).combobox({
+		  data:Customers.getCountCardTypeList(),
+		  valueField:'dataDictId',
+		  textField:'dataDictName'
+	});
+};

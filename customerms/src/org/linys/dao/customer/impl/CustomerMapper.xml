@@ -39,10 +39,10 @@
 		</if>
 	</select>
   <insert id="insert" parameterType="Customer"  useGeneratedKeys="true" keyProperty="customerId">
-    insert into t_customer ( customerCode, customerName, customerTypeId,telephone,wechat,amount)
+    insert into T_Customer (customerCode, customerName, customerTypeId,telephone,wechat,amount)
     values (#{customerCode,jdbcType=VARCHAR},#{customerName,jdbcType=VARCHAR}, 
       #{customerTypeId,jdbcType=INTEGER}, #{telephone,jdbcType=VARCHAR}, 
-      #{wechat,jdbcType=VARCHAR},#{amount,jdbcType=REAL})
+      #{wechat,jdbcType=VARCHAR},0)
   </insert>
   <update id="update" parameterType="Customer" >
     update t_customer

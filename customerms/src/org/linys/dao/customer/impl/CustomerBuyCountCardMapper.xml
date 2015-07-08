@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.linys.dao.customer.CustomerBuyCountCardDAO" >
+	<insert id="insert" parameterType="CustomerBuyCountCard">
+	  insert into t_customerbuycountcard (customerId, countCardId,alreadySaleCount,buyCountCardDate)
+	  values (#{customerId,jdbcType=INTEGER}, #{countCardId,jdbcType=INTEGER},
+	          #{alreadySaleCount,jdbcType=INTEGER},#{buyCountCardDate,jdbcType=VARCHAR})
+	</insert>
+	 <select id="query"  resultType="CountCard" parameterType="CustomerBuyCountCard">
+		select a.buyCountCardDate,c.dataDictName as countCardTypeName,b.amount,b.canSaleCount,
+			   (b.canSaleCount-a.alreadySaleCount) as canCount 
+		from t_customerbuycountcard a
+		left join t_countcard b on a.countCardId = b.countCardId
+  		left join t_datadict c on b.countCardTypeId = c.dataDictId
+		where a.customerId = #{customerId,jdbcType=INTEGER} 
+		order by a.buyCountCardDate desc
+	</select>
+	<select id="count"  resultType="Long" parameterType="CustomerBuyCountCard">
+		select count(1)
+		from t_customerbuycountcard
+		where customerId = #{customerId,jdbcType=INTEGER} 
+	</select>
+	 <select id="queryCustomerBuyCountCard"  resultType="CustomerBuyCountCard" parameterType="CustomerBuyCountCard">
+		select a.customerBuyCountCardId,c.dataDictName as countCardTypeName,b.amount,
+		       b.canSaleCount,(b.canSaleCount-a.alreadySaleCount) as canCount ,
+		       a.alreadySaleCount,d.customerCode,d.customerName
+		from t_customerbuycountcard a
+		left join t_countcard b on a.countCardId = b.countCardId
+  		left join t_datadict c on b.countCardTypeId = c.dataDictId
+  		left join t_customer d on a.customerId = d.customerId
+  		where (b.canSaleCount-a.alreadySaleCount)>0
+		<if test="customerCode != null and customerCode !=''">
+			and d.customerCode like '%${customerCode}%'
+		</if>
+		<if test="customerName != null and customerName !=''">
+			and d.customerName like '%${customerName}%'
+		</if>
+		order by canCount desc
+	</select>
+	<select id="countCustomerBuyCountCard"  resultType="Long" parameterType="CustomerBuyCountCard">
+		select count(1)
+		from t_customerbuycountcard a
+		left join t_countcard b on a.countCardId = b.countCardId
+  		left join t_datadict c on b.countCardTypeId = c.dataDictId
+  		left join t_customer d on a.customerId = d.customerId
+  		where (b.canSaleCount-a.alreadySaleCount)>0
+  		<if test="customerCode != null and customerCode !=''">
+			and d.customerCode like '%${customerCode}%'
+		</if>
+		<if test="customerName != null and customerName !=''">
+			and d.customerName like '%${customerName}%'
+		</if>
+	</select>
+</mapper>

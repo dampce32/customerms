@@ -52,6 +52,10 @@
 					url:'customer/queryCustomerRecharge.do',
 					queryParams:{customerId:selectRow.customerId}
 				});
+				$(customerBuyCountCardList).datagrid({
+					url:'customer/queryCustomerBuyCountCard.do',
+					queryParams:{customerId:selectRow.customerId}
+				});
 			},
 			onDblClickRow:function(rowIndex,rowData){
 				onUpdate();
@@ -66,7 +70,6 @@
 	  $('#add_'+id,$this).click(function(){
 		  onAdd();
 	  });
-	  
 	  
 	  //修改
 	  $('#update_'+id,$this).click(function(){
@@ -162,6 +165,7 @@
 	//修改
 	var onUpdate = function(){
 		if(!$('#update_'+id,$this).is(":hidden")){
+			var selectRow = $(viewList).datagrid('getSelected');
 			if(selectRow==null){
 				$.messager.alert("警告","请选择数据行",'warning');
 				return;
@@ -282,6 +286,152 @@
 			}
 		});
 	}
+	//----------会员购买计次卡--------------
+	var buyCountCardDialog = $('#buyCountCardDialog_'+id,$this);
+	var buyCountCardForm = $('#buyCountCardForm_'+id,buyCountCardDialog);
+	//编辑框
+	$(buyCountCardDialog).dialog({  
+	    title: '会员购买计次卡',  
+	    width:500,
+	    height:220,
+	    closed: true,  
+	    cache: false,  
+	    modal: true,
+	    closable:false,
+	    toolbar:[{
+			text:'购买',
+			iconCls:'icon-save',
+			handler:function(){
+				onBuyCountCardOK();
+			}
+		},{
+			text:'退出',
+			iconCls:'icon-exit',
+			handler:function(){
+				$(buyCountCardDialog).dialog('close');
+			}
+		}],
+		onClose:function(){
+			$(buyCountCardForm).form('clear');
+		}
+	});  
+	//购买计次卡
+	  $('#buycountCard_'+id,$this).click(function(){
+		  onBuycountCard();
+	  });
+	var  onBuycountCard = function(){
+		if(selectRow==null){
+			$.messager.alert('提示','请选择会员',"warning");
+			return;
+		}
+		$('#customerId',buyCountCardDialog).val(selectRow.customerId);
+		$('#customerCode',buyCountCardDialog).val(selectRow.customerCode);
+		$('#customerName',buyCountCardDialog).val(selectRow.customerName);
+		$(buyCountCardDialog).dialog('open');
+	}
+	var setValueBuyCountCardOK = function(){
+		var countCardId = $('#countCardId',buyCountCardDialog).val();
+		if(countCardId==null || countCardId==''){
+			$.messager.alert('提示','请选择购买计次卡',"warning");
+			return false;
+		}
+	}
+	var onBuyCountCardOK = function(){
+		$(buyCountCardForm).form('submit',{
+			url:'customer/saveCustomerBuyCountCard.do',
+			onSubmit: function(){
+				return setValueBuyCountCardOK();
+			},
+			success: function(data){
+				var result = eval('('+data+')');
+				if(result.isSuccess){
+					var fn = function(){
+						$(customerBuyCountCardList).datagrid('reload');
+						$(buyCountCardDialog).dialog('close');
+					};
+					$.messager.alert('提示','购买成功','info',fn);
+				}else{
+					$.messager.alert('提示',result.message,"error");
+				}
+			}
+		});
+	}
+	//----选择计次卡---
+	$('#searchBuycountCard_'+id,buyCountCardDialog).click(function(){
+		$(selectCountCardDialog).dialog('open');
+		Customers.initCountCardTypeCombobox('#countCardSearch',selectCountCardDialog);
+		onSearchCountCard();
+	  });
+	var selectCountCardDialog = $('#selectCountCardDialog_'+id,$this);
+	var countCardList = $('#countCardList_'+id,selectCountCardDialog);
+	//编辑框
+	$(selectCountCardDialog).dialog({  
+	    title: '选择计次卡',  
+	    width:500,
+	    height:400,
+	    closed: true,  
+	    cache: false,  
+	    modal: true,
+	    closable:false,
+	    toolbar:[{
+			text:'选择',
+			iconCls:'icon-ok',
+			handler:function(){
+				onCountCardTypeOK();
+			}
+		},{
+			text:'退出',
+			iconCls:'icon-exit',
+			handler:function(){
+				$(selectCountCardDialog).dialog('close');
+			}
+		}],
+		onClose:function(){
+			$(selectCountCardDialog).form('clear');
+		}
+	}); 
+	var onCountCardTypeOK = function(){
+		var selectCountCard = $(countCardList).datagrid('getSelected');
+		if(selectCountCard==null){
+			$.messager.alert('提示','请选择计次卡','info');
+			return;
+		}
+		$('#countCardId',buyCountCardDialog).val(selectCountCard.countCardId);
+		$('#countCountTypeName',buyCountCardDialog).val(selectCountCard.countCardTypeName);
+		$('#amount',buyCountCardDialog).val(selectCountCard.amount);
+		$('#canSaleCount',buyCountCardDialog).val(selectCountCard.canSaleCount);
+		$(selectCountCardDialog).dialog('close');
+	};
+	$(countCardList).datagrid({
+		url:"countCard/queryCountCard.do",
+		method:"POST",
+		nowrap:true,
+		striped: true,
+		collapsible:true,
+		pagination:true,
+		rownumbers:true,
+		singleSelect:true,
+		fit:true,
+		columns:[[
+			{field:'countCardTypeName',title:'计次卡类型',width:100,align:"center"},
+			{field:'amount',title:'档次',width:100,align:"center"},
+			{field:'canSaleCount',title:'购买消费次数',width:100,align:"center"}
+		]],
+		onDblClickRow:function(rowIndex,rowData){
+			onCountCardTypeOK();
+		}
+  });
+	var onSearchCountCard = function(){
+		var countCardTypeId = $('#countCardSearch',selectCountCardDialog).combobox('getValue');
+		var content = {countCardTypeId:countCardTypeId};
+		$(countCardList).datagrid({
+			queryParams:content
+		});
+	};
+	//查询
+	$('#searchCountCardType',selectCountCardDialog).click(function(){
+		onSearchCountCard();
+	});
 	//----------充值列表--------------
 	var customerRechargeList = $('#customerRechargeList_'+id,$this);
 	$(customerRechargeList).datagrid({
@@ -295,10 +445,28 @@
 		fit:true,
 		columns:[[
 			{field:'rechargeDate',title:'充值时间',width:160,align:"center"},
-			 {field:'amount',title:'充值金额',width:100,align:"center"}
+			{field:'amount',title:'充值金额',width:100,align:"center"}
 		]]
   });
-	
+	//----------购买计次卡列表-------------
+	var customerBuyCountCardList =  $('#customerBuyCountCardList_'+id,$this);
+	$(customerBuyCountCardList).datagrid({
+	  	singleSelect:true,
+		method:"POST",
+		nowrap:true,
+		striped: true,
+		collapsible:true,
+		pagination:true,
+		rownumbers:true,
+		fit:true,
+		columns:[[
+			{field:'buyCountCardDate',title:'购买计次卡时间',width:130,align:"center"},
+		    {field:'countCardTypeName',title:'计次卡类型',width:70,align:"center"},
+			{field:'level',title:'档次',width:50,align:"center"},
+			{field:'canSaleCount',title:'购买消费次数',width:80,align:"center"},
+			{field:'canCount',title:'可消费次数',width:70,align:"center"}
+		]]
+  });
 	//----------检查权限--------------
 	var rights = null;
 	var checkBtnRight = function(){

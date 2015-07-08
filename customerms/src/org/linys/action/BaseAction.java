@@ -493,4 +493,5 @@ public class BaseAction extends ActionSupport {
 	public void setOrder(String order) {
 		this.order = order;
 	}
+	
 }

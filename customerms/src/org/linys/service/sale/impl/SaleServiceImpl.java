@@ -53,8 +53,16 @@ public class SaleServiceImpl implements SaleService {
 		Integer[] isDiscountsGoodArray = StringUtil.splitToInteger(isDiscountsGoods);
 		Integer[] userIdsGoodArray = StringUtil.splitToInteger(userIdsGoods);
 //		Integer[] delSaleGoodsDetailIdArray = StringUtil.splitToInteger(delSaleGoodsDetailIds);
+		Customer customer = new Customer();
+		customer.setCustomerId(model.getCustomerId());
+		customer=customerDAO.load(customer);
 		
 		if(model.getSaleId()==null){//新增
+			if(model.getPayByCash()==null){
+				model.setPayByCash(0f);	
+			}
+			model.setPayByCard(model.getAmount()-model.getPayByCash());//会员卡付款
+			model.setBalance(customer.getAmount()-model.getAmount()+model.getPayByCash());//消费后的会员卡余额
 			saleDAO.insert(model);
 			//消费项目
 			for (int i = 0; i < saleItemIdArray.length; i++) {
@@ -87,13 +95,10 @@ public class SaleServiceImpl implements SaleService {
 				saleGoodsDetailDAO.insert(saleGoodsDetail);
 			}
 			//更新会员的账号信息
-			Customer customer = new Customer();
-			customer.setCustomerId(model.getCustomerId());
-			customer=customerDAO.load(customer);
 			if(customer.getAmount()>=model.getAmount()){//帐号的钱够付
 				model.setAmount(customer.getAmount()-model.getAmount());
 			}else{
-				model.setAmount(0.0f);
+				model.setAmount(customer.getAmount()-model.getAmount()+model.getPayByCash());
 			}
 			customerDAO.saleUpdate(model);
 		}else{
@@ -107,7 +112,7 @@ public class SaleServiceImpl implements SaleService {
 	public String query(Integer page, Integer rows, Sale model) {
 		List<Sale> list = saleDAO.query(page,rows,model);
 		Long total = saleDAO.count(model);
-		String[] properties = {"saleId","saleDate","customerId","notIntoDiscountAmount","intoDiscountAmount","discount","amount","userId","userName","customerName"};
+		String[] properties = {"saleId","saleDate","customerId","notIntoDiscountAmount","intoDiscountAmount","discount","amount","balance","payByCash","payByCard","userId","userName","customerName"};
 		return JSONUtil.toJson(list, properties, total);
 	}
 

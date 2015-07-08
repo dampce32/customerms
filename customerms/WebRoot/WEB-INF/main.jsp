@@ -4,7 +4,7 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 String base = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" >
+<!DOCTYPE html>
 <html>
   <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -36,14 +36,14 @@ String base = request.getScheme()+"://"+request.getServerName()+":"+request.getS
 <body class="easyui-layout" id="all-body" >
 	<div region="north" id="index-north" border="false">
 		<div  id="index-north-bd">
-				<div id="index-north-bd-left" class="f-l" style="padding-top: 3px">
-	            	<span style="font-size: 25;padding-left: 22px">会员管理系统</span>
-	            </div>
-	            <div id="index-north-bd-right" class="f-r">
-	             	<span style="font-size: 14px">欢迎您：<span id="loginNameMain"></span></span>
-	            	 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"  id="modifyPwdBtn">修改密码</a>
-	                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-back',plain:true"  id="exitSystem">退出</a>
-	            </div>
+			<div id="index-north-bd-left" class="f-l" style="padding-top: 3px">
+				<span style="font-size: 25px;padding-left: 22px">会员管理系统</span>
+			</div>
+            <div id="index-north-bd-right" class="f-r">
+             	<span style="font-size: 14px">欢迎您：<span id="loginNameMain"></span></span>
+            	 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"  id="modifyPwdBtn">修改密码</a>
+                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-back',plain:true"  id="exitSystem">退出</a>
+            </div>
 	    </div>
 	    <input type="hidden" id="baseMain" value="<%=base%>">
 	</div>
@@ -65,6 +65,31 @@ String base = request.getScheme()+"://"+request.getServerName()+":"+request.getS
 		<div id="mm-tabcloseall">关闭全部</div>
 		<div id="mm-tabcloseright">关闭当前右侧</div>
 		<div id="mm-tabcloseleft">关闭当前左侧</div>
+	</div>
+	
+	<div id="modifyPwdDialog">
+		<form id="modifyPwdForm">
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+	     			<td class="tdFirstTitle">原密码：</td>
+	     			<td class="tdFirstContent">
+	     				<input type="password" name ="password" id="password" class="contentInput easyui-validatebox" data-options="required:true"/>
+	     			</td>
+	     		</tr>
+	     		<tr>
+	     			<td class="tdTitle">新密码：</td>
+	     			<td class="tdContent">
+	     				<input type="password" name="newPassword" id="newPassword" class="contentInput easyui-validatebox" data-options="required:true,validType:['minLength[6]','matchUserPwd']"/>
+	     			</td>
+	     		</tr>
+	     		<tr>
+	     			<td class="tdTitle">重新输入新密码：</td>
+	     			<td class="tdContent">
+	     				<input type="password" name="newPassword2" id="newPassword2" class="contentInput easyui-validatebox" data-options="required:true,validType:['minLength[6]','same[\'newPassword\']']"/>
+	     			</td>
+	     		</tr>
+	   		</table>
+		</form>
 	</div>
 </body>
 </html>

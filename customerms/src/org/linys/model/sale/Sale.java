@@ -46,6 +46,18 @@ public class Sale extends BaseModel{
 	 */
     private Float amount;
     /**
+     * 消费余额
+     */
+    private Float balance;
+    /**
+     * 现金付款
+     */
+    private Float payByCash;
+    /**
+     * 会员卡付款
+     */
+    private Float payByCard;
+	/**
      * 会员名称
      */
     private String customerName;
@@ -153,5 +165,27 @@ public class Sale extends BaseModel{
 
 	public void setCustomerAmount(Float customerAmount) {
 		this.customerAmount = customerAmount;
+	}
+	public Float getBalance() {
+		return balance;
+	}
+
+	public void setBalance(Float balance) {
+		this.balance = balance;
+	}
+	public Float getPayByCash() {
+		return payByCash;
+	}
+
+	public void setPayByCash(Float payByCash) {
+		this.payByCash = payByCash;
+	}
+
+	public Float getPayByCard() {
+		return payByCard;
+	}
+
+	public void setPayByCard(Float payByCard) {
+		this.payByCard = payByCard;
 	}
 }

@@ -55,6 +55,7 @@
 	</package>
 	<!-- 基础字典 -->
 	<package name="dict" namespace="/dict" extends="userPackage">
+		<action name="*DataDict" class="dataDictAction" method="{1}"></action>
 		<action name="*SaleItem" class="saleItemAction" method="{1}"></action>
 		<action name="*CustomerType" class="customerTypeAction" method="{1}"></action>
 		<action name="*Goods" class="goodsAction" method="{1}"></action>
@@ -62,11 +63,17 @@
 	<!-- 客户 -->
 	<package name="customer" namespace="/customer" extends="userPackage">
 		<action name="*CustomerRecharge" class="customerRechargeAction" method="{1}"></action>
+		<action name="*CustomerBuyCountCard" class="customerBuyCountCardAction" method="{1}"></action>
 		<action name="*Customer" class="customerAction" method="{1}"></action>
 	</package>
 	<!-- 消费 -->
 	<package name="sale" namespace="/sale" extends="userPackage">
 		<action name="*Sale" class="saleAction" method="{1}"></action>
+		<action name="*SaleBuyCountCard" class="saleBuyCountCardAction" method="{1}"></action>
+	</package>
+	<!-- 计次卡	-->
+	<package name="countCard" namespace="/countCard" extends="userPackage">
+		<action name="*CountCard" class="countCardAction" method="{1}"></action>
 	</package>
 	<!-- 公共方法 -->
 	<package name="common" namespace="/common" extends="userPackage">

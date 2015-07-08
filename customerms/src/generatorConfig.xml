@@ -196,7 +196,7 @@
        	<columnOverride column="isDiscount" property="isDiscount" javaType="Integer"></columnOverride>
     </table>
     -->
-    <!-- 会员充值 -->
+    <!-- 会员充值 
     <table schema="customerms" tableName="T_CustomerRecharge" domainObjectName="CustomerRecharge"
    		enableInsert="true" enableDeleteByPrimaryKey="true"
    		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
@@ -207,6 +207,31 @@
        	<columnOverride column="customerId" property="customerId" javaType="Integer"></columnOverride>
        	<columnOverride column="rechargeDate" property="rechargeDate" javaType="String"></columnOverride>
        	<columnOverride column="amount" property="amount" javaType="Float"></columnOverride>
+    </table>
+   
+     <table schema="customerms" tableName="T_DataDict" domainObjectName="DataDict"
+   		enableInsert="true" enableDeleteByPrimaryKey="true"
+   		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
+  		enableCountByExample="false" enableUpdateByExample="false"
+       	enableDeleteByExample="false" enableSelectByExample="false"
+       	selectByExampleQueryId="false"> 
+       	<columnOverride column="dataDictId" property="dataDictId" javaType="Integer"></columnOverride>
+       	<columnOverride column="dataDictType" property="dataDictType" javaType="String"></columnOverride>
+       	<columnOverride column="dataDictCode" property="dataDictCode" javaType="String"></columnOverride>
+       	<columnOverride column="dataDictName" property="dataDictName" javaType="String"></columnOverride>
+       	<columnOverride column="array" property="array" javaType="Integer"></columnOverride>
+    </table>
+     -->
+     <table schema="customerms" tableName="T_CountCard" domainObjectName="CountCard"
+   		enableInsert="true" enableDeleteByPrimaryKey="true"
+   		enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="false" selectByPrimaryKeyQueryId="false"
+  		enableCountByExample="false" enableUpdateByExample="false"
+       	enableDeleteByExample="false" enableSelectByExample="false"
+       	selectByExampleQueryId="false"> 
+       	<columnOverride column="countCardId" property="countCardId" javaType="Integer" delimitedColumnName=""></columnOverride>
+       	<columnOverride column="countCardTypeId" property="countCardType" javaType="DataDict"></columnOverride>
+       	<columnOverride column="amount" property="amount" javaType="Double"></columnOverride>
+       	<columnOverride column="canSaleCount" property="canSaleCount" javaType="Integer"></columnOverride>
     </table>
   </context>
 </generatorConfiguration>

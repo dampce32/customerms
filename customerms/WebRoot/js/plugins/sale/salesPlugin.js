@@ -36,6 +36,9 @@
 			    {field:'intoDiscountAmount',title:'打折金额',width:100,align:"center"},
 				{field:'discount',title:'折扣',width:100,align:"center"},
 				{field:'amount',title:'消费金额',width:100,align:"center"},
+				{field:'payByCard',title:'会员卡付款金额',width:100,align:"center"},
+				{field:'payByCash',title:'现金付款金额',width:100,align:"center"},
+				{field:'balance',title:'消费后会员卡余额',width:100,align:"center"},
 				{field:'userName',title:'录入人',width:100,align:"center"}
 			]],
 			onClickRow:function(rowIndex, rowData){
@@ -49,9 +52,6 @@
 				selectRow = null;
 		 		selectIndex = null;
 				pageNumber = 1;
-			},
-			onLoadError:function(){
-				alert(33);
 			}
 	  });
 	  //添加
@@ -143,7 +143,7 @@
 				$.messager.alert('提示','请填写折扣','warning');
 				return false;
 			}
-			var amount = $('#amount',editForm).numberbox('getValue');
+			var amount = parseFloat($('#amount',editForm).numberbox('getValue'));
 			if(0==amount){
 				$.messager.alert('提示','请填写消费金额','warning');
 				return false;
@@ -229,7 +229,7 @@
 			$('#userIdsGoods',editForm).val(userIdArray.join(CSIT.join));
 			$('#delSaleGoodsDetailIds',editForm).val(delSaleGoodsDetailIdArray.join(CSIT.join));
 			
-			var customerAmount  = $('#customerAmount',editForm).numberbox('getValue');
+			var customerAmount  = parseFloat($('#customerAmount',editForm).numberbox('getValue'));
 			var saleId = $('#saleId',editForm).val();
 			if(saleId==''){
 				if(customerAmount<amount){
@@ -238,7 +238,7 @@
 					$('#customerAmountLabel',amountLessDialog).html(customerAmount);
 					$('#amount',amountLessDialog).numberbox('setValue',amount);
 					$('#lessAmount',amountLessDialog).numberbox('setValue',amount-customerAmount);
-					$('#lessAmountLabel',amountLessDialog).html(amount-customerAmount);
+					$('#lessAmountLabel',amountLessDialog).html((amount-customerAmount).toFixed(2));
 					
 					$(amountLessDialog).dialog('open');
 					return false;
@@ -367,7 +367,7 @@
 				}, "json");
 		});
 	};
-	//-------------选择会员-----------------
+	//---选择会员s---
 	var customerDialog = $('#customerDialog_'+id,$this);
 	var customerList =  $('#customerList_'+id,customerDialog);
 	//编辑框
@@ -424,12 +424,21 @@
 		var disabled = $('#customerAddBtn_'+id,editDialog).linkbutton('options').disabled;
 		if(disabled==false){
 			$(customerDialog).dialog('open');
-			$(customerList).datagrid({
-				url:"customer/queryCustomer.do"
-			});
+			onSearchCustomer();
 		}
-	})
-	
+	});
+	var onSearchCustomer = function(){
+		var customerCode = $('#customerCodeSearch',customerDialog).val();
+		var customerName = $('#customerNameSearch',customerDialog).val();
+		var content = {customerCode:customerCode,customerName:customerName};
+		$(customerList).datagrid({
+			url:"customer/queryCustomer.do",
+			queryParams:content
+		});
+	};
+	$('#searchCustomerBtn_'+id,customerDialog).click(function(){
+		onSearchCustomer();
+	});
 	var onSelectCustomerOK = function(){
 		var selectCustomer = $(customerList).datagrid('getSelected');
 		if(selectCustomer==null){
@@ -441,12 +450,13 @@
 		$('#discount',editDialog).numberbox('setValue', selectCustomer.discount);
 		$('#customerAmount',editDialog).numberbox('setValue', selectCustomer.amount);
 		$(customerDialog).dialog('close');
-	}
+	};
+	//---选择会员e---
 	//修改折扣
 	$('#discount',editDialog).numberbox({onChange: function(newValue,oldValue){
 		var notIntoDiscountAmount= $('#notIntoDiscountAmount',editDialog).numberbox('getValue');
 		var intoDiscountAmount= $('#intoDiscountAmount',editDialog).numberbox('getValue');
-		$('#amount',editDialog).numberbox('setValue',parseFloat(notIntoDiscountAmount)+intoDiscountAmount*parseFloat(newValue)/10);
+		$('#amount',editDialog).numberbox('setValue',Math.round(parseFloat(notIntoDiscountAmount)+intoDiscountAmount*parseFloat(newValue)/10));
 	}});
 	//----------消费项目--------------
 	var saleItemDetailList = $('#saleItemDetailList_'+id,editDialog);
@@ -618,8 +628,8 @@
 		}
 		$('#intoDiscountAmount',editDialog).numberbox('setValue',intoDiscountAmountTotal);
 		$('#notIntoDiscountAmount',editDialog).numberbox('setValue',notIntoDiscountAmountTotal);
-		$('#amount',editDialog).numberbox('setValue',notIntoDiscountAmountTotal+intoDiscountAmountTotal*discount/10);
-	}
+		$('#amount',editDialog).numberbox('setValue',Math.round(notIntoDiscountAmountTotal+intoDiscountAmountTotal*discount/10));
+	};
 	var onSelectSaleItem = function(){
 		if(checkCustomerChoosed()){
 			var addedSaleItems = $(saleItemDetailList).datagrid('getRows');
@@ -969,27 +979,7 @@
 	$('#rechargeBtn_'+id,editDialog).click(function(){
 		$(rechargeDialog).dialog('open');
 	});
-	//联合付款
-	$('#unitPayBtn_'+id,amountLessDialog).click(function(){
-		$(editForm).form('submit',{
-			url:'sale/saveSale.do',
-			success: function(data){
-				var result = eval('('+data+')');
-				if(result.isSuccess){
-					var fn = function(){
-						search();
-						$('#payType',editDialog).val('');
-						$(amountLessDialog).dialog('close');
-						$(editDialog).dialog('close');
-					};
-					$.messager.alert('提示','付款成功','info',fn);
-				}else{
-					$.messager.alert('提示',result.message,"error");
-				}
-			}
-		});
-		
-	});
+	
 	//----------充值-----------------
 	var rechargeDialog = $('#rechargeDialog_'+id,$this);
 	$(rechargeDialog).dialog({  
@@ -1023,11 +1013,12 @@
 		$('#customerAmount',rechargeDialog).numberbox('setValue',$('#customerAmount',amountLessDialog).numberbox('getValue'));
 		$('#amountSale',rechargeDialog).numberbox('setValue',$('#amount',amountLessDialog).numberbox('getValue'));
 		$('#lessAmount',rechargeDialog).numberbox('setValue',$('#lessAmount',amountLessDialog).numberbox('getValue'));
+		$('#amount',rechargeDialog).numberbox('setValue',$('#lessAmount',amountLessDialog).numberbox('getValue'));
 		$(rechargeDialog).dialog('open');
-	})
+	});
 	var onRechargeSetValue = function(){
-		var amount = $('#amount',rechargeDialog).numberbox('getValue');
-		var lessAmount = $('#lessAmount',rechargeDialog).numberbox('getValue');
+		var amount = parseFloat($('#amount',rechargeDialog).numberbox('getValue'));
+		var lessAmount = parseFloat($('#lessAmount',rechargeDialog).numberbox('getValue'));
 		if(amount==0){
 			$.messager.alert('提示','请输入充值金额！','warning');
 			return false;
@@ -1037,8 +1028,7 @@
 			return false;
 		}
 		return true;
-	}
-	
+	};
 	//保存
 	var onRecharge = function(){
 		$('#rechargeForm_'+id).form('submit',{
@@ -1053,18 +1043,97 @@
 						var amount = $('#amount',rechargeDialog).numberbox('getValue');
 						var customerAmount  = $('#customerAmount',editDialog).numberbox('getValue');
 						$('#customerAmount',editDialog).numberbox('setValue',amount+customerAmount);
-						
 						$(rechargeDialog).dialog('close');
 						$(amountLessDialog).dialog('close');
-						onSave('rechargeSave');
+						
+						$(editForm).form('submit',{
+							url:'sale/saveSale.do',
+							success: function(data){
+								var result = eval('('+data+')');
+								if(result.isSuccess){
+									$(editDialog).dialog('close');
+								}else{
+									$.messager.alert('提示',result.message,"error");
+								}
+							}
+						});
 					};
-					$.messager.alert('提示','充值成功','info',fn);
+					$.messager.alert('提示','付款成功','info',fn);
 				}else{
 					$.messager.alert('提示',result.message,"error");
 				}
 			}
 		});
 	};
+	//---联合结账s---
+	var unitPayDialog = $('#unitPayDialog_'+id,$this);
+	$(unitPayDialog).dialog({  
+	    title: '联合结账',  
+	    width:400,
+	    height:276,
+	    closed: true,  
+	    cache: false,  
+	    modal: true,
+	    closable:false,
+		onClose:function(){
+			$(unitPayDialog).form('clear');
+		},
+		toolbar:[{
+			text:'结账',
+			iconCls:'icon-ok',
+			handler:function(){
+				onUnitPay();
+			}
+		},{
+			text:'退出',
+			iconCls:'icon-exit',
+			handler:function(){
+				$(unitPayDialog).dialog('close');
+			}
+		}]
+	}); 
+	$('#unitPayBtn_'+id,amountLessDialog).click(function(){
+		$('#customerId',unitPayDialog).val($('#customerId',editDialog).val());
+		$('#customerName',unitPayDialog).val($('#customerName',amountLessDialog).val());
+		$('#customerAmount',unitPayDialog).numberbox('setValue',$('#customerAmount',amountLessDialog).numberbox('getValue'));
+		$('#amountSale',unitPayDialog).numberbox('setValue',$('#amount',amountLessDialog).numberbox('getValue'));
+		$('#lessAmount',unitPayDialog).numberbox('setValue',$('#lessAmount',amountLessDialog).numberbox('getValue'));
+		$('#payByCash',unitPayDialog).numberbox('setValue',$('#lessAmount',amountLessDialog).numberbox('getValue'));
+		$(unitPayDialog).dialog('open');
+	});
+	var onUnitPaySetValue = function(){
+		var payByCash = $('#payByCash',unitPayDialog).numberbox('getValue');
+		if(payByCash==''){
+			$.messager.alert('提示','请输入现金付款！','warning');
+			return false;
+		}
+		$('#payByCash',editDialog).val(payByCash);
+		return true;
+	};
+	//保存
+	var onUnitPay = function(){
+		$(editForm).form('submit',{
+			url:'sale/saveSale.do',
+			onSubmit: function(){
+				return onUnitPaySetValue();
+			},
+			success: function(data){
+				var result = eval('('+data+')');
+				if(result.isSuccess){
+					var fn = function(){
+						$(amountLessDialog).dialog('close');
+						$(unitPayDialog).dialog('close');
+						$(editDialog).dialog('close');
+					};
+					$.messager.alert('提示','保存成功','info',fn);
+				}else{
+					$.messager.alert('提示',result.message,"error");
+				}
+				$(editDialog).mask('hide');
+			}
+		});
+	};
+	//---联合结账e---
 	var rights = null;
 	var checkBtnRight = function(){
 	};

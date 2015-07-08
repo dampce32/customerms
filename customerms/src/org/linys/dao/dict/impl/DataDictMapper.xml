@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="DataDictMapper" >
+  	<select id="load"  resultType="DataDict" parameterType="DataDict">
+		select *
+		from T_DataDict
+		where 1 = 1  
+		<if test="dataDictType != null and dataDictType !=''">
+			and dataDictType = #{dataDictType}
+		</if>
+		<if test="dataDictName != null and dataDictName !=''">
+			and dataDictName = #{dataDictName}
+		</if>
+	</select>
+	<select id="query"  resultType="DataDict" parameterType="DataDict">
+		select *
+		from T_DataDict
+		where 1 = 1  
+		<if test="dataDictType != null and dataDictType !=''">
+			and dataDictType = #{dataDictType}
+		</if>
+		<if test="dataDictName != null and dataDictName !=''">
+			and dataDictName like '%${dataDictName}%'
+		</if>
+		order by dataDictId
+	</select>
+	<select id="count"  resultType="Long" parameterType="DataDict">
+		select count(1)
+		from T_DataDict
+		where 1 = 1  
+		<if test="dataDictType != null and dataDictType !=''">
+			and dataDictType = #{dataDictType}
+		</if>
+		<if test="dataDictName != null and dataDictName !=''">
+			and dataDictName like '%${dataDictName}%'
+		</if>
+	</select>
+  <insert id="insert" parameterType="DataDict"  useGeneratedKeys="true" keyProperty="dataDictId">
+    insert into t_dataDict (dataDictType,dataDictName) values (#{dataDictType,jdbcType=VARCHAR},#{dataDictName,jdbcType=VARCHAR})
+  </insert>
+  <update id="update" parameterType="DataDict" >
+    update t_dataDict
+    set dataDictName = #{dataDictName,jdbcType=VARCHAR},
+      dataDictType = #{dataDictType,jdbcType=VARCHAR}
+    where dataDictId = #{dataDictId,jdbcType=INTEGER}
+  </update>
+  <delete id="delete" parameterType="Integer" >
+    delete from t_dataDict
+    where dataDictId = #{dataDictId,jdbcType=INTEGER}
+  </delete>
+  <select id="querySelect"  resultType="DataDict" parameterType="DataDict">
+		select *
+		from T_DataDict
+		where 1 = 1  
+		<if test="dataDictName != null and dataDictName !=''">
+			and dataDictName like '%${dataDictName}%'
+		</if>
+		<if test="idArray != null and idArray.length >0">
+			and dataDictId not in 
+			<foreach item="item" index="index" collection="idArray"
+		      open="(" separator="," close=")">
+		        #{item}
+		 	 </foreach>
+		</if>
+		order by dataDictId
+	</select>
+	<select id="countSelect"  resultType="Long" parameterType="DataDict">
+		select count(1)
+		from T_DataDict
+		where 1 = 1  
+		<if test="dataDictName != null and dataDictName !=''">
+			and dataDictName like '%${dataDictName}%'
+		</if>
+		<if test="idArray != null and idArray.length >0">
+			and dataDictId not in 
+			<foreach item="item" index="index" collection="idArray"
+		      open="(" separator="," close=")">
+		        #{item}
+		 	 </foreach>
+		</if>
+	</select>
+	
+	<select id="queryCombobox"  resultType="DataDict" parameterType="DataDict">
+		select dataDictId,dataDictName
+		from T_DataDict
+		where dataDictType = #{dataDictType}
+	</select>
+</mapper>

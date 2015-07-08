@@ -2,6 +2,22 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+<!--  
+  <properties resource="jdbc.properties"/> 
+  
+	<environments default="environment">
+		<environment id="environment">
+			<transactionManager type="JDBC">
+				<dataSource type="POOLED">
+					<property name = "driver" value="${driver}"/>
+					<property name="url" value="${url}"/>
+					<property name="username" value="${username}"/>
+					<property name="password" value="${password}"/>
+				</dataSource>
+			</transactionManager>
+		</environment>
+	</environments>
+	  -->
 	<settings>
 		<setting name="cacheEnabled" value="true" />
 		<setting name="lazyLoadingEnabled" value="true" />
@@ -13,6 +29,7 @@
 	</settings>
 	
 	<typeAliases>
+		<typeAlias alias="CountCard" type="org.linys.model.countCard.CountCard"/>
 		<typeAlias alias="RoleRight" type="org.linys.model.system.RoleRight"/>
 		<typeAlias alias="Right" type="org.linys.model.system.Right" />
 		<typeAlias alias="Role" type="org.linys.model.system.Role" />
@@ -21,11 +38,14 @@
 		<typeAlias alias="CustomerType" type="org.linys.model.dict.CustomerType" />
 		<typeAlias alias="SaleItem" type="org.linys.model.dict.SaleItem" />
 		<typeAlias alias="Goods" type="org.linys.model.dict.Goods" />
+		<typeAlias alias="DataDict" type="org.linys.model.dict.DataDict" />
 		<typeAlias alias="Customer" type="org.linys.model.customer.Customer" />
 		<typeAlias alias="CustomerRecharge" type="org.linys.model.customer.CustomerRecharge" />
+		<typeAlias alias="CustomerBuyCountCard" type="org.linys.model.customer.CustomerBuyCountCard" />
 		<typeAlias alias="Sale" type="org.linys.model.sale.Sale" />
 		<typeAlias alias="SaleItemDetail" type="org.linys.model.sale.SaleItemDetail" />
 		<typeAlias alias="SaleGoodsDetail" type="org.linys.model.sale.SaleGoodsDetail" />
+		<typeAlias alias="SaleBuyCountCard" type="org.linys.model.sale.SaleBuyCountCard" />
 	</typeAliases>
 
 </configuration>

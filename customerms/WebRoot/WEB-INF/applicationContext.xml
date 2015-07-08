@@ -16,13 +16,12 @@
 	<context:annotation-config/>
 	<context:component-scan base-package="org.linys" />
 	<context:property-placeholder location="classpath:jdbc.properties" />
-
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="${driver}" />
-		<property name="url" value="${url}" />
-		<property name="username" value="${username}" />
-		<property name="password" value="${password}" />
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/customerms?useOldAliasMetadataBehavior=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
 	</bean>
 	<bean id="sqlSessionFactory"
 		class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -60,5 +59,12 @@
 		<aop:advisor advice-ref="txAdvice"
 			pointcut-ref="serviceOperation" />
 	</aop:config>
-
+	
+	<!-- 按指定包和注解标记扫描Mapper -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+		<property name="basePackage" value="org.linys.dao"/>
+		<property name="annotationClass"
+				  value="org.linys.annotation.MyBatisRepository"/>
+	</bean>
 </beans>

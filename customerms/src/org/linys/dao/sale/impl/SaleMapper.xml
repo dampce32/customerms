@@ -53,15 +53,15 @@
   <insert id="insert" parameterType="Sale"  useGeneratedKeys="true" keyProperty="saleId">
    insert into t_sale (customerId, userId, 
       saleDate, notIntoDiscountAmount,intoDiscountAmount, discount, 
-      amount)
+      amount,balance,payByCard,payByCash)
     values (#{customerId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
       #{saleDate,jdbcType=TIMESTAMP}, #{notIntoDiscountAmount,jdbcType=REAL}, #{intoDiscountAmount,jdbcType=REAL}, #{discount,jdbcType=REAL}, 
-      #{amount,jdbcType=REAL})
+      #{amount,jdbcType=REAL},#{balance,jdbcType=REAL},#{payByCard,jdbcType=REAL},#{payByCash,jdbcType=REAL})
   </insert>
   <update id="update" parameterType="Sale" >
     update t_sale
     set 
-      saleDate = #{saleDate,jdbcType=TIMESTAMP}
+      saleDate = #{saleDate,jdbcType=TIMESTAMP},
     where saleId = #{saleId,jdbcType=INTEGER}
   </update>
   <delete id="delete" parameterType="Integer" >

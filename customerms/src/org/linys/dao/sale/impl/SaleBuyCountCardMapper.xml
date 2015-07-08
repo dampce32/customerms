@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.linys.dao.sale.SaleBuyCountCardDAO" >
+ 	<select id="query" resultType="SaleBuyCountCard" parameterType="SaleBuyCountCard" >
+ 		select a.saleBuyCountCardId,a.customerBuyCountCardId,a.saleDate,a.saleCount,a.canCount, 
+               c.customerCode,c.customerName,d.amount,d.canSaleCount,
+               e.dataDictName as countCardTypeName,f.userName
+ 		from t_salebuycountcard a
+ 		left join t_customerbuycountcard b on a.customerBuyCountCardId = b.customerBuyCountCardId
+ 		left join t_customer c on b.customerId = c.customerId
+ 		left join t_countcard d on b.countCardId = d.countCardId
+	    left join t_datadict e on d.countCardTypeId = e.dataDictId
+ 		left join t_user f on a.userId = f.userId
+ 		where 1=1
+ 		<if test="beginDate != null and beginDate !=''">
+			and a.saleDate &gt;= #{beginDate}
+		</if>
+		<if test="endDate != null and endDate !=''">
+			and a.saleDate &lt;= #{endDate}
+		</if>
+		<if test="customerName != null and customerName !=''">
+			and c.customerName  like '%${customerName}%'
+		</if>
+		order by a.saleDate desc
+		limit #{start},#{rows}
+ 	</select>
+ 	<select id="count" resultType="Long" parameterType="SaleBuyCountCard">
+ 		select count(a.saleBuyCountCardId)
+ 		from t_salebuycountcard a
+ 		left join t_customerbuycountcard b on a.customerBuyCountCardId = b.customerBuyCountCardId
+ 		left join t_customer c on b.customerId = c.customerId
+ 		where 1=1
+ 		<if test="beginDate != null and beginDate !=''">
+			and a.saleDate &gt;= #{beginDate}
+		</if>
+		<if test="endDate != null and endDate !=''">
+			and a.saleDate &lt;= #{endDate}
+		</if>
+		<if test="customerName != null and customerName !=''">
+			and c.customerName  like '%${customerName}%'
+		</if>
+		order by a.saleDate desc
+ 	</select>
+ 	<insert id="insert" parameterType="SaleBuyCountCard" useGeneratedKeys="true" keyProperty="saleBuyCountCardId">
+ 	    insert into t_salebuycountcard(userId,customerBuyCountCardId,saleDate,saleCount,canCount)  
+ 	    values(#{userId,jdbcType=INTEGER},#{customerBuyCountCardId,jdbcType=INTEGER},
+ 	    #{saleDate,jdbcType=VARCHAR},#{saleCount,jdbcType=INTEGER},#{canCount,jdbcType=INTEGER})
+ 	</insert>
+ 	<update id="update" parameterType="SaleBuyCountCard">
+		update t_customerbuycountcard 
+		set alreadySaleCount = #{alreadySaleCount,jdbcType=INTEGER}+#{saleCount,jdbcType=INTEGER}
+		where customerBuyCountCardId =#{customerBuyCountCardId,jdbcType=INTEGER}
+	</update>
+	<delete id="delete" parameterType="Integer">
+		delete from t_salebuycountcard
+		where saleBuyCountCardId = #{saleBuyCountCardId,jdbcType=INTEGER}
+	</delete>
+</mapper>
