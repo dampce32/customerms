@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50520
 File Encoding         : 65001
 
-Date: 2016-05-28 16:43:07
+Date: 2016-10-03 00:23:29
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -27,7 +27,7 @@ CREATE TABLE `t_countcard` (
   PRIMARY KEY (`countCardId`),
   KEY `FK_Reference_17` (`countCardTypeId`),
   CONSTRAINT `FK_Reference_17` FOREIGN KEY (`countCardTypeId`) REFERENCES `t_datadict` (`dataDictId`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_countcard
@@ -49,7 +49,7 @@ CREATE TABLE `t_customer` (
   KEY `AK_A_customerCode` (`customerCode`),
   KEY `FK_Reference_6` (`customerTypeId`),
   CONSTRAINT `FK_Reference_6` FOREIGN KEY (`customerTypeId`) REFERENCES `t_customertype` (`customerTypeId`)
-) ENGINE=InnoDB AUTO_INCREMENT=205 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_customer
@@ -70,7 +70,7 @@ CREATE TABLE `t_customerbuycountcard` (
   KEY `FK_Reference_51` (`countcardId`),
   CONSTRAINT `FK_Reference_50` FOREIGN KEY (`customerId`) REFERENCES `t_customer` (`customerId`),
   CONSTRAINT `FK_Reference_51` FOREIGN KEY (`countcardId`) REFERENCES `t_countcard` (`countCardId`)
-) ENGINE=InnoDB AUTO_INCREMENT=206 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_customerbuycountcard
@@ -88,7 +88,7 @@ CREATE TABLE `t_customerrecharge` (
   PRIMARY KEY (`customerRechargeId`),
   KEY `FK_Reference_15` (`customerId`),
   CONSTRAINT `FK_Reference_15` FOREIGN KEY (`customerId`) REFERENCES `t_customer` (`customerId`)
-) ENGINE=InnoDB AUTO_INCREMENT=189 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_customerrecharge
@@ -125,7 +125,7 @@ CREATE TABLE `t_datadict` (
   `array` int(11) DEFAULT NULL,
   PRIMARY KEY (`dataDictId`),
   KEY `AK_AU_Code` (`dataDictType`,`dataDictCode`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='dataDictType\r\ncountCardType--计次卡类型\r\n';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='dataDictType\r\ncountCardType--计次卡类型\r\n';
 
 -- ----------------------------
 -- Records of t_datadict
@@ -141,7 +141,7 @@ CREATE TABLE `t_goods` (
   `amount` float NOT NULL,
   `isDiscount` int(11) NOT NULL,
   PRIMARY KEY (`goodsId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_goods
@@ -200,7 +200,7 @@ CREATE TABLE `t_role` (
   `status` int(11) NOT NULL,
   PRIMARY KEY (`roleId`),
   KEY `AK_U_RoleCode` (`roleCode`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_role
@@ -221,7 +221,7 @@ CREATE TABLE `t_roleright` (
   KEY `FK_Reference_2` (`roleId`),
   CONSTRAINT `FK_Reference_1` FOREIGN KEY (`rightId`) REFERENCES `t_right` (`rightId`),
   CONSTRAINT `FK_Reference_2` FOREIGN KEY (`roleId`) REFERENCES `t_role` (`roleId`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_roleright
@@ -262,7 +262,7 @@ CREATE TABLE `t_sale` (
   KEY `FK_Reference_7` (`customerId`),
   CONSTRAINT `FK_Reference_14` FOREIGN KEY (`userId`) REFERENCES `t_user` (`userId`),
   CONSTRAINT `FK_Reference_7` FOREIGN KEY (`customerId`) REFERENCES `t_customer` (`customerId`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_sale
@@ -284,7 +284,7 @@ CREATE TABLE `t_salebuycountcard` (
   KEY `salebuycountcard_ref_customerbuycountcard` (`customerBuyCountCardId`),
   CONSTRAINT `salebuycountcard_ref_customerbuycountcard` FOREIGN KEY (`customerBuyCountCardId`) REFERENCES `t_customerbuycountcard` (`customerBuyCountCardId`),
   CONSTRAINT `salebuycountcard_ref_user` FOREIGN KEY (`userId`) REFERENCES `t_user` (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_salebuycountcard
@@ -324,7 +324,7 @@ CREATE TABLE `t_saleitem` (
   `amount` float NOT NULL,
   `isDiscount` int(11) NOT NULL,
   PRIMARY KEY (`saleItemId`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_saleitem
@@ -348,7 +348,7 @@ CREATE TABLE `t_saleitemdetail` (
   CONSTRAINT `FK_Reference_10` FOREIGN KEY (`userId`) REFERENCES `t_user` (`userId`),
   CONSTRAINT `FK_Reference_8` FOREIGN KEY (`saleId`) REFERENCES `t_sale` (`saleId`),
   CONSTRAINT `FK_Reference_9` FOREIGN KEY (`saleItemId`) REFERENCES `t_saleitem` (`saleItemId`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_saleitemdetail
@@ -366,7 +366,7 @@ CREATE TABLE `t_user` (
   `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`userId`),
   KEY `AK_U_UserCode` (`userCode`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_user
@@ -386,7 +386,7 @@ CREATE TABLE `t_userrole` (
   KEY `FK_Reference_4` (`userId`),
   CONSTRAINT `FK_Reference_3` FOREIGN KEY (`roleId`) REFERENCES `t_role` (`roleId`),
   CONSTRAINT `FK_Reference_4` FOREIGN KEY (`userId`) REFERENCES `t_user` (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_userrole
